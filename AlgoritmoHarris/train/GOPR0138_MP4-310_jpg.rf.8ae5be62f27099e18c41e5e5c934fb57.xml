@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>GOPR0138_MP4-310_jpg.rf.8ae5be62f27099e18c41e5e5c934fb57.jpg</filename>
+	<path>GOPR0138_MP4-310_jpg.rf.8ae5be62f27099e18c41e5e5c934fb57.jpg</path>
+	<source>
+		<database>roboflow.com</database>
+	</source>
+	<size>
+		<width>416</width>
+		<height>416</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>Persona</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>130</xmin>
+			<xmax>141</xmax>
+			<ymin>14</ymin>
+			<ymax>46</ymax>
+		</bndbox>
+	</object>
+</annotation>
