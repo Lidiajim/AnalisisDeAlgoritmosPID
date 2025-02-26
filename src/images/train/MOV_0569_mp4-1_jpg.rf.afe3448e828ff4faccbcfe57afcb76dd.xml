@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>MOV_0569_mp4-1_jpg.rf.afe3448e828ff4faccbcfe57afcb76dd.jpg</filename>
+	<path>MOV_0569_mp4-1_jpg.rf.afe3448e828ff4faccbcfe57afcb76dd.jpg</path>
+	<source>
+		<database>roboflow.com</database>
+	</source>
+	<size>
+		<width>416</width>
+		<height>416</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>Persona</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>374</xmin>
+			<xmax>417</xmax>
+			<ymin>152</ymin>
+			<ymax>344</ymax>
+		</bndbox>
+	</object>
+</annotation>
