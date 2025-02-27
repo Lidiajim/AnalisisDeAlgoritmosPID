@@ -2,7 +2,8 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-img = cv2.imread('img/peatones4.jpg',cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('src/images/test/MOV_0574_mp4-45_jpg.rf.80805457c99429f9d4ef9468af23ec1d.jpg',cv2.IMREAD_GRAYSCALE)
+
 
 #Se calcula el gradiente de x e y
 Ix = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)
