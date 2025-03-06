@@ -46,24 +46,46 @@ class sift_detect:
                                     edgeThreshold=self.edgeThreshold, 
                                     sigma=self.sigma)
     
-    def detect_and_compute(self, img):
+    def detect_keypoints(self, img):
         '''
-        detect_and_compute(img):
-            Return: keypoints, descriptors
-            Param: 
+        detect_keypoints(img):
+            Return: keypoints
+            Param:
                 img -> Matriz de la imagen. Si es a color, se convertirá a escala de grises.
-            Detecta los puntos clave y calcula sus descriptores utilizando SIFT.
+            Función:
+                Detecta los puntos clave (incluyendo la asignación de orientación) utilizando SIFT.
         '''
-        # Verificar si la imagen es a color y convertirla a escala de grises
+        # Convertir la imagen a escala de grises si es necesario
         if len(img.shape) == 3:
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         else:
             gray = img
+
+        # Detectar los keypoints; la función 'detect' asigna la orientación a cada keypoint
+        keypoints = self.sift.detect(gray, None)
         
-        # Detectar los puntos clave y calcular los descriptores
-        keypoints, descriptors = self.sift.detectAndCompute(gray, None)
+        return keypoints
+
+    def compute_descriptors(self, img, keypoints):
+        '''
+        compute_descriptors(img, keypoints):
+            Return: descriptors
+            Params:
+                img -> Matriz de la imagen. Si es a color, se convertirá a escala de grises.
+                keypoints -> Lista de puntos clave detectados previamente (con orientación asignada).
+            Función:
+                Calcula los descriptores para los keypoints detectados usando SIFT.
+        '''
+        # Convertir la imagen a escala de grises si es necesario
+        if len(img.shape) == 3:
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = img
+
+        # Calcular los descriptores para los keypoints
+        keypoints, descriptors = self.sift.compute(gray, keypoints)
         
-        return keypoints, descriptors
+        return descriptors
 
     def draw_keypoints(self, img, keypoints, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS):
         '''
@@ -88,26 +110,6 @@ class sift_detect:
         plt.axis("off")
         plt.show()
     
-    def show_image(self, img, title="Imagen con Keypoints", axis="on"):
-        '''
-        show_image(img, title, axis):
-            Param:
-                img -> Matriz de la imagen a mostrar.
-                title -> Título de la ventana de la imagen.
-                axis -> Controla la visualización de los ejes ("on" o "off").
-            Muestra la imagen utilizando matplotlib.
-        '''
-        # Si la imagen es BGR (color), convertir a RGB para visualizarla correctamente
-        if len(img.shape) == 3:
-            img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        else:
-            img_rgb = img
-        
-        plt.imshow(img_rgb, cmap="gray")
-        plt.title(title)
-        if axis == "off":
-            plt.axis("off")
-        plt.show()
     
     def show_dog_pyramid(self, dog_pyr):
         """
@@ -121,7 +123,6 @@ class sift_detect:
             for j, level in enumerate(octave):
                 print(f"  Nivel {j}: resolución {level.shape}")
         num_octaves = len(dog_pyr)
-        # Se asume que cada octava tiene la misma cantidad de niveles en la DoG
         num_levels = len(dog_pyr[0])
         
         fig, axes = plt.subplots(nrows=num_octaves, 
@@ -138,11 +139,9 @@ class sift_detect:
                 axes[i, j].set_aspect('equal')
                 axes[i, j].axis("off")
                 
-                # Título de columna (solo en la primera fila)
                 if i == 0:
                     axes[i, j].set_title(f"Nivel {j}")
             
-            # Etiqueta de fila (solo en la primera columna)
             axes[i, 0].set_ylabel(f"Octava {i}", rotation=90, size="large")
         
         plt.tight_layout()
@@ -168,9 +167,6 @@ class sift_detect:
         organizando subplots en forma de rejilla:
         - Filas = número de octavas
         - Columnas = número de niveles por octava
-
-        Ajusta la interpolación a 'nearest' y el aspect a 'equal'
-        para visualizar mejor la diferencia de resolución.
         """
         for i, octave in enumerate(gaussian_pyr):
             print(f"Octava {i}:")
@@ -274,9 +270,10 @@ class sift_detect:
         max_bin = np.argmax(histogram)
         return max_bin * bin_width
 
+
     def demonstrate_orientation(self, patch):
         """
-        Demuestra de forma didáctica el proceso de cálculo de la orientación dominante.
+        Demuestra el proceso de cálculo de la orientación dominante.
         Muestra:
           1. La ventana del Keypoint.
           2. El histograma de orientaciones.
@@ -307,7 +304,6 @@ class sift_detect:
         center = (patch.shape[1] // 2, patch.shape[0] // 2)
         arrow_length = 20
         
-        # Invertir el ángulo
         draw_angle = 360 - dom_angle
         theta = np.deg2rad(draw_angle)
         
