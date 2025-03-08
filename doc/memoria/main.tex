@@ -101,15 +101,40 @@
       \item \textbf{Construcción de la Pirámide de Diferencia de Gaussianos (DoG):}  
       Se calculan diferencias entre imágenes suavizadas consecutivas de la pirámide gaussiana. Esta operación permite resaltar bordes y estructuras significativas en la imagen, facilitando la detección de puntos clave.
       
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=1.1\textwidth]{images/sift_gauss.png}
+        \caption{Proceso de la piramide de diferencia gaussiana.}
+    \end{figure}
+    
       \item \textbf{Detección de keypoints:}  
       Se identifican los puntos extremos en la pirámide DoG, comparando cada píxel con sus vecinos en los niveles superior e inferior de la pirámide, así como en su entorno local. Los puntos seleccionados se someten a un proceso de refinamiento para descartar aquellos con bajo contraste o situados en bordes poco definidos.
       
       \item \textbf{Asignación de orientación:}  
-      A cada keypoint se le asigna una orientación dominante basada en la distribución de gradientes en su vecindad. Esto permite que el algoritmo sea invariante a rotaciones.
-      
-      \item \textbf{Generación del descriptor SIFT:}  
-      Se crea un descriptor basado en la distribución de gradientes en una ventana alrededor del keypoint. La ventana se divide en subregiones y en cada una de ellas se calcula un histograma de gradientes, lo que genera un vector de 128 dimensiones que representa el keypoint.
-  \end{itemize}
+      A cada keypoint se le asigna una orientación dominante basada en la distribución de gradientes en su vecindad. Para ello, se calcula el gradiente horizontal y vertical, y se calcula el histograma de orientaciones del gradiente en una ventana centrada en el punto en la escala en la que se ha detectado. La orientación 
+      se discretiza en 36 intervalos y se van acumulando las amplitudes del gradiente en cada ángulo detectado. Esto permite que el algoritmo sea invariante a rotaciones.
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=1.1\textwidth]{images/sift_orientacion.png}
+        \caption{Proceso de orientación de un keypoint.}
+    \end{figure}
+
+
+    \item \textbf{Generación del descriptor SIFT:}  
+    Para representar de manera robusta un keypoint, se genera un descriptor basado en la distribución de los gradientes dentro de una ventana centrada en dicho punto.  
+    Esta región se divide en una cuadrícula de \(4 \times 4\) celdas, formando un total de 16 subregiones.  
+    En cada subregión se calcula un histograma de orientaciones de gradientes con 8 direcciones posibles.  
+    Finalmente, los 16 histogramas se concatenan en un único vector de características de 128 dimensiones, dado que proviene de la combinación de las 16 subregiones (\(4 \times 4\)) y las 8 direcciones (\(16 \times 8 = 128\)).  
+    Este descriptor permite identificar y comparar keypoints de manera robusta frente a variaciones en escala, rotación e iluminación.
+
+   
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{images/sift_descrip.png}
+        \caption{Keypoint Descriptor.}
+    \end{figure}
+
+    \end{itemize}
   
   \par\vspace{0.5cm}
   \textbf{Fundamentos matemáticos}
@@ -143,7 +168,7 @@
       donde \(m(x, y)\) representa la magnitud del gradiente y \(\theta(x, y)\) su dirección.
       
       \item \textbf{Generación del descriptor SIFT:}  
-      El descriptor de cada keypoint se forma a partir de histogramas de gradientes calculados en una ventana de \(16\times16\) píxeles alrededor del punto de interés. La ventana se subdivide en \(4\times4\) celdas y en cada celda se calcula un histograma de 8 orientaciones, generando un vector de:
+      El descriptor de cada keypoint como se explicó anteriormente, se forma a partir de histogramas de gradientes calculados en una ventana de \(16\times16\) píxeles alrededor del punto de interés. La ventana se subdivide en \(4\times4\) celdas y en cada celda se calcula un histograma de 8 orientaciones, generando un vector de:
       \[
       4 \times 4 \times 8 = 128
       \]
@@ -151,10 +176,10 @@
   \end{itemize}
   
   \par\vspace{0.5cm}
-  \textbf{Ventajas de SIFT frente a otros métodos}
+  \textbf{Ventajas de SIFT}
   \par\vspace{0.5cm}
   
-  El algoritmo SIFT presenta varias ventajas en comparación con otros métodos de detección de características, como Harris, SURF o HOG:
+  El algoritmo SIFT presenta varias ventajas en comparación con otros métodos de detección de características:
   
   \begin{itemize}
       \item \textbf{Invariancia a escala y rotación:}  
@@ -167,17 +192,11 @@
       Debido a su método de detección basado en diferencias de gaussianos y análisis de gradientes, SIFT es menos sensible al ruido y sigue funcionando incluso cuando partes de la imagen están ocultas.
       
       \item \textbf{Aplicabilidad en reconocimiento de patrones y emparejamiento de imágenes:}  
-      El uso de descriptores de 128 dimensiones permite realizar comparaciones eficientes entre imágenes, facilitando tareas como el reconocimiento de objetos o la reconstrucción de escenas.
+      El uso de descriptores de 128 dimensiones permite realizar comparaciones eficientes entre imágenes, facilitando tareas como el reconocimiento de objetos.
   \end{itemize}
   
   \par\vspace{0.5cm}
-  \textbf{Conclusión}
-  \par\vspace{0.5cm}
-  
-  El algoritmo SIFT es una herramienta poderosa para la detección y descripción de características en imágenes. Su capacidad de ser invariante a escala, rotación e iluminación lo hace especialmente útil en aplicaciones como la visión por computadora, la robótica y el reconocimiento de objetos. En la siguiente sección, se procederá a la implementación de este método y su evaluación experimental para analizar su rendimiento en la detección de peatones en imágenes digitales.
-  
-
-
+ 
 
 
   \subsection{HOG (Histogram of Oriented Gradients)}

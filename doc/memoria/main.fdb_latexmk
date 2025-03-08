@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1741456798.13237 "c:/Users/alvar/Desktop/PID/proyecto/AnalisisDeAlgoritmosPID/doc/memoria/main.tex" "main.pdf" "main" 1741456800.45298 0
+["pdflatex"] 1741465280.77634 "c:/Users/alvar/Desktop/PID/proyecto/AnalisisDeAlgoritmosPID/doc/memoria/main.tex" "main.pdf" "main" 1741465283.18848 0
   "C:/Users/alvar/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1740495854 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/alvar/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx0700.pk" 1741439848 17380 cbb1da4eb1bb35aec0ff66e40e429764 ""
   "C:/Users/alvar/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx0900.pk" 1740495871 22504 2a3955c3d9b63a0010b525845e7e5e18 ""
@@ -185,7 +185,10 @@
   "C:/Users/alvar/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/alvar/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
   "C:/Users/alvar/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656233319 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
-  "c:/Users/alvar/Desktop/PID/proyecto/AnalisisDeAlgoritmosPID/doc/memoria/main.tex" 1741456795 30989 7023fbe8ead62329ee164098e41ace13 ""
+  "c:/Users/alvar/Desktop/PID/proyecto/AnalisisDeAlgoritmosPID/doc/memoria/main.tex" 1741465280 31764 5b847b19d3853d68e0b418faab4107c9 ""
+  "images/sift_descrip.png" 1741464338 55648 84fb168d16155628d6a4f7cce8e39172 ""
+  "images/sift_gauss.png" 1741463070 268179 15baf9108c503daba49b61fc85d8b24a ""
+  "images/sift_orientacion.png" 1741463571 774130 a9aef898119741f58977cdb8a3b41db0 ""
   "images/sift_paso_1.png" 1741453189 248309 c9473b85678489268eafbd62d060f4c9 ""
   "images/sift_paso_2.png" 1741453218 150850 068c999034e151e1b26958e3520dd27f ""
   "images/sift_paso_3.1.png" 1741453296 159460 206f1ac8548bfc78b21a0f58cd9750ba ""
@@ -201,9 +204,9 @@
   "images/sift_paso_6.1.png" 1741453590 77101 88721d2e1bcc69f7a14347b00fa3765b ""
   "images/sift_paso_7.1.png" 1741453614 136824 a53c3c9232bb8b2c70de3c5c2acd861c ""
   "images/sift_paso_8.png" 1741453630 33381 26c18e225e2cad642b5c9b030dcea22c ""
-  "main.aux" 1741456800 5229 4bf1d0d7e53958fbe7c679b353668de5 "pdflatex"
-  "main.out" 1741456800 4606 5745d48739d677739baed26db55847cd "pdflatex"
-  "main.tex" 1741456795 30989 7023fbe8ead62329ee164098e41ace13 ""
+  "main.aux" 1741465282 5676 7cadda0a56759366d45e60eeae1f8b69 "pdflatex"
+  "main.out" 1741465282 4606 5745d48739d677739baed26db55847cd "pdflatex"
+  "main.tex" 1741465280 31764 5b847b19d3853d68e0b418faab4107c9 ""
   (generated)
   "main.aux"
   "main.log"
