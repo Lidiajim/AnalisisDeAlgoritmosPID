@@ -1,121 +1,165 @@
 import os
+import cv2
+import joblib
 import numpy as np
+import xml.etree.ElementTree as ET
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
-import joblib
-from procesar_imagen import procesar_imagen
-import harris_svm as hs
-import hog_svm as ho
-import sift_svm as st
-import surf_svm as sf
-import cv2
 
-# Rutas del dataset
-train_path_persona = "images/train"
-val_path_persona = "images/valid"
-annotations_train_path = train_path_persona
-annotations_val_path = val_path_persona
-
-train_path_no_persona = "images/train_no"
-val_path_no_persona = "images/valid_no"
-algo_control = 1
-
-#prueba
-gb=3
-k=0.04
-threshold=0.05
-ws=5
-
-def cargar_datos_persona(imagenes_path, anotaciones_path, algoritmo=1): # 1: Harris, 2: HOG, 3: SIFT, 4: SURF
-    """Carga imágenes con personas usando anotaciones XML"""
-    X, y = [], []
-    algo_control = algoritmo
-
-    for image_file in os.listdir(imagenes_path):
-        if image_file.endswith(".jpg"):
-            image_path = os.path.join(imagenes_path, image_file)
-            xml_path = os.path.join(anotaciones_path, image_file.replace(".jpg", ".xml"))
-
-            if os.path.exists(xml_path):
-                print(f"Procesando persona: {image_file}")
-                features, labels = procesar_imagen(image_path, xml_path,algoritmo) #modificar, necesita constructor
-
-                if features:
-                    X.extend(features)
+class svm:
+    def __init__(self, algorithm, algo_params):
+        self.algorithm = algorithm
+        self.algo_params = algo_params
+        self.model = SVC(kernel="linear")
+    
+    def extract_features(self, image, roi=None):
+        region = roi if roi is not None else image
+        return self.algorithm(region, self.algo_params)
+    
+    def process_image(self, image_path, xml_path):
+        image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        if image is None:
+            return [], []
+        
+        try:
+            tree = ET.parse(xml_path)
+        except:
+            return [], []
+        
+        root = tree.getroot()
+        features_list, labels_list = [], []
+        for obj in root.findall("object"):
+            if obj.find("name").text.lower() == "persona":
+                bbox = obj.find("bndbox")
+                xmin, ymin = int(bbox.find("xmin").text), int(bbox.find("ymin").text)
+                xmax, ymax = int(bbox.find("xmax").text), int(bbox.find("ymax").text)
+                roi = image[ymin:ymax, xmin:xmax]
+                features = self.extract_features(image, roi)
+                if features is not None:
+                    features_list.append(features)
+                    labels_list.append(1)
+        return features_list, labels_list
+    
+    def load_data_persona(self, images_dir):
+        X, y = [], []
+        for file in os.listdir(images_dir):
+            if file.endswith(".jpg"):
+                xml_path = os.path.join(images_dir, file.replace(".jpg", ".xml"))
+                if os.path.exists(xml_path):
+                    feats, labels = self.process_image(os.path.join(images_dir, file), xml_path)
+                    X.extend(feats)
                     y.extend(labels)
+        return np.array(X), np.array(y)
+    
+    def load_data_no_persona(self, images_dir):
+        X, y = [], []
+        for file in os.listdir(images_dir):
+            if file.endswith(".jpg"):
+                image = cv2.imread(os.path.join(images_dir, file), cv2.IMREAD_GRAYSCALE)
+                if image is not None:
+                    features = self.extract_features(image)
+                    if features is not None:
+                        X.append(features)
+                        y.append(0)
+        return np.array(X), np.array(y)
+    
+    def fit(self, train_persona_dir, train_no_persona_dir, val_persona_dir=None, val_no_persona_dir=None):
+        X_train_p, y_train_p = self.load_data_persona(train_persona_dir)
+        X_train_n, y_train_n = self.load_data_no_persona(train_no_persona_dir)
+        
+        print(f"Imágenes procesadas - Entrenamiento: {len(y_train_p)} personas, {len(y_train_n)} sin persona")
+        
+        X_train = np.vstack((X_train_p, X_train_n))
+        y_train = np.concatenate((y_train_p, y_train_n))
+        
+        if len(np.unique(y_train)) < 2:
+            raise ValueError("El dataset debe contener al menos dos clases diferentes para entrenar un SVM.")
+        
+        self.model.fit(X_train, y_train)
+        
+        if val_persona_dir and val_no_persona_dir:
+            X_val_p, y_val_p = self.load_data_persona(val_persona_dir)
+            X_val_n, y_val_n = self.load_data_no_persona(val_no_persona_dir)
+            print(f"Imágenes procesadas - Validación: {len(y_val_p)} personas, {len(y_val_n)} sin persona")
+    
+    def predict_persona(self, images_dir):
+        X, y_true = [], []
+        for file in os.listdir(images_dir):
+            if file.endswith(".jpg"):
+                xml_path = os.path.join(images_dir, file.replace(".jpg", ".xml"))
+                if os.path.exists(xml_path):
+                    feats, labels = self.process_image(os.path.join(images_dir, file), xml_path)
+                    X.extend(feats)
+                    y_true.extend(labels)
+        return np.array(y_true), np.array(self.model.predict(np.array(X))) if X else (np.array([]), np.array([]))
+    
+    def predict_no_persona(self, images_dir):
+        X, y_true = [], []
+        for file in os.listdir(images_dir):
+            if file.endswith(".jpg"):
+                image = cv2.imread(os.path.join(images_dir, file), cv2.IMREAD_GRAYSCALE)
+                if image is not None:
+                    features = self.extract_features(image)
+                    if features is not None:
+                        X.append(features)
+                        y_true.append(0)
+        return np.array(y_true), np.array(self.model.predict(np.array(X))) if X else (np.array([]), np.array([]))
+    
+    def evaluate(self, test_persona_dir, test_no_persona_dir, model_path=None):
+        if model_path:
+            self.model = joblib.load(model_path)
+        
+        y_true_p, y_pred_p = self.predict_persona(test_persona_dir)
+        y_true_np, y_pred_np = self.predict_no_persona(test_no_persona_dir)
+        
+        y_true = np.concatenate((y_true_p, y_true_np))
+        y_pred = np.concatenate((y_pred_p, y_pred_np)) if y_pred_p.size and y_pred_np.size else y_pred_p if y_pred_p.size else y_pred_np
+        
+        if y_true.size > 0 and y_pred.size > 0:
+            accuracy = accuracy_score(y_true, y_pred) * 100
+            print(f"\nPrecisión del modelo en el conjunto de prueba: {accuracy:.2f}%")
+        else:
+            print("\nNo se encontraron datos para evaluar.")
 
-    return np.array(X), np.array(y)
-
-def cargar_datos_no_persona(imagenes_path, algoritmo=1):
-    """Carga imágenes sin personas"""
-    X, y = [], []
-    algo_control = algoritmo
-
-    for image_file in os.listdir(imagenes_path):
-        if image_file.endswith(".jpg"):
-            image_path = os.path.join(imagenes_path, image_file)
-            image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-
-            if image is not None:
-                print(f"Procesando NO persona: {image_file}")
-                if(algoritmo == 1):
-                    features = hs.harris_svm(image, gb, k, threshold, ws) #modificar, necesita constructor
-                elif(algoritmo == 2):
-                    features = ho.hog_svm(image) #modificar, necesita constructor
-                elif(algoritmo == 3):
-                    features = st.sift_svm(image) #modificar, necesita constructor
-                else:
-                    features = sf.surf_svm(image) #modificar, necesita constructor
-
-                if features:
-                    X.append(features)
-                    y.append(0)  # Etiqueta 0 para "no persona"
-
-    return np.array(X), np.array(y)
-
-# Cargar datos de entrenamiento y validación
-X_train_p, y_train_p = cargar_datos_persona(train_path_persona, annotations_train_path,1)
-X_train_n, y_train_n = cargar_datos_no_persona(train_path_no_persona,1)
-
-X_val_p, y_val_p = cargar_datos_persona(val_path_persona, annotations_val_path,1)
-X_val_n, y_val_n = cargar_datos_no_persona(val_path_no_persona,1)
-
-# Combinar datos
-X_train = np.vstack((X_train_p, X_train_n))
-y_train = np.concatenate((y_train_p, y_train_n))
-
-X_val = np.vstack((X_val_p, X_val_n))
-y_val = np.concatenate((y_val_p, y_val_n))
-
-print(f"Características de entrenamiento: {X_train.shape}")
-print(f"Características de validación: {X_val.shape}")
-
-# Verificar que haya más de una clase
-if len(set(y_train)) < 2:
-    raise ValueError("El dataset debe contener al menos dos clases diferentes para entrenar un SVM.")
-
-# Entrenar el modelo SVM
-svm = SVC(kernel="linear")
-svm.fit(X_train, y_train)
-
-# Evaluar con el conjunto de validación
-y_pred = svm.predict(X_val)
-accuracy = accuracy_score(y_val, y_pred)
-print(f"Precisión en validación: {accuracy * 100:.2f}%")
-
-# Guardar el modelo entrenado
-
-if(algo_control == 1):
-    joblib.dump(svm, "svm_harris_hs.pkl")
-    print("Modelo SVM guardado como 'svm_harris_hs.pkl'")                      
-elif(algo_control == 2):
-    joblib.dump(svm, "svm_harris_hog.pkl")
-    print("Modelo SVM guardado como 'svm_harris_hs.pkl'")                     
-elif(algo_control == 3):
-    joblib.dump(svm, "svm_harris_sift.pkl")
-    print("Modelo SVM guardado como 'svm_harris_hs.pkl'")          
-else:
-    joblib.dump(svm, "svm_harris_surf.pkl") 
-    print("Modelo SVM guardado como 'svm_harris_hs.pkl'")    
+    
+    def save_model(self, filename=None):
+        """
+        Guarda el modelo entrenado. Si no se proporciona 'filename', se usa un nombre
+        por defecto basado en el algoritmo (por ejemplo, 'svm_sift.pkl' para 'sift_svm').
+        """
+        if filename is None:
+            # Se espera que el nombre de la función sea algo como "<nombre>_svm"
+            base = self.algorithm.__name__.replace("_svm", "")
+            filename = f"svm_{base}.pkl"
+        joblib.dump(self.model, filename)
+        print(f"Modelo SVM guardado como '{filename}'")
 
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
