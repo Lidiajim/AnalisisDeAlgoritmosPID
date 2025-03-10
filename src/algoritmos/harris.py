@@ -8,7 +8,7 @@ import numpy as np
 
 class harris_detect:
 
-    def __init__(self, gaussbox=3, k=0.04, threshold=0.1, window_size=5, window_size_mx=7):
+    def __init__(self, gaussbox=3, k=0.04, threshold=0.1, window_size=5):
         '''
         ########################################## PARÁMETROS ##########################################
         
@@ -111,12 +111,12 @@ class harris_detect:
         
         return Ix2, Iy2, Ixy
 
-    def gauss_filter(self, Ix2, Iy2, Ixy, gb):
+    def gauss_filter(self, Ix2, Iy2, Ixy):
         
         #Se aplica un filtro Gaussiano para suavizar
-        Ix2 = cv2.GaussianBlur(Ix2, (gb, gb), 1)
-        Iy2 = cv2.GaussianBlur(Iy2, (gb, gb), 1)
-        Ixy = cv2.GaussianBlur(Ixy, (gb, gb), 1)
+        Ix2 = cv2.GaussianBlur(Ix2, (self.gaussbox, self.gaussbox), 1)
+        Iy2 = cv2.GaussianBlur(Iy2, (self.gaussbox, self.gaussbox), 1)
+        Ixy = cv2.GaussianBlur(Ixy, (self.gaussbox, self.gaussbox), 1)
 
         return Ix2, Iy2, Ixy
 
@@ -140,9 +140,9 @@ class harris_detect:
         
         return R_norm
 
-    def non_max_supre(self, R_norm, window_size):
+    def non_max_supre(self, R_norm):
         strongest_corners = np.zeros(R_norm.shape)  # Matriz vacía para almacenar los máximos locales
-        offset = window_size // 2  # Offset para centrar la ventana
+        offset = self.window_size // 2  # Offset para centrar la ventana
         
         # Iterar sobre cada píxel de la imagen
         for x, y in np.argwhere(R_norm > 0):  # Solo recorrer donde hay respuestas (>0)
