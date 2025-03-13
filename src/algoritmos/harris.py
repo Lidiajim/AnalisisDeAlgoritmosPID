@@ -20,11 +20,11 @@ class harris_detect:
 
         threshold: 
                 Type: float
-                Description: Umbral de los valores harris al normalizar. DefaultValue=0.1%
+                Description: Umbral de los valores harris al normalizar. DefaultValue=0.1 (10%)
 
         window_size: 
                 Type: int
-                Description: Tamaño de la ventana usada en supresion de no maximos. DefaultValue=7
+                Description: Tamaño de la ventana usada en supresion de no maximos. DefaultValue=5
         '''
        
         self.gaussbox = gaussbox
@@ -54,9 +54,9 @@ class harris_detect:
         Return: List        
         '''
         #Se calcula los productos de los gradientes
-        Ix2 = Ix * Ix
-        Iy2 = Iy * Iy
-        Ixy = Ix * Iy
+        Ix2 = cv2.Sobel(Ix, cv2.CV_64F, 1, 0, ksize=3)
+        Iy2 = cv2.Sobel(Iy, cv2.CV_64F, 0, 1, ksize=3)
+        Ixy = cv2.Sobel(Ix, cv2.CV_64F, 0, 1, ksize=3)
         
         return Ix2, Iy2, Ixy
 
