@@ -6,28 +6,20 @@ def harris_svm(image, gb, k ,threshold, ws):
     
     '''
     image -> imagen a procesar
-    
     gb -> tamaño del filtro gaussiano
-    
     k -> parametro de control del harris score
-    
     ws -> tamaño de la ventana de supresion de no maximos
 
     ########################################## PASOS DEL ALGORITMO ##########################################
     
         1. Calculamos gradiente de x e y.
-
         2. Calculamos producto de los gradiente.
-
         3. Aplicamos un filtro Gaussiano.
-
         4. Calculamos el Harris Score.
-
         5. Normalizamos y aplicamos un umbral.
-
         6. Aplicamos supresión de no maximos.
 
-    El objetivo de este código es facilitarle al svm un método para la extracción
+    El objetivo de este código es facilitarle al SVM un método para la extracción
     de características aplicando el algoritmo Harris Corner Detection.
     '''
     #Inicializamos el constructor

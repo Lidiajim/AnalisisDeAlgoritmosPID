@@ -10,8 +10,6 @@ class harris_detect:
 
     def __init__(self, gaussbox=3, k=0.04, threshold=0.1, window_size=5):
         '''
-        ########################################## PARÁMETROS ##########################################
-        
         gaussbox: 
                 Type: int
                 Description: Describe el tamaño del filtro usado al aplicar el filtro gaussiano. En el valor por defecto el tamaño del filtro seria una matriz 3x3
@@ -32,78 +30,29 @@ class harris_detect:
         self.gaussbox = gaussbox
         self.k = k
         self.threshold = 0.1
-        self.window_size = window_size
-        
-        '''
-        ########################################## MÉTODOS ##########################################
-
-        calc_grad(img): 
-            Return: List
-            Param: img -> Matriz de la imagen.
-            Calcula el gradiente en las direcciones x e y de la imagen.
-
-        calc_grad_prod(Ix, Iy):
-            Return: List
-            Param: 
-                Ix -> Gradiente en la dirección x.
-                Iy -> Gradiente en la dirección y.
-            Calcula el producto de los gradientes. Devuelve tres matrices: Ix², Iy² e Ixy.
-
-        gauss_filter(Ix2, Iy2, Ixy, gb):
-            Return: List
-            Param: 
-                Ix2 -> Cuadrado del gradiente en x.
-                Iy2 -> Cuadrado del gradiente en y.
-                Ixy -> Producto de ambos gradientes.
-                gb -> Kernel del filtro gaussiano.
-            Aplica un filtro gaussiano para suavizar la imagen.
-
-        calc_harris_score(Ix2, Iy2, Ixy): 
-            Return: List
-            Param: 
-                Ix2 -> Cuadrado del gradiente en x.
-                Iy2 -> Cuadrado del gradiente en y.
-                Ixy -> Producto de ambos gradientes.
-            Calcula la puntuación de Harris para cada píxel (x, y).
-
-        normalize_thresh(self, R):
-            Return: List
-            Param: 
-                R -> Matriz de las puntuaciones de Harris.
-            Normaliza la matriz R para que sus valores estén en el rango [0,255] y aplica un umbral para descartar valores no válidos.
-
-        non_max_supre(R_norm, window_size):
-            Return: List
-            Param: 
-                R_norm -> Matriz normalizada después de aplicar un umbral a las puntuaciones de Harris.
-                window_size -> Tamaño de la ventana utilizada en la supresión de no máximos.
-            Aplica la supresión de no máximos iterando sobre cada píxel y conservando solo el de mayor puntuación dentro de cada ventana.
-
-        draw_corner(strongest_corners, img): 
-            Return: List
-            Param: 
-                strongest_corners -> Matriz con las puntuaciones de Harris destacadas.
-                img -> Matriz de la imagen.   
-            Dibuja círculos rojos en las posiciones de las esquinas detectadas.
-
-        draw_img(img, axis="on"): 
-            Param: 
-                img -> Matriz de la imagen.
-                axis -> Controla si se debe mostrar el eje de coordenadas en la imagen.
-            Muestra la imagen en pantalla.
-
-    '''
+        self.window_size = window_size    
     
     def calc_grad(self, img):
-        
+        '''
+        Calcula el gradiente en las direcciones x e y de la imagen.          
+            Param: img -> Matriz de la imagen.
+        Return: List   
+        '''
         #Se calcula el gradiente de x e y
         Ix = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)
         Iy = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=3)
 
         return Ix, Iy
+    
 
     def calc_grad_prod(self, Ix, Iy):
-        
+        '''
+        Calcula el producto de los gradientes. Devuelve tres matrices: Ix², Iy² e Ixy.
+            Param: 
+                Ix -> Gradiente en la dirección x.
+                Iy -> Gradiente en la dirección y.   
+        Return: List        
+        '''
         #Se calcula los productos de los gradientes
         Ix2 = Ix * Ix
         Iy2 = Iy * Iy
@@ -112,7 +61,15 @@ class harris_detect:
         return Ix2, Iy2, Ixy
 
     def gauss_filter(self, Ix2, Iy2, Ixy):
-        
+        '''
+        Aplica un filtro gaussiano para suavizar la imagen.            
+            Param: 
+                Ix2 -> Cuadrado del gradiente en x.
+                Iy2 -> Cuadrado del gradiente en y.
+                Ixy -> Producto de ambos gradientes.
+                gb -> Kernel del filtro gaussiano.
+        Return: List    
+        '''
         #Se aplica un filtro Gaussiano para suavizar
         Ix2 = cv2.GaussianBlur(Ix2, (self.gaussbox, self.gaussbox), 1)
         Iy2 = cv2.GaussianBlur(Iy2, (self.gaussbox, self.gaussbox), 1)
@@ -121,7 +78,14 @@ class harris_detect:
         return Ix2, Iy2, Ixy
 
     def calc_harris_score(self, Ix2, Iy2, Ixy):
-        
+        '''
+        Calcula la puntuación de Harris para cada píxel (x, y).           
+            Param: 
+                Ix2 -> Cuadrado del gradiente en x.
+                Iy2 -> Cuadrado del gradiente en y.
+                Ixy -> Producto de ambos gradientes.
+        Return: List    
+        '''
         #Calculamos el Harris Score
         detM = (Ix2 * Iy2) - (Ixy ** 2)
         traceM = Ix2 + Iy2
@@ -130,7 +94,13 @@ class harris_detect:
         return R
 
     def normalize_thresh(self, R):
-        
+        '''
+        Normaliza la matriz R para que sus valores estén en el rango [0,255] y aplica un umbral para descartar valores no válidos.
+            
+            Param: 
+                R -> Matriz de las puntuaciones de Harris.       
+        Return: List
+        '''
         # Aplica un umbral
         R[R < self.threshold * np.max(R)] = 0  
 
@@ -141,6 +111,13 @@ class harris_detect:
         return R_norm
 
     def non_max_supre(self, R_norm):
+        '''
+        Aplica la supresión de no máximos iterando sobre cada píxel y conservando solo el de mayor puntuación dentro de cada ventana.           
+            Param: 
+                R_norm -> Matriz normalizada después de aplicar un umbral a las puntuaciones de Harris.
+                window_size -> Tamaño de la ventana utilizada en la supresión de no máximos.
+        Return: List    
+        '''
         strongest_corners = np.zeros(R_norm.shape)  # Matriz vacía para almacenar los máximos locales
         offset = self.window_size // 2  # Offset para centrar la ventana
         
@@ -168,7 +145,13 @@ class harris_detect:
 
 
     def draw_corner(self, strongest_corners, img):
-        
+        '''
+        Dibuja círculos rojos en las posiciones de las esquinas detectadas.           
+            Param: 
+                strongest_corners -> Matriz con las puntuaciones de Harris destacadas.
+                img -> Matriz de la imagen.  
+        Return: List                     
+        '''
         # Dibujar las esquinas detectadas en la imagen original
         output_image = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)  # Crear una copia para no modificar la imagen original 
         
@@ -180,7 +163,12 @@ class harris_detect:
     
     
     def draw_img(self, img, axis="on"): 
-        
+        '''
+        Muestra la imagen en pantalla.
+            Param: 
+                img -> Matriz de la imagen.
+                axis -> Controla si se debe mostrar el eje de coordenadas en la imagen.            
+        '''
         # Dibuja la imagen con o sin ejes
         plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
         plt.title("Puntos detectados por el Algoritmo")
