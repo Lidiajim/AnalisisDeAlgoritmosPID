@@ -3,6 +3,7 @@ import cv2
 import joblib
 import numpy as np
 import xml.etree.ElementTree as ET
+import random as rn
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
@@ -16,6 +17,32 @@ class svm:
         region = roi if roi is not None else image
         return self.algorithm(region, self.algo_params)
     
+    def generateRndRoi(self, image):
+            
+        maxTamx = int((image.shape[1]*0.3)) #El roi debe ser máximo el 30% de la imagen
+        minTamx = int((image.shape[1]*0.15)) #El roi debe ser superior al 15% de la imagen
+        maxTamy = int((image.shape[0]*0.3)) #El roi debe ser máximo el 30% de la imagen
+        minTamy = int((image.shape[0]*0.15)) #El roi debe ser superior al 15% de la imagen
+        
+        width = rn.randint(minTamy, maxTamy)
+        height = rn.randint(minTamx, maxTamx)
+
+        '''1º. Calculamos el area maxima del roi, y su area minima en base al tamaño de la imagen.
+           2º. Generamos un area aleatoria entre esos extremos
+           3º. Generamos una altura aleatoria teniendo en cuenta que debe ser como minimo 1/4 y como maximo 1/2 del tamaño del area
+           4º. Generamos la anchura correspodiente al area y la altura
+         '''
+        #Ahora hay que generar un punto que va a ser el ancla de nuestra roi
+        #Para ello, debemos asegurarnos que nuestra roi siempre este dentro de la imagem
+
+        xmin = rn.randint(0, (image.shape[1] - width)) #Calcula una x entre [0, width max de la imagen]
+        ymin = rn.randint(0, (image.shape[0] - height)) #Calcula una y entre [0, height max de la imagen]
+        xmax = xmin + width
+        ymax = ymin + height
+        roi = image[ymin:ymax, xmin:xmax]
+        print(f"ROI size: ({roi.shape[0]},{roi.shape[1]}) (ymin: {ymin}, ymax: {ymax}, xmin: {xmin}, xmax: {xmax})")
+        return roi
+
     def process_image(self, image_path, xml_path):
         image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         if image is None:
@@ -57,11 +84,14 @@ class svm:
             if file.endswith(".jpg"):
                 image = cv2.imread(os.path.join(images_dir, file), cv2.IMREAD_GRAYSCALE)
                 if image is not None:
-                    features = self.extract_features(image)
+                    roi = self.generateRndRoi(image)
+                    features = self.extract_features(image, roi)
                     if features is not None:
                         X.append(features)
                         y.append(0)
         return np.array(X), np.array(y)
+    
+   
     
     def fit(self, train_persona_dir, train_no_persona_dir, val_persona_dir=None, val_no_persona_dir=None):
         X_train_p, y_train_p = self.load_data_persona(train_persona_dir)
@@ -99,7 +129,8 @@ class svm:
             if file.endswith(".jpg"):
                 image = cv2.imread(os.path.join(images_dir, file), cv2.IMREAD_GRAYSCALE)
                 if image is not None:
-                    features = self.extract_features(image)
+                    roi = self.generateRndRoi(image)
+                    features = self.extract_features(image, roi)
                     if features is not None:
                         X.append(features)
                         y_true.append(0)
