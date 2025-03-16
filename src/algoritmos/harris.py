@@ -54,9 +54,9 @@ class harris_detect:
         Return: List        
         '''
         #Se calcula los productos de los gradientes
-        Ix2 = cv2.Sobel(Ix, cv2.CV_64F, 1, 0, ksize=3)
-        Iy2 = cv2.Sobel(Iy, cv2.CV_64F, 0, 1, ksize=3)
-        Ixy = cv2.Sobel(Ix, cv2.CV_64F, 0, 1, ksize=3)
+        Ix2 = Ix * Ix
+        Iy2 = Iy * Iy
+        Ixy = Ix*Iy
         
         return Ix2, Iy2, Ixy
 
