@@ -29,7 +29,7 @@ class harris_detect:
        
         self.gaussbox = gaussbox
         self.k = k
-        self.threshold = 0.1
+        self.threshold = threshold
         self.window_size = window_size    
     
     def calc_grad(self, img):
