@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import algoritmos.harris as hs
 
-def harris_svm(image, gb, k ,threshold, ws):
+def harris_svm(image, parametros):
     
     '''
     image -> imagen a procesar
@@ -22,8 +22,14 @@ def harris_svm(image, gb, k ,threshold, ws):
     El objetivo de este código es facilitarle al SVM un método para la extracción
     de características aplicando el algoritmo Harris Corner Detection.
     '''
+
     #Inicializamos el constructor
-    hs_svm = hs.harris_detect(gb,k,threshold,ws)
+    hs_svm = hs.harris_detect(
+        gaussbox = parametros.get("gaussbox", 3),
+        k = parametros.get("k", 0.04),
+        threshold = parametros.get("threshold", 0.1),
+        window_size = parametros.get("window_size", 5)
+    )
     
     # Se calcula el gradiente de x e y
     Ix, Iy = hs_svm.calc_grad(image)

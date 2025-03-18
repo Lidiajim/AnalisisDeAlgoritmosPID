@@ -5,13 +5,13 @@ import numpy as np
 import xml.etree.ElementTree as ET
 import random as rn
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report
 
 class svm:
     def __init__(self, algorithm, algo_params):
         self.algorithm = algorithm
         self.algo_params = algo_params
-        self.model = SVC(kernel="linear")
+        self.model = SVC(kernel="rbf", C=1)
     
     def extract_features(self, image, roi=None):
         region = roi if roi is not None else image
@@ -40,7 +40,7 @@ class svm:
         xmax = xmin + width
         ymax = ymin + height
         roi = image[ymin:ymax, xmin:xmax]
-        print(f"ROI size: ({roi.shape[0]},{roi.shape[1]}) (ymin: {ymin}, ymax: {ymax}, xmin: {xmin}, xmax: {xmax})")
+        #print(f"ROI size: ({roi.shape[0]},{roi.shape[1]}) (ymin: {ymin}, ymax: {ymax}, xmin: {xmin}, xmax: {xmax})")
         return roi
 
     def process_image(self, image_path, xml_path):
@@ -93,7 +93,7 @@ class svm:
     
    
     
-    def fit(self, train_persona_dir, train_no_persona_dir, val_persona_dir=None, val_no_persona_dir=None):
+    def fit(self, train_persona_dir, train_no_persona_dir):
         X_train_p, y_train_p = self.load_data_persona(train_persona_dir)
         X_train_n, y_train_n = self.load_data_no_persona(train_no_persona_dir)
         
@@ -107,10 +107,12 @@ class svm:
         
         self.model.fit(X_train, y_train)
         
-        if val_persona_dir and val_no_persona_dir:
-            X_val_p, y_val_p = self.load_data_persona(val_persona_dir)
-            X_val_n, y_val_n = self.load_data_no_persona(val_no_persona_dir)
-            print(f"Imágenes procesadas - Validación: {len(y_val_p)} personas, {len(y_val_n)} sin persona")
+        #Codigo no usado
+
+        #if val_persona_dir and val_no_persona_dir:
+        #    X_val_p, y_val_p = self.load_data_persona(val_persona_dir)
+        #    X_val_n, y_val_n = self.load_data_no_persona(val_no_persona_dir)
+        #    print(f"Imágenes procesadas - Validación: {len(y_val_p)} personas, {len(y_val_n)} sin persona")
     
     def predict_persona(self, images_dir):
         X, y_true = [], []
@@ -135,7 +137,7 @@ class svm:
                         X.append(features)
                         y_true.append(0)
         return np.array(y_true), np.array(self.model.predict(np.array(X))) if X else (np.array([]), np.array([]))
-    
+   
     def evaluate(self, test_persona_dir, test_no_persona_dir, model_path=None):
         if model_path:
             self.model = joblib.load(model_path)
@@ -145,10 +147,40 @@ class svm:
         
         y_true = np.concatenate((y_true_p, y_true_np))
         y_pred = np.concatenate((y_pred_p, y_pred_np)) if y_pred_p.size and y_pred_np.size else y_pred_p if y_pred_p.size else y_pred_np
-        
+
+        print(f"Imágenes procesadas - Evaluacion: {len(y_true_p)} personas, {len(y_true_np)} sin persona")
         if y_true.size > 0 and y_pred.size > 0:
+            # Precisión
             accuracy = accuracy_score(y_true, y_pred) * 100
             print(f"\nPrecisión del modelo en el conjunto de prueba: {accuracy:.2f}%")
+            
+            # Precisión, Recall y F1-Score
+            precision = precision_score(y_true, y_pred) * 100
+            recall = recall_score(y_true, y_pred) * 100
+            f1 = f1_score(y_true, y_pred) * 100
+            
+            print(f"🔹 Precisión (Precision): {precision:.2f}%")
+            print(f"🔹 Sensibilidad (Recall): {recall:.2f}%")
+            print(f"🔹 F1-Score: {f1:.2f}%")
+            
+            # Matriz de confusión
+            cm = confusion_matrix(y_true, y_pred)
+            tn, fp, fn, tp = cm.ravel()
+            
+            print(f"\nMatriz de confusión:")
+            print(cm)
+            
+            # Falsos positivos y falsos negativos
+            print(f"\nFalsos positivos (FP): {fp}")
+            print(f"Falsos negativos (FN): {fn}")
+            print(f"Verdaderos positivos (TP): {tp}")
+            print(f"Verdaderos negativos (TN): {tn}")
+            
+            # Reporte de clasificación
+            print("\nReporte de clasificación:")
+            report = classification_report(y_true, y_pred, target_names=['No Persona', 'Persona'])
+            print(report)
+            
         else:
             print("\nNo se encontraron datos para evaluar.")
 
