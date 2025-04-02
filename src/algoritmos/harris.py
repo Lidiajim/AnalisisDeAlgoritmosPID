@@ -176,5 +176,45 @@ class harris_detect:
         if(axis == "off"): 
             plt.axis("off")
 
-        plt.show()   
+        plt.show()  
+    
+
+    def calcular_dispersion(self, img):
+        """
+        Calcula la dispersión de los puntos detectados en la imagen.
+
+        :param matriz_puntos: Array de coordenadas (N,2) con los puntos detectados (x, y)
+        :return: Centroide, varianza en X e Y, distancia promedio al centroide
+        """
+        if np.count_nonzero(img) == 0:
+            return [0,0,0,0,0]  # No hay puntos, retorna vacío
+
+        # Convertir a array de NumPy
+        puntos = np.array(img, dtype=np.float32)
+
+        centroide = np.mean(puntos, axis=0)
+        
+        # Calcular el centroide en el eje X
+        centroide_x = np.mean(puntos[:, 0])  # Promedio de las coordenadas X
+
+        # Calcular el centroide en el eje Y
+        centroide_y = np.mean(puntos[:, 1])  # Promedio de las coordenadas Y
+
+
+        # Calcular la varianza en X e Y (qué tan dispersos están)
+        varianza_x = np.var(puntos[:, 0])
+        varianza_y = np.var(puntos[:, 1])
+
+        # Calcular la distancia promedio de los puntos al centroide
+        distancias = np.linalg.norm(puntos - centroide, axis=1)
+        distancia_promedio = np.mean(distancias)
+
+        return centroide_x, centroide_y, varianza_x, varianza_y, distancia_promedio
+
+
+
+      
+
+
+
 
