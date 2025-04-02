@@ -111,31 +111,39 @@ class sift_detect:
         plt.show()
     
     
+
     def show_dog_pyramid(self, dog_pyr):
         """
         Muestra la pirámide de Diferencia de Gaussianas (DoG) en una sola figura, 
         organizando subplots en forma de rejilla:
         - Filas = número de octavas
         - Columnas = número de niveles por octava
+        Cada octava se muestra a la mitad del tamaño en altura que la anterior.
         """
-        for i, octave in enumerate(dog_pyr):
-            print(f"Octava {i}:")
-            for j, level in enumerate(octave):
-                print(f"  Nivel {j}: resolución {level.shape}")
+        
         num_octaves = len(dog_pyr)
         num_levels = len(dog_pyr[0])
         
+        # Calculamos las razones de altura:
+        # La primera octava tendrá ratio 1, la segunda 1/2, la tercera 1/4, etc.
+        height_ratios = [1 / (2 ** i) for i in range(num_octaves)]
+        
+        # El figsize global se define considerando la suma de las alturas de cada fila.
+        total_height = 3 * sum(height_ratios)
+        total_width = 3 * num_levels
+        
         fig, axes = plt.subplots(nrows=num_octaves, 
-                                 ncols=num_levels, 
-                                 figsize=(3 * num_levels, 3 * num_octaves))
+                                ncols=num_levels, 
+                                figsize=(total_width, total_height),
+                                gridspec_kw={'height_ratios': height_ratios})
         
         for i in range(num_octaves):
             for j in range(num_levels):
                 img = dog_pyr[i][j]
                 axes[i, j].imshow(img, 
-                                  cmap="gray", 
-                                  interpolation='nearest',
-                                  extent=[0, img.shape[1], img.shape[0], 0])
+                                cmap="gray", 
+                                interpolation='nearest',
+                                extent=[0, img.shape[1], img.shape[0], 0])
                 axes[i, j].set_aspect('equal')
                 axes[i, j].axis("off")
                 
@@ -146,6 +154,7 @@ class sift_detect:
         
         plt.tight_layout()
         plt.show()
+
         
     def build_dog_pyramid(self, gaussian_pyramid):
         """
@@ -167,36 +176,41 @@ class sift_detect:
         organizando subplots en forma de rejilla:
         - Filas = número de octavas
         - Columnas = número de niveles por octava
+        Cada octava se muestra a la mitad del tamaño en altura que la anterior.
         """
-        for i, octave in enumerate(gaussian_pyr):
-            print(f"Octava {i}:")
-            for j, level in enumerate(octave):
-                print(f"  Nivel {j}: resolución {level.shape}")
         num_octaves = len(gaussian_pyr)
-        # Suponiendo que todas las octavas tienen el mismo número de niveles
         num_levels = len(gaussian_pyr[0])
-    
+        
+        # Calculamos las razones de altura para cada octava: la primera 1, la segunda 1/2, la tercera 1/4, etc.
+        height_ratios = [1 / (2 ** i) for i in range(num_octaves)]
+        
+        # Ajustamos el tamaño de la figura según la suma de las alturas de las filas
+        total_height = 3 * sum(height_ratios)
+        total_width = 3 * num_levels
+        
         fig, axes = plt.subplots(nrows=num_octaves, 
-                                 ncols=num_levels, 
-                                 figsize=(3 * num_levels, 3 * num_octaves))
-    
+                                ncols=num_levels, 
+                                figsize=(total_width, total_height),
+                                gridspec_kw={'height_ratios': height_ratios})
+        
         for i in range(num_octaves):
             for j in range(num_levels):
                 img = gaussian_pyr[i][j]
                 axes[i, j].imshow(img, 
-                                  cmap="gray", 
-                                  interpolation='nearest',
-                                  extent=[0, img.shape[1], img.shape[0], 0])
+                                cmap="gray", 
+                                interpolation='nearest',
+                                extent=[0, img.shape[1], img.shape[0], 0])
                 axes[i, j].set_aspect('equal')
                 axes[i, j].axis("off")
-    
+        
                 if i == 0:
                     axes[i, j].set_title(f"Nivel {j}")
-    
+        
             axes[i, 0].set_ylabel(f"Octava {i}", rotation=90, size="large")
-    
+        
         plt.tight_layout()
         plt.show()
+
         
     def build_gaussian_pyramid(self, base_img, num_octaves=4, num_scales=3, sigma=1.6):
         """
