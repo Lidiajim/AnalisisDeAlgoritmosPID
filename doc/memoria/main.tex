@@ -13,6 +13,8 @@
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{array}
+\usepackage{float}
 
 
 
@@ -23,7 +25,11 @@
 \maketitle
 
 \begin{abstract}
-  \noindent En este trabajo se analiza y compara la eficiencia de cuatro métodos de extracción de características en imágenes: Harris Corner Detection, SURF, SIFT y HOG, aplicados a la detección de peatones mediante un modelo SVM preentrenado. Se estudia la teoría detrás de cada método, extrayendo y explicando sus principios fundamentales de manera didáctica. Posteriormente, se implementan o adaptan implementaciones existentes, detallando los parámetros utilizados y los efectos que tienen en el rendimiento del modelo. Para evaluar la eficiencia de cada método, se definen métricas clave como precisión, recall, F1-score y tiempo de procesamiento. Se presentan los resultados obtenidos mediante experimentación con un conjunto de datos de imágenes, analizando el impacto de cada técnica en la identificación de peatones. Finalmente, se expone de manera clara y estructurada el funcionamiento de cada método, utilizando ejemplos gráficos y explicaciones detalladas. Este estudio proporciona una visión comparativa de estos enfoques en el contexto de la visión por computador, facilitando la selección de técnicas óptimas para aplicaciones similares.  
+  \noindent En este trabajo se analiza y compara la eficiencia de cuatro métodos de extracción de características en imágenes: Harris Corner Detection, SURF, SIFT y HOG, aplicados a la detección de peatones mediante un modelo SVM preentrenado. 
+  Se estudia la teoría detrás de cada método, extrayendo y explicando sus principios fundamentales de manera didáctica. Posteriormente, se implementan o adaptan implementaciones existentes, 
+  detallando los parámetros utilizados y los efectos que tienen en el rendimiento del modelo. Para evaluar la eficiencia de cada método, se definen métricas clave como la precisión y tiempo de procesamiento. 
+  Se presentan los resultados obtenidos mediante experimentación con un conjunto de datos de imágenes, analizando el impacto de cada técnica en la identificación de peatones. Finalmente, se expone de manera clara la 
+  comparativa de los métodos estudiados, destacando sus ventajas y desventajas en función de los resultados obtenidos.  
  
  \hspace{1cm}
  
@@ -36,255 +42,507 @@
  \section{Introducción}
 
  El procesamiento de imágenes digitales es un campo clave dentro de la visión por computador, con aplicaciones en reconocimiento de patrones, inteligencia artificial y análisis de imágenes. Dentro de este ámbito, la detección de objetos y, en particular, la identificación de peatones, representa un desafío fundamental con implicaciones en seguridad, movilidad y automatización. 
- 
+ \par \hspace{1cm}
+
  Este trabajo se centra en el estudio y comparación de cuatro técnicas de extracción de características utilizadas en la identificación de peatones: \textbf{Harris Corner Detection}, \textbf{SURF (Speeded Up Robust Features)}, \textbf{SIFT (Scale-Invariant Feature Transform)} y \textbf{HOG (Histogram of Oriented Gradients)}. Estas técnicas permiten identificar estructuras relevantes en una imagen, facilitando su uso en tareas de reconocimiento y clasificación. Para evaluar su rendimiento, se utilizará un \textbf{modelo SVM (Support Vector Machine) preentrenado}, el cual procesará los descriptores generados por cada método para realizar la identificación de peatones en imágenes. 
- 
- El objetivo principal de este trabajo es ofrecer una explicación didáctica de los métodos estudiados, tanto desde un punto de vista teórico como práctico. Para ello, el desarrollo del proyecto se estructura en tres fases clave:
+ \par \hspace{1cm}
+
+
+ El \textbf{objetivo} principal de este trabajo es ofrecer una explicación didáctica de los métodos estudiados, tanto desde un punto de vista teórico como práctico. Para ello, el desarrollo del proyecto se estructura en tres fases clave:
  
  \begin{itemize}
-     \item \textbf{Análisis teórico:} Se investigarán los principios fundamentales de cada método, extrayendo las ideas principales de fuentes científicas, sin recurrir a transcripciones literales.
+     \item \textbf{Análisis teórico:} Se investigarán los principios fundamentales de cada método, extrayendo las ideas principales de fuentes científicas.
      \item \textbf{Implementación práctica:} Se desarrollará o adaptará la implementación existente de cada técnica, detallando los pasos intermedios, el significado de los parámetros y la experimentación con distintas configuraciones.
      \item \textbf{Presentación didáctica:} Se explicarán de forma estructurada todos los pasos necesarios para la detección de peatones utilizando cada método, complementando con ejemplos gráficos y análisis de resultados.
  \end{itemize}
  
- Dado que el desarrollo del trabajo está orientado a la investigación y aplicación de técnicas avanzadas no vistas en clase, se apoyará en artículos científicos recientes y capítulos de libros especializados en visión por computador. La planificación y ejecución del proyecto se realizará en un equipo de trabajo, distribuyendo \textbf{70 horas por persona}, según lo indicado en las directrices académicas. Además, se utilizarán herramientas de gestión de proyectos para organizar y documentar las tareas realizadas, asegurando un seguimiento adecuado de los avances. 
+ Dado que el desarrollo del trabajo está orientado a la investigación y aplicación de técnicas avanzadas no vistas en clase, se apoyará en artículos científicos recientes. La \textbf{planificación} y ejecución del proyecto se realizará en un equipo de trabajo compuesto por 4 alumnos
+ ,distribuyendo \textbf{70 horas por persona}. Además, se utilizarán herramientas de gestión de proyectos para organizar y documentar las tareas realizadas, asegurando un seguimiento adecuado de los 
+ avances. Concretamente, se utilizará GitHub como repositorio del código fuente y documentación, Clockify para el registro y seguimiento de horas y tareas, y Microsoft Project para realizar una planificación previa precisa de las fases, hitos y actividades previstas.
+ \newpage
+
+ \section{Planteamiento teórico}
+ \par\vspace{0.5cm}
+
+ El problema abordado se centra en la detección automatizada de peatones a partir de imágenes digitales mediante técnicas de procesamiento de imágenes como \textbf{Harris}, \textbf{SURF}, \textbf{SIFT} y \textbf{HOG}. Esta tarea es fundamental en múltiples aplicaciones, 
+ como la seguridad vial, la monitorización del tráfico y la visión por computadora en sistemas autónomos. La detección 
+ precisa y eficiente de peatones permite mejorar la toma de decisiones en entornos urbanos, reducir accidentes o incluso optimizar sistemas de asistencia a la conducción. 
+ \par\vspace{0.5cm}
+
+ Para abordar este problema, se han implementado y evaluado los algoritmos mencionados, 
+ los cuales permiten extraer características distintivas de las imágenes con el objetivo de identificar patrones asociados 
+ a la presencia de peatones. En esta sección, se describirá en profundidad el funcionamiento de cada uno de estos algoritmos, analizando sus fundamentos teóricos, principios matemáticos y ventajas frente a otros enfoques. Esta base teórica servirá como punto de partida para su posterior implementación y evaluación experimental.
  
- Este documento recoge el desarrollo del trabajo en sus distintas fases, proporcionando un análisis comparativo de los métodos seleccionados, su implementación y evaluación en la detección de peatones mediante un modelo SVM.
+
+  \subsection{Harris Corner Detection}
+  \par\vspace{0.5cm}
+
+
+
+
+  \subsection{SURF (Speeded-Up Robust Features)}
+  \par\vspace{0.5cm}
+
+  \subsection{SIFT (Scale-Invariant Feature Transform)}
+  \par\vspace{0.5cm}
+  
+  El algoritmo \textbf{SIFT} (Scale-Invariant Feature Transform) es una técnica ampliamente utilizada en visión por computadora para la detección y descripción de características en imágenes. Fue desarrollado por \textit{David Lowe} en 1999 y destaca por su capacidad de identificar puntos clave en una imagen de manera robusta frente a transformaciones como cambios de escala, rotación e iluminación. Gracias a estas propiedades, SIFT se ha convertido en una herramienta fundamental para aplicaciones como el reconocimiento de objetos, la detección de patrones y el emparejamiento de imágenes.
+  
+  \par\vspace{0.5cm}
+  \textbf{Fundamentos teóricos}
+  \par\vspace{0.5cm}
+  
+  El algoritmo SIFT se basa en la extracción de puntos característicos (keypoints) de una imagen y la generación de descriptores asociados a ellos. Este proceso se realiza en varias etapas, las cuales garantizan la invariancia a escala y a rotación.
+  
+  \begin{itemize}
+      \item \textbf{Construcción de la Pirámide Gaussiana:}  
+      Se aplican sucesivas convoluciones con un filtro gaussiano para generar versiones suavizadas de la imagen en diferentes escalas. Este proceso permite analizar la imagen a distintos niveles de detalle, lo que hace que los puntos característicos sean robustos a cambios de tamaño y desenfoque.
+      
+      \item \textbf{Construcción de la Pirámide de Diferencia de Gaussianos (DoG):}  
+      Se calculan diferencias entre imágenes suavizadas consecutivas de la pirámide gaussiana. Esta operación permite resaltar bordes y estructuras significativas en la imagen, facilitando la detección de puntos clave.
+      
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=1.1\textwidth]{images/sift_gauss.png}
+        \caption{Proceso de la piramide de diferencia gaussiana.}
+    \end{figure}
+    
+      \item \textbf{Detección de keypoints:}  
+      Se identifican los puntos extremos en la pirámide DoG, comparando cada píxel con sus vecinos en los niveles superior e inferior de la pirámide, así como en su entorno local. Los puntos seleccionados se someten a un proceso de refinamiento para descartar aquellos con bajo contraste o situados en bordes poco definidos.
+      
+      \item \textbf{Asignación de orientación:}  
+      A cada keypoint se le asigna una orientación dominante basada en la distribución de gradientes en su vecindad. Para ello, se calcula el gradiente horizontal y vertical, y se calcula el histograma de orientaciones del gradiente en una ventana centrada en el punto en la escala en la que se ha detectado. La orientación 
+      se discretiza en 36 intervalos y se van acumulando las amplitudes del gradiente en cada ángulo detectado. Esto permite que el algoritmo sea invariante a rotaciones.
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=1.1\textwidth]{images/sift_orientacion.png}
+        \caption{Proceso de orientación de un keypoint.}
+    \end{figure}
+
+
+    \item \textbf{Generación del descriptor SIFT:}  
+    Para representar de manera robusta un keypoint, se genera un descriptor basado en la distribución de los gradientes dentro de una ventana centrada en dicho punto.  
+    Esta región se divide en una cuadrícula de \(4 \times 4\) celdas, formando un total de 16 subregiones.  
+    En cada subregión se calcula un histograma de orientaciones de gradientes con 8 direcciones posibles.  
+    Finalmente, los 16 histogramas se concatenan en un único vector de características de 128 dimensiones, dado que proviene de la combinación de las 16 subregiones (\(4 \times 4\)) y las 8 direcciones (\(16 \times 8 = 128\)).  
+    Este descriptor permite identificar y comparar keypoints de manera robusta frente a variaciones en escala, rotación e iluminación.
+
+   
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{images/sift_descrip.png}
+        \caption{Keypoint Descriptor.}
+    \end{figure}
+
+    \end{itemize}
+  
+  \par\vspace{0.5cm}
+  \textbf{Fundamentos matemáticos}
+  \par\vspace{0.5cm}
+  
+  El algoritmo SIFT se basa en varios principios matemáticos que garantizan su eficacia en la detección y descripción de características. A continuación, se presentan algunos de los conceptos clave:
+  
+  \begin{itemize}
+      \item \textbf{Filtro Gaussiano:}  
+      La función gaussiana en dos dimensiones está definida por:
+      \[
+      G(x, y, \sigma) = \frac{1}{2\pi\sigma^2} \exp\left(-\frac{x^2 + y^2}{2\sigma^2}\right)
+      \]
+      donde \(\sigma\) controla el nivel de suavizado aplicado a la imagen.
+      
+      \item \textbf{Diferencia de Gaussianos (DoG):}  
+      Se define como la resta entre dos imágenes suavizadas con diferentes valores de \(\sigma\):
+      \[
+      DoG(x, y, \sigma) = G(x, y, \sigma_2) - G(x, y, \sigma_1)
+      \]
+      Esta operación resalta los cambios de intensidad y permite la detección de keypoints.
+      
+      \item \textbf{Cálculo del gradiente:}  
+      Para determinar la orientación de un keypoint, se calcula el gradiente de la imagen en cada píxel utilizando:
+      \[
+      m(x, y) = \sqrt{(L(x+1, y) - L(x-1, y))^2 + (L(x, y+1) - L(x, y-1))^2}
+      \]
+      \[
+      \theta(x, y) = \tan^{-1} \left(\frac{L(x, y+1) - L(x, y-1)}{L(x+1, y) - L(x-1, y)}\right)
+      \]
+      donde \(m(x, y)\) representa la magnitud del gradiente y \(\theta(x, y)\) su dirección.
+      
+      \item \textbf{Generación del descriptor SIFT:}  
+      El descriptor de cada keypoint como se explicó anteriormente, se forma a partir de histogramas de gradientes calculados en una ventana de \(16\times16\) píxeles alrededor del punto de interés. La ventana se subdivide en \(4\times4\) celdas y en cada celda se calcula un histograma de 8 orientaciones, generando un vector de:
+      \[
+      4 \times 4 \times 8 = 128
+      \]
+      dimensiones, que representa la información local de la imagen.
+  \end{itemize}
+  
+  \par\vspace{0.5cm}
+  \textbf{Ventajas de SIFT}
+  \par\vspace{0.5cm}
+  
+  El algoritmo SIFT presenta varias ventajas en comparación con otros métodos de detección de características:
+  
+  \begin{itemize}
+      \item \textbf{Invariancia a escala y rotación:}  
+      Gracias a la construcción de la pirámide gaussiana y la asignación de orientación, los keypoints detectados son robustos a cambios de tamaño y rotación en la imagen.
+      
+      \item \textbf{Alta discriminación y robustez:}  
+      Los descriptores SIFT tienen una alta capacidad para diferenciar objetos en diferentes condiciones de iluminación y perspectiva.
+      
+      \item \textbf{Resistencia a ruido y oclusiones parciales:}  
+      Debido a su método de detección basado en diferencias de gaussianos y análisis de gradientes, SIFT es menos sensible al ruido y sigue funcionando incluso cuando partes de la imagen están ocultas.
+      
+      \item \textbf{Aplicabilidad en reconocimiento de patrones y emparejamiento de imágenes:}  
+      El uso de descriptores de 128 dimensiones permite realizar comparaciones eficientes entre imágenes, facilitando tareas como el reconocimiento de objetos.
+  \end{itemize}
+  
+  \par\vspace{0.5cm}
  
-\section{Planteamiento teórico}
-
-La sección \textit{Planteamiento teórico} debe plantear el problema a resolver, así como describir los algoritmos propuestos para su resolución. 
-
-La realización del trabajo está programada en {\bf 4 fases}, cada una de las cuales termina con un {\bf Seguimiento}.
-\subsection*{FASE 1}
-En la primera fase, \textbf{los miembros del grupo} realizarán la \textbf{propuesta del trabajo dirigido} (TD), acordando con el profesorado el trabajo a realizar. 
-
-Para la búsqueda de libros y bases de datos de revistas, se puede consultar el catálogo fama de la US \url{http://fama.us.es/}. Se recomiendan las bases de datos ScienceDirect (Elsevier), IEEE Xplore y Sringerlink. Si se accede desde fuera de la Universidad, se tendrá que usar el UVUS. Se pueden encontrar recursos para buscar ideas en el documento \textit{Enlaces de interés} del contenido en ev.
-
-Antes de que termine la \textbf{Fase 1}, se debe entregar la {\bf planificación inicial} y la {\bf lista de objetivos} del TD. Se recuerda que en la planificación se debe detallar cómo se distribuirán las {\bf 70 horas/persona} que el grupo debe dedicar al TD, incluidas las sesiones de clase deicadas al trabajo.  
-En esta fase debe comprenderse la teoría relativa al trabajo a realizar y quedar perfectamente definido. 
-
-\subsection*{FASE 2}
-En esta fase se comenzará a trabajar en la parte práctica y explicación del método. Se recomienda comenzar a escribir la documentación desde el prncipio.
-
-Al finalizar la Fase 2, se mostrará una primera versión de la implementación, algo mínimo. El algoritmo (o algoritmos) a implementar debe estar perfectamente claro y diseñado. 
-
-\subsection*{FASE 3}
-En la Fase 3 se seguirá con la realización del trabajo. Al final de la Fase 3, se mostrará una primera versión de la documentación y segunda de la implementación, ahora ya sí, un producto mínimo viable. Se mostrará la hoja de tiempos realizada hasta ese momento y \textbf{ se revisarán los objetivos iniciales} planteados.
-
-\subsection*{FASE 4}
-En la última fase se realizará la experimentación para poder evaluar y comparar el método implementado y poder inferir conclusiones. Al final de la Fase 4, se tendrá una primera versión de la presentación (aunque sólo sea un índice), junto con una revisión de la documentación y de la implementación. 
-
-\vspace{1cm}
-En la siguiente tabla se resumen los hitos que deben alcanzarse (y entregarse) al final de cada Fase: 
-
-    \begin{center}
-    \begin{tabular}{|c||l|}
-    \hline
-  Seguimiento 1 & Propuesta del TD basándose en una fuente científica.   \\& Planificación inicial y lista de objetivos. \\
-  & Estudio y comprensión del método elegido. \\
-  & Hoja de tiempos individual.\\
-\hline
-Seguimiento 2  & Primera versión de la implementación. \\ &  Hoja de tiempos individual.\\
-\hline
- Seguimiento 3 & Primera versión de la documentación y segunda de la implementación.\\
-&  Hoja de tiempos individual.\\& Revisión de los objetivos. \\
-\hline
-Seguimiento 4 & Primera versión de la presentación.  \\& Revisión de la documentación  y de la  implementación.\\
-\hline
-    \end{tabular}
-    \end{center}
-Los días dedicados a cada Seguimiento aparecen en el Calendario publicado en ev.
-
-\textbf{Todos} los miembros del grupo deberán \textbf{intervenir en la exposición final}, en la que deberán defender su trabajo y comentar los logros teóricos y de implementación obtenidos. Además, deberá hacerse algún ejemplo usando la implementación desarrollada (\textbf{20 minutos en total}). Las exposiciones se realizarán en horario de clase en las dos últimas semanas. Después se abrirá un turno de preguntas.
-
-  %  En la siguiente tabla se muestran las fechas de  \textbf{las exposiciones de cada grupo}. Las exposiones se realizarán en horario de clase.
-
-%\begin{center}
-%    \begin{tabular}{|c||r|r|}
-%    \hline
-%     &Grupos 1,2,3 & Grupos 4,5,6\\
-%    \hline\hline
-%  Fecha de la exposición & 8 de junio & 9 de junio \\
-%\hline
-%    \end{tabular}
-%    \end{center}
-
-Para la entrega, cada grupo deberá subir, en respuesta a una actividad creada para tal efecto en la ev, los siguientes elementos:
-
- \begin{itemize}
-\item \url{documentacion.pdf}. Consiste en un fichero \url{.pdf} correspondiente a la documentación. 
-
-Estructura de la documentación:
-
-\begin{enumerate}
-\item[]  Título
-\item[]  Autores
-\item[]  Resumen
-\item  Introducción 
-\item  Planteamiento teórico 
-\item  Implementación
-\item  Experimentación
-\item  (Manual de usuario)
-\item  Conclusiones
-\item Autoevaluación de cada miembro
-\item  Tabla de tiempos
-\item[]  Bibliografía
-\end{enumerate}
-
-Se puede usar el fichero \url{main.tex} disponible en enseñanza virtual como plantilla de Latex\footnote{Véase el Anexo para algunos apuntes rápidos sobre escritura de textos en LaTex (tomados de \url{Overleaf.com}.}, que es el que se ha usado en este documento. Se recomienda el uso de editores online de LaTeX como \url{Overleaf.com}.
-
-Las referencias se citan así:
-bla, bla \cite{clave:revista}, bla, bla \cite{clave:libro}. La bibliografía
-debe seguir el estilo de este documento, con las referencias ordenadas alfabéticamente por autores.
-
-También se puede documentar el trabajo en un Notebook de Jupyter, en el que también se puede incluir código LaTex e imprimirlo como pdf.
-
-\item \url{codigo.zip}. Si se ha desarrollado una aplicación propia, debe contener todo el código utilizado, comentado y modulado. Debe contener el ejecutable, si existiera, junto con todos los archivos necesarios para su ejecución de forma que no dé errores de compilación.
-Debe contener un {\bf leeme.txt} con instrucciones para ejecutar el código.
-Se debe incluir una carpeta \textbf{images} con imágenes de muestra, incluyendo las imágenes usadas en la experimentación.
-
-En lugar de subir el código a la enseñanza virtual, se puede subir a un repositorio y referenciarlo en la documentación. 
-
-En caso de que exista ya una implementación en un repositorio asociado al trabajo escogido, se debe desarrollar una versión propia que incluya explicaciones, paso a paso, ejemplos, modificaciones, etc. Por ejemplo, se puede hacer un notebook de jupyter para esto.
 
 
-
-\item \url{presentacion.pdf}. Consiste en un fichero \url{.pdf} con la presentación que se usará en clase para exponer el trabajo.
-\end{itemize}
-
-La evaluación del trabajo se realizará en base a una rúbrica que se proporcionará en Blackboard.
+  \subsection{HOG (Histogram of Oriented Gradients)}
+  \par\vspace{0.5cm}
 
 
-
-
+\newpage
 
 \section{Implementación}
 
-Esta sección de la documentación  debe incluir la descripción de la implementación (pero no el código), especificando las tecnologías usadas, el diseño, módulos o partes principales. \textbf{Debe quedar muy claro cuál es la parte original implementada en el programa, qué librerías se han usado y de dónde se han cogido, con referencias apropiadas}. Se debe describir (tanto en la aplicación, como en la documentación, como en la presentación) los pasos seguidos para resolver el problema que se plantea de la forma más divulgativa posible. 
+\subsection{Tecnologías}
 
-%Se recomienda el uso de Python con la librería \textbf{OpenCV}, \url{https://opencv.org/}.
-%Matlab posee también un toolbox de procesamiento de imágenes que se puede usar en los laboratorios de la escuela.
-Una opción muy práctica y recomendable es la de usar la librería \textbf{OpenCV} con Python mediante el gestor de paquetes de Anaconda \url{https://www.anaconda.com} y usar los notebook de Jupyter en los que se puede intercalar ejecución de código con explicaciones teóricas. % Éstas sólo son algunas indicaciones. 
+Para este proyecto se ha utilizado Python como lenguaje de programación junto con varias librerías especializadas en procesamiento de imágenes, aprendizaje automático y visualización de datos. A continuación, se detallan las principales tecnologías empleadas:
 
-Siempre se debe redactar un fichero {\bf Leeme explicando todo lo necesario para poder ejecutar y usar la implementación} en cualquier ordenador (o al menos con el mismo sistema operativo).
+\begin{itemize}
+\item \textbf{OpenCV} \href{https://opencv.org/}{(web oficial)}: Biblioteca de código abierto para visión por computadora y procesamiento de imágenes. Se utilizó para la lectura, preprocesamiento y transformaciones de las imágenes.
+\item \textbf{Numpy} \href{https://numpy.org/}{(web oficial)}: Biblioteca especializada en cálculo numérico y gestión de matrices multidimensionales. Se usó para la manipulación de datos y cálculos matemáticos en la transformación de imágenes.
+\item \textbf{Matplotlib} \href{https://matplotlib.org/}{(web oficial)}: Biblioteca de visualización de datos. Se empleó principalmente para representar imágenes, mostrar los puntos de interés detectados y visualizar los resultados obtenidos.
+\item \textbf{Scikit-image} \href{https://scikit-image.org/}{(web oficial)}: Biblioteca de procesamiento de imágenes que proporciona herramientas adicionales para realizar operaciones de filtrado, detección de bordes y transformaciones de imágenes.
+\item \textbf{Scikit-learn} \href{https://scikit-learn.org/}{(web oficial)}: Biblioteca de aprendizaje automático utilizada para entrenar y evaluar el modelo SVM que predice la presencia de peatones en las imágenes procesadas.
+\end{itemize}
+
+\subsection{Técnicas y Algoritmos Empleados}
+
+A lo largo del proyecto se implementaron varias técnicas de procesamiento de imágenes y detección de características, con el objetivo de extraer información relevante para alimentar un modelo de clasificación basado en \textbf{SVM (Support Vector Machine)}. A continuación, se detallan los algoritmos utilizados y su tratamiento sobre las imágenes:
+
+\subsubsection{Harris Corner Detection}
 
 
+\textbf{Proceso aplicado:}
+
+
+\subsubsection{SURF (Speeded-Up Robust Features)}
+
+
+\textbf{Proceso aplicado:}
+
+
+\subsubsection{SIFT (Scale-Invariant Feature Transform)}
+
+El algoritmo \textbf{SIFT} es un método robusto para detectar características invariantes a escala y rotación en una imagen. Fue utilizado para extraer puntos de interés y construir descriptores característicos que permitieran la identificación de patrones en las imágenes.
+
+\subsubsection{Proceso de Aplicación de SIFT}
+
+A continuación, se detallan los pasos seguidos en la implementación del algoritmo SIFT:
+\par\vspace{0.5cm}
+
+\textbf{Paso 1: Cargar y Mostrar la Imagen}
+\par\vspace{0.5cm}
+
+Antes de aplicar el algoritmo, se importan las librerías necesarias y se carga la imagen con la que se va a trabajar.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/sift_paso_1.png}
+    \caption{Imagen original cargada.}
+\end{figure}
+
+\textbf{Paso 2: Conversión de la Imagen a Escala de Grises}
+
+La imagen se convierte a escala de grises, ya que SIFT opera sobre la intensidad de los píxeles en lugar de los colores, lo que mejora la estabilidad de la detección de características.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/sift_paso_2.png}
+    \caption{Conversión a escala de grises.}
+\end{figure}
+
+\textbf{Paso 3: Configuración del Detector SIFT}
+\par\vspace{0.5cm}
+
+El detector \textbf{SIFT} requiere la configuración de varios parámetros clave que afectan la detección de características en la imagen:
+
+\begin{itemize}
+    \item \textbf{nfeatures = 5:} Número máximo de características a detectar. Si se establece en 0, se detectan todas las posibles características.
+    \item \textbf{nOctaveLayers = 3:} Número de capas por octava en la pirámide Gaussiana.
+    \item \textbf{contrastThreshold = 0.04:} Umbral para descartar características de bajo contraste.
+    \item \textbf{edgeThreshold = 10:} Umbral para eliminar puntos en bordes poco definidos.
+    \item \textbf{sigma = 1.6:} Desviación estándar inicial para el filtro Gaussiano.
+\end{itemize}
+
+Para la implementación, se ha utilizado la clase correspondiente en el módulo \texttt{algoritmos/sift.py}. 
+\par\vspace{0.5cm}
+En las pruebas iniciales, se estableció \texttt{nfeatures} en \textbf{5} para reducir la cantidad de puntos clave detectados, 
+facilitando la visualización y comprensión teórica del proceso.
+\par\vspace{0.5cm}
+
+\textbf{Paso 4: Construcción de la Pirámide Gaussiana}
+\par\vspace{0.5cm}
+
+La pirámide Gaussiana se genera aplicando convoluciones sucesivas con filtros gausianos de distinta desviación estándar (\(\sigma\)), reduciendo la resolución de la imagen en cada octava. Este proceso permite analizar la imagen a diferentes escalas para detectar características invariantes.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{images/sift_paso_3.1.png}
+    \includegraphics[width=0.9\textwidth]{images/sift_paso_3.2.png}
+    \includegraphics[width=0.7\textwidth]{images/sift_paso_3.3.png}
+    \includegraphics[width=0.4\textwidth]{images/sift_paso_3.4.png}
+    \caption{Construcción de la Pirámide Gaussiana.}
+\end{figure}
+
+\textbf{Paso 5: Construcción de la Pirámide de Diferencia de Gaussianos (DoG)}
+
+Después de generar la pirámide Gaussiana, se construye la pirámide de Diferencia de Gaussianos (DoG) restando imágenes consecutivas de la pirámide. Esto resalta las variaciones de intensidad entre niveles de suavizado, facilitando la detección de puntos de interés.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{images/sift_paso_4.1.png}
+    \includegraphics[width=0.9\textwidth]{images/sift_paso_4.2.png}
+    \includegraphics[width=0.7\textwidth]{images/sift_paso_4.3.png}
+    \includegraphics[width=0.4\textwidth]{images/sift_paso_4.4.png}
+    \caption{Construcción de la Pirámide de Diferencia de Gaussianos (DoG).}
+\end{figure}
+
+\textbf{Paso 6: Detección de Keypoints}
+\par\vspace{0.5cm}
+
+Los keypoints se detectan identificando los extremos locales en la pirámide DoG. Se comparan píxeles con sus vecinos en los niveles superiores e inferiores de la pirámide para encontrar puntos máximos y mínimos. Como resultado, obtenemos 5 keypoints debido a la configuración propuesta anteriormente. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/sift_paso_5.1.png}
+    \caption{Detección de 5 keypoints en la imagen.}
+\end{figure}
+
+En el caso de aplicar el valor 0 al parámetro \textbf{nfeatures}, se detectarían todas las características posibles en la imagen, lo que aumentaría significativamente el número de keypoints detectados, como se observa en la siguiente imagen:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/sift_paso_5.png}
+    \caption{Detección de todos los keypoints con \texttt{nfeatures} = 0.}
+\end{figure}
+
+\textbf{Paso 7: Asignación de Orientación a los Keypoints}
+\par\vspace{0.5cm}
+
+Cada keypoint recibe una orientación basada en los gradientes locales de la imagen. Esto permite que los descriptores sean invariables a la rotación.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{images/sift_paso_6.1.png}
+    \caption{Orientación asignada a cada keypoint.}
+\end{figure}
+
+\textbf{Paso 8: Visualización de los Keypoints con su Orientación}
+\par\vspace{0.5cm}
+
+Los keypoints detectados y sus orientaciones asignadas se visualizan para evaluar la robustez del algoritmo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/sift_paso_7.1.png}
+    \caption{Visualización de keypoints con orientación.}
+\end{figure}
+
+\textbf{Paso 9: Cálculo de Descriptores}
+\par\vspace{0.5cm}
+
+Cada keypoint se describe mediante un vector de características basado en la distribución de gradientes en su vecindad.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/sift_paso_8.png}
+    \caption{Ejemplo de descriptor SIFT calculado.}
+\end{figure}
+
+Estos descriptores serán los que permitan al modelo de aprendizaje automático emparejar características entre diferentes imágenes, facilitando tareas como el reconocimiento de objetos y la detección de peatones en escenas complejas.
+
+
+\subsubsection{HOG (Histogram of Oriented Gradients)}
+
+
+\textbf{Proceso aplicado:}
+
+
+\subsection{Decisiones de Diseño}
+
+\begin{itemize}
+\item \textbf{Separación de los algoritmos en archivos independientes:} Cada método de detección (Harris, SURF, SIFT y HOG) se implementó en archivos de Python independientes dentro de una carpeta central denominada \texttt{algoritmos}.
+\item \textbf{Presentación didáctica en Jupyter Notebooks:} Se desarrolló un \texttt{notebook.ipynb} por cada algoritmo donde se explican los algoritmos paso a paso.
+\item \textbf{Experimentación con un banco de imágenes de prueba:} Se realizó una prueba con un conjunto de imágenes para entrenar un modelo \textbf{SVM} y predecir si en una imagen hay o no un peatón.
+\item \textbf{Estructura organizada del proyecto:}  
+    \begin{itemize}
+        \item Se creó una carpeta \texttt{images} donde se almacenan los bancos de imágenes de entrenamiento del \textbf{SVM} y las pruebas para cada algoritmo. Las imágenes incluyen ejemplos con y sin personas, extraídas de \texttt{roboflow.com}.
+        \item Se añadió una carpeta \texttt{doc} para documentar el desarrollo del proyecto y actualizarlo progresivamente.
+        \item Se estableció una carpeta \texttt{machinelearning} dedicada específicamente al entrenamiento del modelo \textbf{SVM}.
+        \item Los Jupyter Notebooks están ubicados en la raíz del proyecto para facilitar su acceso y ejecución.
+    \end{itemize}
+\end{itemize}
+
+\newpage
 
 \section{Experimentación}
 
-Una sección de ejemplos comentados y pruebas realizadas con el programa desarrollado es imprescindible en este trabajo. Si existen distintos parámetros que intervienen en el método, se deben comprender y experimentar con ellos. También puede ser de interés probar distintos tipos de imágenes dentro del contexto del trabajo. Igualmente importantes (o más) serán las conclusiones que se puedan obtener de la experimentación realizada. 
+La experimentación es una parte fundamental de este trabajo, ya que permite evaluar el rendimiento de los algoritmos implementados en combinación con el modelo \textbf{SVM} (Support Vector Machine). 
+Para obtener resultados significativos, hemos realizado pruebas sistemáticas con las configuraciones más eficientes con cada algoritmo y un conjunto variado de imágenes.
+\par \hspace{1cm}
 
+Una vez implementados y probados los algoritmos de detección de características (\textbf{Harris, SURF, SIFT y HOG}), decidimos entrenar un modelo \textbf{SVM} utilizando un banco de datos con más de 1000 imágenes, en las que se incluyen ejemplos con y sin peatones. El objetivo es evaluar la capacidad del modelo para predecir correctamente la presencia de un peatón en una imagen.
+
+\subsection{Preparación del Conjunto de Datos}
+
+Para garantizar un entrenamiento adecuado del \textbf{SVM}, cada imagen del banco de datos fue sometida a un tratamiento previo, el cual depende del algoritmo de detección de características a evaluar. Este preprocesamiento incluyó:
+\begin{itemize}
+    \item Conversión a escala de grises (en los algoritmos que lo requieren).
+    \item Aplicación del método de detección de características correspondiente (Harris, SURF, SIFT o HOG).
+    \item Extracción de descriptores característicos de cada imagen.
+    \item Normalización de los descriptores para mejorar la robustez del modelo.
+\end{itemize}
+
+\subsection{Entrenamiento del Modelo SVM}
+
+Tras procesar el conjunto de datos, se procedió al entrenamiento del \textbf{SVM} con los descriptores extraídos de cada imagen. Para ello, se utilizó un conjunto de entrenamiento compuesto por imágenes etiquetadas en las que tomaba 
+el valor true en caso de haber una o más personas (señalando su ubicación), y false en caso contrario, para diferenciar aquellas que contienen peatones de aquellas que no.
+
+
+\subsection{Pruebas de Evaluación}
+
+Una vez entrenado el modelo con los descriptores obtenidos de cada algoritmo, se realizó una prueba final con un conjunto de imágenes con y sin personas, que no habían sido utilizadas durante el entrenamiento. El objetivo era medir la eficiencia del modelo en la tarea de detección de peatones.
+
+Cada imagen de prueba fue procesada de la misma manera que las imágenes de entrenamiento, aplicando el algoritmo de detección de características correspondiente y extrayendo sus descriptores. Posteriormente, estos descriptores fueron introducidos en el \textbf{SVM} entrenado para predecir si la imagen contenía un peatón o no.
+
+\subsection{Resultados y Análisis}
+
+Para evaluar el desempeño del modelo, se calcularon métricas como:
+\begin{itemize}
+    \item \textbf{Precisión}: Porcentaje de imágenes correctamente clasificadas.
+    \item \textbf{Tiempo de Procesamiento}: Tiempo medio necesario para procesar una imagen.
+\end{itemize}
+
+
+\subsection{Resultados Obtenidos}
+
+
+\newpage
 
 \section{Manual de usuario}
 
-Se debe incluir un breve manual de usuario en caso de que se desarrolle una aplicación. Si se implementa un notebook de Jupyter, no es necesario un manual de usuario, sino que debe quedar muy guiado, explicando todos los pasos y parámetros.  
+El manual de usuario del proyecto se encuentra disponible en el archivo \texttt{README.md} dentro del repositorio del proyecto en GitHub. Dicho manual proporciona una guía detallada sobre el uso de la aplicación, incluyendo su instalación, configuración y funcionalidades principales.
+\par\hspace{1cm}
+
+Para acceder al manual de usuario, visite el siguiente enlace donde encontrará el repositorio del proyecto en GitHub:
+
+\begin{center}
+\url{https://github.com/Lidiajim/AnalisisDeAlgoritmosPID}
+\end{center}
+\newpage
 
 \section{Conclusiones}
 
 Se debe introducir una sección de conclusiones que incluyan propuestas claras de mejora o extensión del trabajo (por ejemplo, si no se han podido alcanzar todos los objetivos iniciales). También conclusiones sobre los resultados obtenidos, en qué medida difieren de los esperados. además, son apropiadas conclusiones sobre las desviaciones en cuanto a la planificación inicial, así como conclusiones sobre la experiencia de la realización del trabajo (lecciones aprendidas).
-
+\newpage
 \section{Autoevaluación}
+A continuación se presenta la autoevaluación individual realizada por cada miembro del equipo según la rúbrica proporcionada:
 
-Siguiendo la rúbrica dada, se debe detallar, por parte de  \textbf{cada miembro del grupo}, la puntuación para el trabajo que se considera justa en cada apartado. 
+\begin{table}[htbp]
+  \centering
+  \scriptsize
+  \renewcommand{\arraystretch}{1.5}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{|>{\raggedright\arraybackslash}p{2.8cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{3cm}|}
+  \hline
+  \multicolumn{5}{|c|}{\textbf{Rúbrica para evaluar los trabajos dirigidos}} \\
+  \hline
+  \textbf{Exposición} &  \textbf{Álvaro} & \textbf{Lidia} & \textbf{Víctor} & \textbf{Óscar} \\
+  \hline
+  Comprensión y dominio (puntuación triple)& Excelente & Excelente & Excelente & Excelente \\
+  \hline
+  Exposición didáctica & Excelente & Excelente & Excelente & Excelente\\
+  \hline
+  Integración del equipo & Excelente & Excelente & Excelente & Excelente \\
+  \hline
+  \textbf{Implementación} & \textbf{Álvaro} & \textbf{Lidia} & \textbf{Víctor} & \textbf{Óscar} \\
+  \hline
+  Objetivos (puntuación doble)& Excelente & Excelente & Excelente & Excelente \\
+  \hline
+  Aspectos didácticos & Excelente & Excelente & Excelente & Excelente \\
+  \hline
+  Experimentación y conclusiones & Excelente & Excelente & Excelente & Excelente \\
+  \hline
+  \textbf{Documentación} & \textbf{Álvaro} & \textbf{Lidia} & \textbf{Víctor} & \textbf{Óscar} \\
+  \hline
+  Contenidos & Excelente & Excelente & Excelente & Excelente \\
+  \hline
+  Divulgación contenidos & Excelente & Excelente & Excelente & Excelente \\
+  \hline
+  Bibliografía y recursos científicos & Excelente & Excelente & Excelente & Excelente \\
+  \hline
+  \end{tabular}
+  \caption{Rúbrica para evaluar trabajos dirigidos (ponderada sobre 7 puntos)}
+  \end{table}
+
+  \newpage
 
 \section{Tabla de tiempos}
 
-
-Se debe justificar el trabajo realizado por cada componente del grupo, indicando el {\bf tiempo total que cada miembro del grupo ha dedicado} al trabajo (lo que puede implicar diferencia de notas obtenidas por los distintos miembros del grupo). El trabajo realizado debe ser de {\bf 70 horas por estudiante}. Además, debe haber un plan de trabajo \textbf{individual} detallado con las {\bf tareas realizadas por cada miembro} del grupo. Para esto último, se puede usar la tabla siguiente o bien documentos generados por la herramienta de gestión de proyectos que se use, como Projetsii o Microsoft Project, por ejemplo.
-
+El seguimiento del trabajo de cada participante del proyecto se ha dividido en cuatro fases claramente definidas, en las cuales cada miembro del equipo se centró en tareas específicas:
 \begin{center}
-\begin{tabular}{|c|c|c|c|}
-\hline
- Fecha de la
- actividad 
-& Tiempo (h)
-& Miembro
-& Actividad realizada
-\\\hline
-\mbox{ }&\mbox{}&\mbox{ }&\mbox{}\\
-\mbox{ }&\mbox{}&\mbox{ }&\mbox{}\\\hline
-\end{tabular}
-\end{center}
+  \begin{tabular}{|c|l|}
+  \hline
+  \textbf{Fase} & \textbf{Descripción y seguimiento asociado} \\
+  \hline
+  Fase 1 & Desarrollo de la idea inicial e investigación (seguimiento 0 y 1) \\
+  Fase 2 & Implementación inicial mediante código (seguimiento 2) \\
+  Fase 3 & Finalización de la implementación y documentación (seguimiento 3) \\
+  Fase 4 & Preparación y presentación del proyecto (seguimiento 4) \\
+  \hline
+  \end{tabular}
+  \end{center}
 
+  \subsection*{Seguimiento Individual}
+
+  \begin{center}
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  Fase & Álvaro Ruiz Gutiérrez & Lidia Jiménez Soriano & Víctor Flores González & Óscar Menéndez Márquez \\
+  \hline
+  Fase 1 & 23,74 horas & 0 horas& 0 horas& 0 horas\\
+  Fase 2 & 26,89 horas & 1 horas& 1 horas& 1 horas\\
+  Fase 3 & x horas& 2 horas & 2 horas& 2 horas\\
+  Fase 4 & x horas& 3 horas & 3 horas& 3 horas\\
+  \hline
+  \textbf{Total} & \textbf{70} & \textbf{70} & \textbf{70} & \textbf{70} \\
+  \hline
+  \end{tabular}
+  \end{center}
+  
+
+Para consultar con mayor detalle las fechas específicas, tareas asignadas, tiempo dedicado por cada participante y otra información relevante, puedes acceder al siguiente enlace a la ficha de datos de Clockify: [LINK].
+\newpage
 
 \begin{thebibliography}{10}
 
+  \bibitem{HARRIS}
+  C. Harris y M. Stephens, \emph{A Combined Corner and Edge Detector}, Proceedings of The Fourth Alvey Vision Conference, pp. 147–151, 1988. Disponible en: \url{https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=88cdfbeb78058e0eb2613e79d1818c567f0920e2}
+  
+  \bibitem{SURF}
+  H. Bay, T. Tuytelaars y L. Van Gool, \emph{Surf: Speeded up robust features}, en Computer Vision–ECCV 2006, Springer Berlin Heidelberg, pp. 404-417, 2006. Disponible en: \url{https://link.springer.com/chapter/10.1007/11744023_32}
+  
+  \bibitem{SIFT}
+  I. Rey-Otero y M. Delbracio, \emph{Anatomy of the SIFT Method}, Image Processing On Line, vol. 4, pp. 370–396, 2014. Disponible en: \url{https://doi.org/10.5201/ipol.2014.82}
+  
+  \bibitem{HOG}
+  N. Dalal y B. Triggs, \emph{Histograms of oriented gradients for human detection}, en IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'05), San Diego, CA, EE.UU., vol. 1, pp. 886-893, 2005. DOI: 10.1109/CVPR.2005.177. Disponible en: \url{https://ieeexplore.ieee.org/abstract/document/1467360}
+  
+  \end{thebibliography}
 
-
-\bibitem{clave:libro}
-U. N. Experto, \emph{Un libro que escribí},
-Editorial, 1996.
-
-\bibitem{clave:revista}
-Y. O. Mismo,
-``Título del artículo'',
-\emph{Revista Publicación Periódica}, Vol. 17, pp. 1-100, 1997.
-\end{thebibliography}
-
-\newpage 
-
-\section*{More about how to write an article}
-\subsection{How to include Figures}
-
-First you have to upload the image file from your computer using the upload link the project menu. Then use the includegraphics command to include it in your document. Use the figure environment and the caption command to add a number and a caption to your figure. See the code for Figure \ref{fig:frog} in this section for an example.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.3\textwidth]{frog.jpg}
-\caption{\label{fig:frog}This frog was uploaded via the project menu.}
-\end{figure}
-
-
-\subsection{How to add Tables}
-
-Use the table and tabular commands for basic tables. See Table~\ref{tab:widgets}, for example. 
-
-\begin{table}[h]
-\centering
-\begin{tabular}{l|r}
-Item & Quantity \\\hline
-Widgets & 42 \\
-Gadgets & 13
-\end{tabular}
-\caption{\label{tab:widgets}An example table.}
-\end{table}
-
-\subsection{How to write Mathematics}
-
-\LaTeX{} is great at typesetting mathematics. Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
-\[S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
-      = \frac{1}{n}\sum_{i}^{n} X_i\]
-denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
-
-
-\subsection{How to create Sections and Subsections}
-
-Use section and subsections to organize your document. Simply use the section and subsection buttons in the toolbar to create them, and we'll handle all the formatting and numbering automatically.
-
-\subsection{How to add Lists}
-
-You can make lists with automatic numbering  or bullet points \dots
-
-\begin{enumerate}
-\item Like this,
-\item and like this.
-\end{enumerate}
-
-\begin{itemize}
-\item Like this,
-\item and like this.
-\end{itemize}
-
-%\subsection{How to add Citations and a References List}
-
-%You can upload a \verb|.bib| file containing your BibTeX entries, created with JabRef; or import your \href{https://www.overleaf.com/blog/184}{Mendeley}, CiteULike or Zotero library as a \verb|.bib| file. You can then cite entries from it, like this: \cite{greenwade93}. Just remember to specify a bibliography style, as well as the filename of the \verb|.bib|.
-
-%You can find a \href{https://www.overleaf.com/help/97-how-to-include-a-bibliography-using-bibtex}{video tutorial here} to learn more about BibTeX.
-
-
-
-%\bibliographystyle{alpha}
-%\bibliography{sample}
 
 \end{document}
