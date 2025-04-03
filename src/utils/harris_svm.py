@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import algoritmos.harris as hs
 
-def harris_svm(image, parametros):
+def harris_svm(image, parametros, tipo):
     
     '''
     image -> imagen a procesar
@@ -49,9 +49,39 @@ def harris_svm(image, parametros):
     # Aplicamos supresión de no máximos
     strongest_corners = hs_svm.non_max_supre(R_norm)
 
-    mean = np.mean(strongest_corners)
-    std = np.std(strongest_corners)
-    max_val = np.max(strongest_corners)
+    def process_puntos(corners, x):
+        
+        valores_no_cero = corners[corners != 0]  # Filtra los valores no cero
+        if len(valores_no_cero) < x:
+            valores_no_cero = np.pad(valores_no_cero, (0, x - len(valores_no_cero)), constant_values=0)
+    
+        return valores_no_cero[:x]
 
-    return [mean, std, max_val]
+    if(tipo == 1): #30 primera notas de un roi
+        
+        #media de puntos por roi es 28,5
+        return process_puntos(strongest_corners, 32)
+    
+    elif(tipo == 2): #parametros estadisticos
+    
+        mean = np.mean(strongest_corners)
+        std = np.std(strongest_corners)
+        max_val = np.max(strongest_corners)
+
+        return [mean, std, max_val]
+    
+    elif(tipo == 3): #densidad de puntos
+
+        alto, ancho = image.shape[:2]
+        densidad = np.count_nonzero(strongest_corners) / (alto * ancho)
+        
+        return [densidad]
+    
+    elif(tipo == 4): #Calcula la dispersion de los puntos
+
+        centroide_x, centroide_y , varianza_x, varianza_y, distancia_promedio = hs_svm.calcular_dispersion(strongest_corners)
+
+        return [centroide_x, centroide_y, varianza_x, varianza_y, distancia_promedio]
+    
+
 

@@ -8,14 +8,15 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report
 
 class svm:
-    def __init__(self, algorithm, algo_params):
+    def __init__(self, algorithm, algo_params, tipo):
         self.algorithm = algorithm
         self.algo_params = algo_params
+        self.tipo = tipo
         self.model = SVC(kernel="rbf", C=1)
     
-    def extract_features(self, image, roi=None):
+    def extract_features(self, image, roi, tipo):
         region = roi if roi is not None else image
-        return self.algorithm(region, self.algo_params)
+        return self.algorithm(region, self.algo_params, tipo)
     
     def generateRndRoi(self, image):
             
@@ -61,7 +62,8 @@ class svm:
                 xmin, ymin = int(bbox.find("xmin").text), int(bbox.find("ymin").text)
                 xmax, ymax = int(bbox.find("xmax").text), int(bbox.find("ymax").text)
                 roi = image[ymin:ymax, xmin:xmax]
-                features = self.extract_features(image, roi)
+                features = self.extract_features(image, roi, self.tipo)
+                
                 if features is not None:
                     features_list.append(features)
                     labels_list.append(1)
@@ -85,7 +87,7 @@ class svm:
                 image = cv2.imread(os.path.join(images_dir, file), cv2.IMREAD_GRAYSCALE)
                 if image is not None:
                     roi = self.generateRndRoi(image)
-                    features = self.extract_features(image, roi)
+                    features = self.extract_features(image, roi, self.tipo)
                     if features is not None:
                         X.append(features)
                         y.append(0)
@@ -98,7 +100,7 @@ class svm:
         X_train_n, y_train_n = self.load_data_no_persona(train_no_persona_dir)
         
         print(f"Imágenes procesadas - Entrenamiento: {len(y_train_p)} personas, {len(y_train_n)} sin persona")
-        
+    
         X_train = np.vstack((X_train_p, X_train_n))
         y_train = np.concatenate((y_train_p, y_train_n))
         
@@ -132,7 +134,7 @@ class svm:
                 image = cv2.imread(os.path.join(images_dir, file), cv2.IMREAD_GRAYSCALE)
                 if image is not None:
                     roi = self.generateRndRoi(image)
-                    features = self.extract_features(image, roi)
+                    features = self.extract_features(image, roi, self.tipo)
                     if features is not None:
                         X.append(features)
                         y_true.append(0)
@@ -145,6 +147,7 @@ class svm:
         y_true_p, y_pred_p = self.predict_persona(test_persona_dir)
         y_true_np, y_pred_np = self.predict_no_persona(test_no_persona_dir)
         
+    
         y_true = np.concatenate((y_true_p, y_true_np))
         y_pred = np.concatenate((y_pred_p, y_pred_np)) if y_pred_p.size and y_pred_np.size else y_pred_p if y_pred_p.size else y_pred_np
 
