@@ -1,7 +1,7 @@
 import numpy as np
 import algoritmos.sift as sf
 
-def sift_svm(image, parametros):
+def sift_svm(image, parametros, tipo):
     '''
     image -> imagen a procesar
     parametros -> diccionario con los parámetros del detector SIFT
