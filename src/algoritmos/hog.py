@@ -247,80 +247,6 @@ class HOGDetect:
         hog_descriptor = self.normalize_blocks(cell_hists)
         return hog_descriptor
 
-    def detect_humans(self, img, threshold):
-        """
-        Detección estándar de humanos utilizando el detector preentrenado de HOG en OpenCV.
-        
-        Se aplican los parámetros definidos (win_stride, padding, scale) y se filtran las detecciones
-        según un umbral de confianza.
-        
-        Parámetros:
-          img: Imagen de entrada.
-          threshold: Valor mínimo de confianza para aceptar una detección.
-          
-        Retorna:
-          Tuple (filtered_rects, filtered_weights).
-        """
-        if img is None:
-            raise ValueError("La imagen de entrada es None.")
-        rects, weights = self.hog.detectMultiScale(
-            img,
-            winStride=self.win_stride,
-            padding=self.padding,
-            scale=self.scale
-        )
-        filtered_rects = []
-        filtered_weights = []
-        for rect, w in zip(rects, weights):
-            if w > threshold:
-                filtered_rects.append(rect)
-                filtered_weights.append(w)
-        return filtered_rects, filtered_weights
-
-    def detect_humans_individual(self, img, threshold = 0.5, sub_threshold = 0.5):
-        """
-        Detecta humanos intentando separar aquellos que están muy juntos.
-        
-        Flujo:
-          1. Se realiza una detección inicial.
-          2. Si un rectángulo detectado es muy ancho (p.ej., > 60 px), se extrae la subregión y se aplica una detección con parámetros más finos.
-          3. Se ajustan las coordenadas de las detecciones en la subregión al sistema de coordenadas original.
-          
-        Parámetros:
-          img: Imagen de entrada.
-          threshold: Umbral para la detección inicial.
-          sub_threshold: Umbral para la detección en la subregión.
-          
-        Retorna:
-          Tuple (final_rects, final_weights).
-        """
-        rects, weights = self.detect_humans(img, threshold=threshold)
-        final_rects = []
-        final_weights = []
-        for rect, w in zip(rects, weights):
-            x, y, ancho_rect, alto_rect = rect
-            if ancho_rect > 60:
-                subROI = img[y:y + alto_rect, x:x + ancho_rect]
-                sub_rects, sub_weights = self.hog.detectMultiScale(
-                    subROI,
-                    winStride=(2, 2),
-                    padding=self.padding,
-                    scale=1.005
-                )
-                for srect, sw in zip(sub_rects, sub_weights):
-                    if sw > sub_threshold:
-                        sx, sy, sw_rect, sh_rect = srect
-                        final_rects.append((x + sx, y + sy, sw_rect, sh_rect))
-                        final_weights.append(sw)
-                # Si no se detectó nada en la subregión, se conserva el rectángulo original.
-                if sub_rects is None or sub_rects.size == 0:
-                    final_rects.append(rect)
-                    final_weights.append(w)
-            else:
-                final_rects.append(rect)
-                final_weights.append(w)
-        return final_rects, final_weights
-
     def draw_detections(self, img, rects):
         """
         Dibuja los rectángulos de detección sobre la imagen.
@@ -350,9 +276,6 @@ class HOGDetect:
         if axis == "off":
             plt.axis("off")
         plt.show()
-
-    
-
     
     def draw_hog_descriptor(self, img, cell_hists, scale_factor=0.5):
         """
@@ -457,11 +380,11 @@ class HOGDetect:
                 y1 = int(center_y - length * np.sin(angle_rad))
                 x2 = int(center_x + length * np.cos(angle_rad))
                 y2 = int(center_y + length * np.sin(angle_rad))
-                cv2.line(out_img, (x1, y1), (x2, y2), (0, 255, 0), 0.5)
+                cv2.line(out_img, (x1, y1), (x2, y2), (0, 255, 0), 1)
         
         return out_img
     
-    def draw_cell_grid(self, img, cell_size=(8, 8), color=(255, 0, 0), thickness=1):
+    def draw_cell_grid(self, img, cell_size, color=(255, 0, 0), thickness=1):
         """
         Dibuja líneas de cuadrícula en 'hog_vis' para mostrar las celdas del descriptor HOG.
         
@@ -495,7 +418,81 @@ class HOGDetect:
         return out_img
     
 
+######################################## Funcioes de deteccion de personas ###############################################
 
+    def detect_humans(self, img, threshold):
+        """
+        Detección estándar de humanos utilizando el detector preentrenado de HOG en OpenCV.
+        
+        Se aplican los parámetros definidos (win_stride, padding, scale) y se filtran las detecciones
+        según un umbral de confianza.
+        
+        Parámetros:
+          img: Imagen de entrada.
+          threshold: Valor mínimo de confianza para aceptar una detección.
+          
+        Retorna:
+          Tuple (filtered_rects, filtered_weights).
+        """
+        if img is None:
+            raise ValueError("La imagen de entrada es None.")
+        rects, weights = self.hog.detectMultiScale(
+            img,
+            winStride=self.win_stride,
+            padding=self.padding,
+            scale=self.scale
+        )
+        filtered_rects = []
+        filtered_weights = []
+        for rect, w in zip(rects, weights):
+            if w > threshold:
+                filtered_rects.append(rect)
+                filtered_weights.append(w)
+        return filtered_rects, filtered_weights
+
+    def detect_humans_individual(self, img, threshold = 0.5, sub_threshold = 0.5):
+        """
+        Detecta humanos intentando separar aquellos que están muy juntos.
+        
+        Flujo:
+          1. Se realiza una detección inicial.
+          2. Si un rectángulo detectado es muy ancho (p.ej., > 60 px), se extrae la subregión y se aplica una detección con parámetros más finos.
+          3. Se ajustan las coordenadas de las detecciones en la subregión al sistema de coordenadas original.
+          
+        Parámetros:
+          img: Imagen de entrada.
+          threshold: Umbral para la detección inicial.
+          sub_threshold: Umbral para la detección en la subregión.
+          
+        Retorna:
+          Tuple (final_rects, final_weights).
+        """
+        rects, weights = self.detect_humans(img, threshold=threshold)
+        final_rects = []
+        final_weights = []
+        for rect, w in zip(rects, weights):
+            x, y, ancho_rect, alto_rect = rect
+            if ancho_rect > 60:
+                subROI = img[y:y + alto_rect, x:x + ancho_rect]
+                sub_rects, sub_weights = self.hog.detectMultiScale(
+                    subROI,
+                    winStride=(2, 2),
+                    padding=self.padding,
+                    scale=1.005
+                )
+                for srect, sw in zip(sub_rects, sub_weights):
+                    if sw > sub_threshold:
+                        sx, sy, sw_rect, sh_rect = srect
+                        final_rects.append((x + sx, y + sy, sw_rect, sh_rect))
+                        final_weights.append(sw)
+                # Si no se detectó nada en la subregión, se conserva el rectángulo original.
+                if sub_rects is None or sub_rects.size == 0:
+                    final_rects.append(rect)
+                    final_weights.append(w)
+            else:
+                final_rects.append(rect)
+                final_weights.append(w)
+        return final_rects, final_weights
 
     
 

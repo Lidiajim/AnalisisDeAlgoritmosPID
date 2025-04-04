@@ -201,31 +201,3 @@ class svm:
         print(f"Modelo SVM guardado como '{filename}'")
 
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
