@@ -1,38 +1,37 @@
 import numpy as np
-import algoritmos.sift as sf
 
-def sift_svm(image, parametros, tipo):
+def sift_svm(image, detector, tipo):
     '''
     image -> imagen a procesar
-    parametros -> diccionario con los parámetros del detector SIFT
-
-    ########################################## PASOS DEL ALGORITMO ##########################################
-        1. Inicializamos el detector SIFT con los parámetros dados.
-        2. Detectamos los puntos clave y descriptores en la imagen.
-        3. Extraemos estadísticas de los descriptores.
+    detector -> objeto SIFT ya creado con nfeatures=X
+    tipo -> indica el tipo de vector de características a extraer
     
-    El objetivo de este código es facilitarle al SVM un método para la extracción
-    de características aplicando el algoritmo SIFT.
+       Tipos disponibles:
+        1. Estadísticas globales (media, std, max)
+        2. Histograma de magnitudes de los keypoints
+    
     '''
-    # Inicializamos el detector SIFT
-    sift_detector = sf.sift_detect(
-        nfeatures=parametros.get("nfeatures", 0),
-        nOctaveLayers=parametros.get("nOctaveLayers", 3),
-        contrastThreshold=parametros.get("contrastThreshold", 0.04),
-        edgeThreshold=parametros.get("edgeThreshold", 10),
-        sigma=parametros.get("sigma", 1.6)
-    )
-    
-    # Detectamos los puntos clave y los descriptores
-    keypoints, descriptors = sift_detector.sift.detectAndCompute(image, None)
-    
-    if descriptors is None or len(descriptors) == 0:
-        return [0, 0, 0]  # Si no hay descriptores, devolvemos valores neutros
-    
-    # Calculamos estadísticas de los descriptores
-    mean = np.mean(descriptors)
-    std = np.std(descriptors)
-    max_val = np.max(descriptors)
-    
-    return [mean, std, max_val]
 
+    keypoints, descriptors = detector.detectAndCompute(image, None)
+    # Tipo 1 – Estadísticas: media, std, max
+    if tipo == 1:
+        if descriptors is None or descriptors.shape[0] == 0:
+            return np.zeros(128 * 3)
+
+        mean_desc = np.mean(descriptors, axis=0)
+        std_desc = np.std(descriptors, axis=0)
+        max_desc = np.max(descriptors, axis=0)
+
+        return np.concatenate([mean_desc, std_desc, max_desc])
+
+    # Tipo 2 – Histograma de magnitudes
+    elif tipo == 2:
+        if keypoints is None or len(keypoints) == 0:
+            return np.zeros(10)
+
+        magnitudes = np.array([kp.response for kp in keypoints])
+        hist, _ = np.histogram(magnitudes, bins=10, range=(0, 1))
+        return hist.astype(np.float32)
+
+    else:
+        raise ValueError(f"Tipo de extracción no válido: {tipo}")
