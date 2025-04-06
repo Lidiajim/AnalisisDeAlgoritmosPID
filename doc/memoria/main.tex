@@ -202,6 +202,53 @@
   \subsection{HOG (Histogram of Oriented Gradients)}
   \par\vspace{0.5cm}
 
+  El descriptor \textbf{HOG}, propuesto por \textit{Dalal y Triggs} en 2005, es una técnica ampliamente utilizada para la detección de humanos en imágenes. Su éxito se basa en la idea de que la apariencia y la forma de los objetos, y en particular de las personas, pueden caracterizarse de manera efectiva mediante la distribución de gradientes o bordes. Esta representación es robusta frente a cambios en la iluminación y pequeñas variaciones en la geometría de la imagen, lo que la convierte en una herramienta idónea para alimentar clasificadores como el SVM
+
+  \par\vspace{0.5cm}
+  \textbf{Fundamentos teóricos y matemáticos}
+  \par\vspace{0.5cm}
+
+  El algoritmo HOG se fundamenta en los siguientes conceptos:
+
+  \begin{itemize}
+    \item \textbf{Cálculo de Gradientes:} 
+    La primera etapa del proceso consiste en convertir la imagen a escala de grises y calcular, para cada píxel, la magnitud y la orientación del gradiente. Utilizando operadores como el de Sobel, se obtienen dos imágenes: una con las derivadas en la dirección horizontal (Gx) y otra en la vertical (Gy). A partir de estas, se calcula la magnitud M y la orientación \(\theta\) según:
+    \[
+    M(x,y) = \sqrt{G_x(x,y)^2 + G_y(x,y)^2}
+    \]
+    \[
+    \theta(x,y) = \arctan\left(\frac{G_y(x,y)}{G_x(x,y)}\right) \times \frac{180}{\pi}
+    \]
+    Los ángulos se ajustan al rango \textbf{[0,180°)} para mantener la invarianza ante la dirección (ya que un borde tiene la misma apariencia tanto en una dirección como en la opuesta).
+    \item \textbf{División en Celdas:}
+    La imagen se divide en pequeñas regiones (celdas), típicamente de \(8\times8\) o \(16\times16\) píxeles, en las que se construye un histograma de orientaciones. Cada celda produce un histograma donde se acumulan las magnitudes de los gradientes de los píxeles, distribuidas en un número fijo de intervalos (por ejemplo, 9 bins, donde cada bin abarca 20°).
+    \item \textbf{Normalización de Bloques:}
+    Para reducir los efectos de variaciones en iluminación y contraste, se agrupan las celdas en bloques solapados (por ejemplo, \(2\times2\) celdas). Cada bloque se aplana en un vector y se normaliza (usualmente mediante la normalización L2 o L2-Hys) según:
+    \[
+    v_{\text{norm}} = \frac{v}{\|v\|_2 + \epsilon}
+    \]
+    donde \textbf{v} es el vector formado por la concatenación de los histogramas de las celdas del bloque y \textbf{\(\epsilon\)} es una pequeña constante para evitar la división por cero. La normalización asegura que el descriptor sea menos sensible a cambios en la iluminación.
+    \item \textbf{Concatenación del Descriptor HOG:}
+    Los vectores normalizados de todos los bloques se concatenan para formar el descriptor HOG final, que representa de forma global la distribución de gradientes en la imagen. Este descriptor es utilizado para alimentar el clasificador (SVM) que se encarga de diferenciar entre imágenes con y sin peatones.
+\end{itemize}
+
+\par\vspace{0.5cm}
+\textbf{Ventajas de HOG}
+\par\vspace{0.5cm}
+
+El descriptor HOG presenta varias ventajas en comparación con otros métodos de detección de características:
+
+\begin{itemize}
+    \item \textbf{Robustez a Variaciones de Iluminación:}
+    La normalización de bloques reduce el impacto de cambios en el brillo y contraste.
+    \item \textbf{Invarianza a Pequeñas Variaciones Geométricas:}
+    La estructura local capturada por las celdas y bloques permite que el descriptor sea relativamente invariante a pequeñas transformaciones, desplazamientos o deformaciones.
+    \item \textbf{Simplicidad y Eficiencia:}
+    HOG es relativamente sencillo de implementar y, a pesar de requerir cálculos intensivos de gradientes, puede optimizarse para aplicaciones en tiempo real. 
+\end{itemize}
+
+\par\vspace{0.5cm}
+
 
 \newpage
 
@@ -368,9 +415,101 @@ Estos descriptores serán los que permitan al modelo de aprendizaje automático 
 
 \subsubsection{HOG (Histogram of Oriented Gradients)}
 
+El algoritmo HOG es una técnica eficaz para extraer y representar características locales en imágenes mediante el cálculo de gradientes orientados en pequeñas celdas. HOG se ha consolidado como una herramienta robusta para la detección de objetos, en particular para la identificación de peatones, ya que al combinar la descripción detallada de la estructura visual con la normalización de bloques, logra ser invariante frente a variaciones de iluminación, contraste y posición. 
 
-\textbf{Proceso aplicado:}
 
+\subsubsection{Proceso de Aplicación de HOG}
+
+A continuación, se detallan los pasos seguidos en la implementación del algoritmo hog:
+\par\vspace{0.5cm}
+
+\textbf{Paso 1: Cargar y Mostrar la Imagen}
+\par\vspace{0.5cm}
+
+Antes de aplicar el algoritmo, se importan las librerías necesarias y se carga la imagen con la que se va a trabajar.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/hog_paso_1.png}
+    \caption{Imagen original cargada.}
+\end{figure}
+
+\textbf{Paso2: Escalar la Imagen}
+\par\vspace{0.5cm}
+
+La imagen se escala para ajustar la resolución a un tamaño óptimo, lo que permite que el descriptor HOG capture de manera consistente los patrones y detalles esenciales, minimizando la carga computacional sin perder información relevante.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/hog_paso_2.png}
+    \caption{Imagen original e imagen redimensionada.}
+\end{figure}
+
+\textbf{Paso 3: Configuración del detector HOG}
+\par\vspace{0.5cm}
+
+El detector HOG requiere la configuración de varios parámetros clave que afectan la detección de características en la imagen:
+\begin{itemize}
+    \item \textbf{cell\_size = (16,16):} Tamaño de cada celda en la que se divide la imagen.
+    \item \textbf{block\_size = (2,2):} Número de celdas agrupadas para formar un bloque.
+    \item \textbf{block\_stride = (8,8):} Desplazamiento en píxeles entre bloques.
+    \item \textbf{nbins = 9:} Número de intervalos del histograma de orientaciones (cada bin abarca 20°).
+    \item \textbf{win\_stride = (8,8):} Desplazamiento en píxeles de la ventana durante la detección.
+    \item \textbf{padding = (8,8):} Acolchamiento aplicado a la imagen en el proceso de detección.
+    \item \textbf{scale = 1.05:} Factor de escala para construir la pirámide de escalas.
+    \item \textbf{bin\_width = 20:} Ancho (en grados) de cada bin en el histograma.
+\end{itemize}
+
+Para la implemnetación se ha utilizado la clase correspondiente en el módulo \texttt{algoritmos/hog.py}.
+\par\vspace{0.5cm}
+
+\textbf{Paso 4: Conversión de la Imagen a Escala de Grises}
+\par\vspace{0.5cm}
+
+La imagen se convierte a escala de grises para que HOG pueda centrarse exclusivamente en la estructura y forma de la imagen, lo que mejora la estabilidad de la extracción de gradientes y reducir la complejidad computacional.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/hog_paso_4.png}
+    \caption{Imagen en escala de grises.}
+\end{figure}
+
+\textbf{Paso 5: Cálculo de Gradientes}
+\par\vspace{0.5cm}
+
+El gradiente se calcula aplicando los operadores Sobel en las direcciones horizontal y vertical, obteniendo la magnitud y orientación de los cambios de intensidad en cada píxel. Esto permite resaltar los bordes y transiciones en la imagen, proporcionando información esencial sobre su estructura.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/hog_paso_5.png}
+    \caption{Magnitud del gradiente y Orientación del gradiente.}
+\end{figure}
+
+\textbf{Paso 6: Cálculo del Histograma por celda}
+\par\vspace{0.5cm}
+
+En cada celda se construye un histograma que acumula las magnitudes de los gradientes según la orientación de cada píxel, lo que permite capturar y resumir la distribución local de bordes y transiciones en esa región de la imagen.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/hog_paso_6.png}
+    \caption{Ejemplo de cálculo del histograma para la celda (0,0).}
+\end{figure}
+
+\textbf{Normalización de Bloques y Concatenación de Descriptores}
+\par\vspace{0.5cm}
+
+En este paso, los histogramas de las celdas se agrupan en bloques, y cada bloque se normaliza para reducir el efecto de variaciones en la iluminación y el contraste. Luego, los vectores normalizados de todos los bloques se concatenan para formar un descriptor global que resume la distribución de gradientes en toda la imagen.
+\par\vspace{0.5cm}
+
+\textbf{Paso 7: Visualización de los Descriptores HOG}
+\par\vspace{0.5cm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/hog_paso_7.png}
+    \caption{Visualización del descriptor y Visualizalización del descriptor con celdas.}
+\end{figure}
 
 \subsection{Decisiones de Diseño}
 
