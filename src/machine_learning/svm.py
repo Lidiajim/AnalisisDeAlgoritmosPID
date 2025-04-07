@@ -61,6 +61,11 @@ class svm:
                 bbox = obj.find("bndbox")
                 xmin, ymin = int(bbox.find("xmin").text), int(bbox.find("ymin").text)
                 xmax, ymax = int(bbox.find("xmax").text), int(bbox.find("ymax").text)
+                # validación para evitar ROIs inválidos
+                if xmax - xmin < 5 or ymax - ymin < 5:
+                    continue
+                if xmax > image.shape[1] or ymax > image.shape[0]:
+                    continue
                 roi = image[ymin:ymax, xmin:xmax]
                 features = self.extract_features(image, roi, self.tipo)
                 
