@@ -77,7 +77,164 @@
   \subsection{Harris Corner Detection}
   \par\vspace{0.5cm}
 
+  El algoritmo \textbf{HARRIS} (Harris Corner Detection) es un método ampliamente utilizado en visión por computadora para la detección de esquinas y puntos de interés en imágenes. Fue desarrollado por \textit{Chris Harris} y \textit{Mike Stephens} en 1988 
+  y se basa en la idea de que las esquinas son puntos donde la intensidad de la imagen cambia significativamente en múltiples direcciones. Este algoritmo es especialmente útil para tareas como el seguimiento de objetos, la reconstrucción 3D y la detección 
+  de características invariantes a escala y rotación.
 
+  \par\vspace{0.5cm}
+  \textbf{Fundamentos matemáticos}
+  \par\vspace{0.5cm}
+  
+  El algoritmo Harris se basa en varios principios matemáticos que son los pilares de su funcionamiento.
+   A continuación, se presentan algunos de los conceptos clave:
+  
+  \begin{itemize}
+      \item \textbf{Extracción de los autovectores y autovalores:}  
+      El algoritmo Harris utiliza la matriz de autocorrelación para identificar esquinas en la imagen. El porque 
+      de utilizar la matriz de autocorrelación es que, al calcular los autovectores y autovalores de esta matriz, se pueden identificar puntos donde la intensidad de la imagen cambia significativamente en múltiples direcciones.
+      La imagen que se muestra a continuación ilustra como varia los autovalores y autovectores en función de la intensidad de la imagen.
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=1.1\textwidth]{images/harris_autovectores.png}
+        \caption{Proceso de la piramide de diferencia gaussiana.}
+        
+    \end{figure}
+      
+    \item Para el cálculo de dichos autovectores y autovalores, se utiliza la matriz de autocorrelación \(M\) que se define como:
+    \[
+        M \cdot x = \lambda \cdot x
+    \]
+    
+    Donde:
+    \begin{itemize}
+        \item \(M\) es la matriz de autocorrelación de la imagen.
+        \item \(x\) es nuestra matriz de autovectores.
+        \item \(\lambda\) es el llamado autovalor, es decir, cuánto aumenta en cada dirección el autovector.
+    \end{itemize}
+
+    Los autovectores y autovalores se obtienen resolviendo la siguiente igualdad.
+    
+        \[
+        \det(M - \lambda I) = 0
+        \]
+
+        \[
+        \det(M - \lambda I) = \det\left(
+        \begin{bmatrix}
+        a_{11} - \lambda & a_{12} \\
+        a_{21} & a_{22} - \lambda
+        \end{bmatrix}
+        \right) = 0
+        \]
+
+        Los elementos \(a_n\) son los elementos de la matriz de autocorrelación \(M\) y \(\lambda\) es el autovalor. 
+        \(lambda_max\) corresponde al autovalor máximo y \(lambda_min\) al autovalor mínimo, es decir, cuanto aumenta la intensidad de la imagen en cada dirección.
+
+        \[
+        (a_{11} - \lambda)(a_{22} - \lambda) - a_{12} a_{21} = 0
+        \]
+
+        Como se trata de un polinomio de segundo grado, podemos obtener fácilmente las soluciones:
+
+        \[
+        \lambda_{\text{max}} = \frac{1}{2} \left(a_{11} + a_{22} + \sqrt{4a_{12}a_{21} + (a_{11} - a_{22})^2}\right)
+        \]
+
+        \[
+        \lambda_{\text{min}} = \frac{1}{2} \left(a_{11} + a_{22} - \sqrt{4a_{12}a_{21} + (a_{11} - a_{22})^2}\right)
+        \]
+
+
+      \item \textbf{Calculo del gradiente de la imagen:}  
+        Debemos calcular el gradiente de la imagen para poder calcular la matriz de autocorrelación. Para cada pixel
+        de la imagen, dicho gradiente se calcula como:
+      
+        \[
+        \nabla f(x, y) =
+        \begin{bmatrix}
+        \frac{\partial f(x, y)}{\partial x} \\
+        \frac{\partial f(x, y)}{\partial y}
+        \end{bmatrix}
+        \]
+
+        Dado que este cálculo también es relativamente complejo y costoso, podemos aproximarlo de la siguiente manera:
+
+        \[
+        \text{Filtro de Sobel} \approx \nabla f(x, y) =
+        \begin{bmatrix}
+        \frac{\partial f(x, y)}{\partial x} \\
+        \frac{\partial f(x, y)}{\partial y}
+        \end{bmatrix}
+        \approx
+        \begin{bmatrix}
+        I_x \\
+        I_y
+        \end{bmatrix}
+        \]
+
+        \textbf{Nota:} El resultado es en realidad una matriz con \(f_x\) y \(f_y\), pero se ha representado como \(I_x\) e \(I_y\) por simplicidad.
+
+      
+      \item \textbf{Calculo de la matriz de autocorrelación:}  
+      
+      Debemos realizar el siguiente para obtener la matriz de autocorrelación \(M\) para cada pixel de la imagen:
+
+            \[
+        A = \sum_{x, y} w(x, y)
+        \begin{bmatrix}
+        I_x^2 & I_x I_y \\
+        I_x I_y & I_y^2
+        \end{bmatrix}
+        \]
+
+        Para simplificar, evitamos el uso explícito de la función ventana \(w(x, y)\), y aprovechamos que ya contamos con los valores de \(I_x\) e \(I_y\), por lo que simplemente calculamos sus productos.
+
+        \item \textbf{Calculo de las notas Harris para cada pixel:} 
+    
+        Finalmente, para cada pixel de la imagen, calculamos la nota Harris \(R\) Esta nota representa
+        el valor de "esquinidad" de cada pixel, es decir, que tan "esquina" es el pixel, a mayor valor, mayor esquinidad.
+
+        \[
+        f(x, y) = \lambda_{\text{min}} \lambda_{\text{max}} - \kappa (\lambda_{\text{min}} + \lambda_{\text{max}})^2
+        \]
+
+        \textbf{Nota:} El valor \(\kappa\) corresponde al parámetro \(k\) de la ecuación original de Harris, que se utiliza para ajustar la sensibilidad del detector. Un valor comúnmente utilizado es \(k = 0.04\).
+
+        Afortunadamente, el valor de Harris se puede calcular de una manera equivalente pero más sencilla:
+
+        \[
+        f(x, y) = \det(A) - \kappa \, \text{tr}(A)^2 = a_{11} a_{22} - a_{12} a_{21} - \kappa (a_{11} + a_{22})^2
+        \]
+
+    Esta formulación es mucho más simple y se puede obtener fácilmente mediante el uso de filtros de gradiente como el filtro de Sobel.
+
+  \end{itemize}
+
+  \par\vspace{0.5cm}
+  \textbf{Ventajas de HARRIS}
+  \par\vspace{0.5cm}
+  
+  El algoritmo HARRIS presenta varias ventajas en comparación con otros métodos de detección de características:
+  
+  \begin{itemize}
+      \item \textbf{Robustez frente al ruido:}  
+      Gracias al uso de filtros de suavizado y la matriz de autocorrelación, el algoritmo es menos sensible al ruido en la imagen, lo que permite una detección más precisa de esquinas.
+      
+      \item \textbf{Alta precisión en la detección de esquinas:}  
+      Identifica puntos donde las variaciones de intensidad son altas en múltiples direcciones, lo que corresponde a esquinas reales con muy buena exactitud.
+      
+      \item \textbf{Invariancia a la rotación:}  
+      El detector es invariante a rotaciones: si rotas la imagen, las esquinas detectadas rotarán de manera consistente. Esto es útil para tareas como emparejamiento de imágenes o reconstrucción 3D.
+      
+      \item \textbf{Bajo costo computacional:}  
+      El dectector usa calculos de gradientes simples mediante filtros de Sobel, además de calculos sencillos como las notas Harris, lo que lo hace eficiente en términos de tiempo de procesamiento.
+      
+      \item \textbf{Respuesta continua:}
+      La salida del detector es continua, es decir, no se limite a un conjunto binario de pixeles, si no que ofrece una matriz
+      de valores que representan la "esquinidad" de cada pixel. Esto permite ajustar el umbral de detección según las necesidades del problema, además de ofrecer ordenación de los puntos detectados.  
+    \end{itemize}
+  
+  \par\vspace{0.5cm}
 
 
   \subsection{SURF (Speeded-Up Robust Features)}

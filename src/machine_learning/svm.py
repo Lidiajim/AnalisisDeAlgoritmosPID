@@ -201,7 +201,8 @@ class svm:
         if filename is None:
             # Se espera que el nombre de la función sea algo como "<nombre>_svm"
             base = self.algorithm.__name__.replace("_svm", "")
-            filename = f"svm_{base}.pkl"
+            tipo = str(self.tipo)
+            filename = f"svm_{base}_{tipo}.pkl"
         joblib.dump(self.model, filename)
         print(f"Modelo SVM guardado como '{filename}'")
 
