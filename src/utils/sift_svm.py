@@ -8,12 +8,11 @@ def sift_svm(image, detector, tipo):
     
        Tipos disponibles:
         1. Estadísticas globales (media, std, max)
-        2. Histograma de magnitudes de los keypoints
     
     '''
 
-    keypoints, descriptors = detector.detectAndCompute(image, None)
-    # Tipo 1 – Estadísticas: media, std, max
+    _, descriptors = detector.detectAndCompute(image, None)
+    # Tipo 1 – Estadísticas: media, std
     if tipo == 1:
         if descriptors is None or descriptors.shape[0] == 0:
             return np.zeros(128 * 3)
@@ -24,14 +23,6 @@ def sift_svm(image, detector, tipo):
 
         return np.concatenate([mean_desc, std_desc, max_desc])
 
-    # Tipo 2 – Histograma de magnitudes
-    elif tipo == 2:
-        if keypoints is None or len(keypoints) == 0:
-            return np.zeros(10)
-
-        magnitudes = np.array([kp.response for kp in keypoints])
-        hist, _ = np.histogram(magnitudes, bins=10, range=(0, 1))
-        return hist.astype(np.float32)
 
     else:
         raise ValueError(f"Tipo de extracción no válido: {tipo}")

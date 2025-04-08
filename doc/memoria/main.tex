@@ -25,16 +25,15 @@
 \maketitle
 
 \begin{abstract}
-  \noindent En este trabajo se analiza y compara la eficiencia de cuatro métodos de extracción de características en imágenes: Harris Corner Detection, SURF, SIFT y HOG, aplicados a la detección de peatones mediante un modelo SVM preentrenado. 
-  Se estudia la teoría detrás de cada método, extrayendo y explicando sus principios fundamentales de manera didáctica. Posteriormente, se implementan o adaptan implementaciones existentes, 
-  detallando los parámetros utilizados y los efectos que tienen en el rendimiento del modelo. Para evaluar la eficiencia de cada método, se definen métricas clave como la precisión y tiempo de procesamiento. 
+  \noindent En este trabajo se analiza y compara la eficiencia de cuatro métodos de extracción de características en imágenes: Harris Corner Detection, ORB, SIFT y HOG, aplicados a la detección de peatones mediante un modelo SVM preentrenado. 
+  Se estudia la teoría detrás de cada método, extrayendo y explicando sus principios fundamentales de manera didáctica. Posteriormente, se implementan detallando los parámetros utilizados y los efectos que tienen en el rendimiento del modelo. Para evaluar la eficiencia de cada método, se definen métricas estadísticas claves para analizarlas. 
   Se presentan los resultados obtenidos mediante experimentación con un conjunto de datos de imágenes, analizando el impacto de cada técnica en la identificación de peatones. Finalmente, se expone de manera clara la 
   comparativa de los métodos estudiados, destacando sus ventajas y desventajas en función de los resultados obtenidos.  
  
  \hspace{1cm}
  
  \noindent \textbf{Palabras clave:} 
- Harris Corner Detection,SURF , SIFT, HOG, procesamiento de imágenes, detección de peatones, SVM.
+ Harris Corner Detection,ORB , SIFT, HOG, procesamiento de imágenes, detección de peatones, SVM.
  \end{abstract}
  
 
@@ -44,34 +43,38 @@
  El procesamiento de imágenes digitales es un campo clave dentro de la visión por computador, con aplicaciones en reconocimiento de patrones, inteligencia artificial y análisis de imágenes. Dentro de este ámbito, la detección de objetos y, en particular, la identificación de peatones, representa un desafío fundamental con implicaciones en seguridad, movilidad y automatización. 
  \par \hspace{1cm}
 
- Este trabajo se centra en el estudio y comparación de cuatro técnicas de extracción de características utilizadas en la identificación de peatones: \textbf{Harris Corner Detection}, \textbf{SURF (Speeded Up Robust Features)}, \textbf{SIFT (Scale-Invariant Feature Transform)} y \textbf{HOG (Histogram of Oriented Gradients)}. Estas técnicas permiten identificar estructuras relevantes en una imagen, facilitando su uso en tareas de reconocimiento y clasificación. Para evaluar su rendimiento, se utilizará un \textbf{modelo SVM (Support Vector Machine) preentrenado}, el cual procesará los descriptores generados por cada método para realizar la identificación de peatones en imágenes. 
+ Este trabajo se centra en el estudio y comparación de cuatro técnicas de extracción de características utilizadas en la identificación de peatones: \textbf{Harris Corner Detection}, \textbf{ORB (Oriented FAST and Rotated BRIEF)}, \textbf{SIFT (Scale-Invariant Feature Transform)} y \textbf{HOG (Histogram of Oriented Gradients)}. Estas técnicas permiten identificar estructuras relevantes en una imagen, facilitando su uso en tareas de reconocimiento y clasificación. Para evaluar su rendimiento, se utilizará un 
+ \textbf{modelo SVM (Support Vector Machine) preentrenado}, el cual es ideal para tareas de clasificación binaria. Este procesará los descriptores generados por cada método para realizar la identificación de peatones en imágenes. 
  \par \hspace{1cm}
 
 
- El \textbf{objetivo} principal de este trabajo es ofrecer una explicación didáctica de los métodos estudiados, tanto desde un punto de vista teórico como práctico. Para ello, el desarrollo del proyecto se estructura en tres fases clave:
- 
+ El \textbf{objetivo} principal de este trabajo es ofrecer una explicación didáctica de los métodos estudiados, tanto desde un punto de vista teórico como práctico. Para ello, el desarrollo del proyecto se estructura en cuatro fases clave: 
  \begin{itemize}
-     \item \textbf{Análisis teórico:} Se investigarán los principios fundamentales de cada método, extrayendo las ideas principales de fuentes científicas.
-     \item \textbf{Implementación práctica:} Se desarrollará o adaptará la implementación existente de cada técnica, detallando los pasos intermedios, el significado de los parámetros y la experimentación con distintas configuraciones.
-     \item \textbf{Presentación didáctica:} Se explicarán de forma estructurada todos los pasos necesarios para la detección de peatones utilizando cada método, complementando con ejemplos gráficos y análisis de resultados.
+     \item \textbf{Análisis teórico:} Se desarrollan los fundamentos teóricos y matemáticos de cada método, extrayendo las ideas principales de fuentes científicas y técnicas.
+     
+     \item \textbf{Implementación práctica:} Se realiza una prueba de concepto para comprender cómo aplicar estos algoritmos en código, detallando los pasos intermedios, el significado de los parámetros y la experimentación con distintas configuraciones.
+ 
+     \item \textbf{Experimentación:} Con los algoritmos explicados e implementados, se lleva a cabo una experimentación utilizando un modelo SVM, con el objetivo de analizar la eficiencia de cada uno en la tarea de detección de peatones.
+ 
+     \item \textbf{Presentación didáctica:} Se explican de forma estructurada todos los pasos necesarios para la detección de peatones utilizando cada método, complementando con ejemplos gráficos y análisis de resultados.
  \end{itemize}
  
- Dado que el desarrollo del trabajo está orientado a la investigación y aplicación de técnicas avanzadas no vistas en clase, se apoyará en artículos científicos recientes. La \textbf{planificación} y ejecución del proyecto se realizará en un equipo de trabajo compuesto por 4 alumnos
- ,distribuyendo \textbf{70 horas por persona}. Además, se utilizarán herramientas de gestión de proyectos para organizar y documentar las tareas realizadas, asegurando un seguimiento adecuado de los 
+ Dado que el desarrollo del trabajo está orientado a la investigación y aplicación de técnicas avanzadas no vistas en clase, se apoyará en artículos científicos recientes. La \textbf{planificación} y ejecución del proyecto se realizará en un equipo de trabajo compuesto por 4 alumnos, distribuyendo \textbf{70 horas por persona}. Además, se utilizarán herramientas de gestión de proyectos para organizar y documentar las tareas realizadas, asegurando un seguimiento adecuado de los 
  avances. Concretamente, se utilizará GitHub como repositorio del código fuente y documentación, Clockify para el registro y seguimiento de horas y tareas, y Microsoft Project para realizar una planificación previa precisa de las fases, hitos y actividades previstas.
  \newpage
 
  \section{Planteamiento teórico}
  \par\vspace{0.5cm}
-
- El problema abordado se centra en la detección automatizada de peatones a partir de imágenes digitales mediante técnicas de procesamiento de imágenes como \textbf{Harris}, \textbf{SURF}, \textbf{SIFT} y \textbf{HOG}. Esta tarea es fundamental en múltiples aplicaciones, 
- como la seguridad vial, la monitorización del tráfico y la visión por computadora en sistemas autónomos. La detección 
- precisa y eficiente de peatones permite mejorar la toma de decisiones en entornos urbanos, reducir accidentes o incluso optimizar sistemas de asistencia a la conducción. 
+ 
+ La detección automatizada de peatones a partir de imágenes digitales es una tarea clave en el campo del procesamiento de imágenes, con aplicaciones relevantes en ámbitos como la seguridad vial, la monitorización del tráfico o los sistemas autónomos. 
+ 
  \par\vspace{0.5cm}
-
- Para abordar este problema, se han implementado y evaluado los algoritmos mencionados, 
- los cuales permiten extraer características distintivas de las imágenes con el objetivo de identificar patrones asociados 
- a la presencia de peatones. En esta sección, se describirá en profundidad el funcionamiento de cada uno de estos algoritmos, analizando sus fundamentos teóricos, principios matemáticos y ventajas frente a otros enfoques. Esta base teórica servirá como punto de partida para su posterior implementación y evaluación experimental.
+ 
+ En este contexto, se estudiarán en detalle cuatro técnicas ampliamente utilizadas para la extracción de características: \textbf{Harris}, \textbf{ORB}, \textbf{SIFT} y \textbf{HOG}. Cada uno de estos métodos permite detectar puntos clave o describir regiones relevantes de una imagen, lo que resulta esencial para identificar patrones asociados a la presencia de personas.
+ 
+ \par\vspace{0.5cm}
+ 
+ En esta sección se profundiza en los fundamentos teóricos y matemáticos de cada uno de estos algoritmos, explicando los principios que los sustentan, su formulación, y analizando sus principales ventajas y limitaciones frente a otros enfoques. Esta base teórica servirá como soporte para su posterior implementación y evaluación experimental.
  
 
   \subsection{Harris Corner Detection}
@@ -237,14 +240,13 @@
   \par\vspace{0.5cm}
 
 
-  \subsection{SURF (Speeded-Up Robust Features)}
+  \subsection{ORB (Oriented FAST and Rotated BRIEF)}
   \par\vspace{0.5cm}
 
   \subsection{SIFT (Scale-Invariant Feature Transform)}
   \par\vspace{0.5cm}
   
   El algoritmo \textbf{SIFT} (Scale-Invariant Feature Transform) es una técnica ampliamente utilizada en visión por computadora para la detección y descripción de características en imágenes. Fue desarrollado por \textit{David Lowe} en 1999 y destaca por su capacidad de identificar puntos clave en una imagen de manera robusta frente a transformaciones como cambios de escala, rotación e iluminación. Gracias a estas propiedades, SIFT se ha convertido en una herramienta fundamental para aplicaciones como el reconocimiento de objetos, la detección de patrones y el emparejamiento de imágenes.
-  
   \par\vspace{0.5cm}
   \textbf{Fundamentos teóricos}
   \par\vspace{0.5cm}
@@ -261,7 +263,7 @@
       \begin{figure}[H]
         \centering
         \includegraphics[width=1.1\textwidth]{images/sift_gauss.png}
-        \caption{Proceso de la piramide de diferencia gaussiana.}
+        \caption{Proceso de la piramide de diferencia gaussiana. Fuente: \url{https://docs.opencv.org/3.4/da/df5/tutorial_py_sift_intro.html}}
     \end{figure}
     
       \item \textbf{Detección de keypoints:}  
@@ -273,7 +275,7 @@
       \begin{figure}[H]
         \centering
         \includegraphics[width=1.1\textwidth]{images/sift_orientacion.png}
-        \caption{Proceso de orientación de un keypoint.}
+        \caption{Proceso de orientación de un keypoint. Fuente: \url{https://tinyurl.com/wyv9vczp}}
     \end{figure}
 
 
@@ -288,7 +290,7 @@
       \begin{figure}[H]
         \centering
         \includegraphics[width=0.7\textwidth]{images/sift_descrip.png}
-        \caption{Keypoint Descriptor.}
+        \caption{Keypoint Descriptor. Fuente: \url{https://tinyurl.com/3ufntmbn}}
     \end{figure}
 
     \end{itemize}
@@ -342,10 +344,10 @@
       \item \textbf{Invariancia a escala y rotación:}  
       Gracias a la construcción de la pirámide gaussiana y la asignación de orientación, los keypoints detectados son robustos a cambios de tamaño y rotación en la imagen.
       
-      \item \textbf{Alta discriminación y robustez:}  
-      Los descriptores SIFT tienen una alta capacidad para diferenciar objetos en diferentes condiciones de iluminación y perspectiva.
+      \item \textbf{Robustez:}  
+      Los descriptores SIFT tienen una alta capacidad para diferenciar objetos en diferentes condiciones de iluminación y contraste.
       
-      \item \textbf{Resistencia a ruido y oclusiones parciales:}  
+      \item \textbf{Resistencia a ruido:}  
       Debido a su método de detección basado en diferencias de gaussianos y análisis de gradientes, SIFT es menos sensible al ruido y sigue funcionando incluso cuando partes de la imagen están ocultas.
       
       \item \textbf{Aplicabilidad en reconocimiento de patrones y emparejamiento de imágenes:}  
@@ -433,7 +435,7 @@ A lo largo del proyecto se implementaron varias técnicas de procesamiento de im
 \textbf{Proceso aplicado:}
 
 
-\subsubsection{SURF (Speeded-Up Robust Features)}
+\subsubsection{ORB (Oriented FAST and Rotated BRIEF)}
 
 
 \textbf{Proceso aplicado:}
@@ -456,7 +458,7 @@ Antes de aplicar el algoritmo, se importan las librerías necesarias y se carga 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{images/sift_paso_1.png}
-    \caption{Imagen original cargada.}
+    \caption{Imagen original cargada. Fuente: Elaboracion propia.}
 \end{figure}
 
 \textbf{Paso 2: Conversión de la Imagen a Escala de Grises}
@@ -466,7 +468,7 @@ La imagen se convierte a escala de grises, ya que SIFT opera sobre la intensidad
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{images/sift_paso_2.png}
-    \caption{Conversión a escala de grises.}
+    \caption{Conversión a escala de grises. Fuente: Elaboracion propia.}
 \end{figure}
 
 \textbf{Paso 3: Configuración del Detector SIFT}
@@ -499,7 +501,7 @@ La pirámide Gaussiana se genera aplicando convoluciones sucesivas con filtros g
     \includegraphics[width=0.9\textwidth]{images/sift_paso_3.2.png}
     \includegraphics[width=0.7\textwidth]{images/sift_paso_3.3.png}
     \includegraphics[width=0.4\textwidth]{images/sift_paso_3.4.png}
-    \caption{Construcción de la Pirámide Gaussiana.}
+    \caption{Construcción de la Pirámide Gaussiana. Fuente: Elaboracion propia.}
 \end{figure}
 
 \textbf{Paso 5: Construcción de la Pirámide de Diferencia de Gaussianos (DoG)}
@@ -512,7 +514,7 @@ Después de generar la pirámide Gaussiana, se construye la pirámide de Diferen
     \includegraphics[width=0.9\textwidth]{images/sift_paso_4.2.png}
     \includegraphics[width=0.7\textwidth]{images/sift_paso_4.3.png}
     \includegraphics[width=0.4\textwidth]{images/sift_paso_4.4.png}
-    \caption{Construcción de la Pirámide de Diferencia de Gaussianos (DoG).}
+    \caption{Construcción de la Pirámide de Diferencia de Gaussianos (DoG). Fuente: Elaboracion propia.}
 \end{figure}
 
 \textbf{Paso 6: Detección de Keypoints}
@@ -523,7 +525,7 @@ Los keypoints se detectan identificando los extremos locales en la pirámide DoG
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{images/sift_paso_5.1.png}
-    \caption{Detección de 5 keypoints en la imagen.}
+    \caption{Detección de 5 keypoints en la imagen. Fuente: Elaboracion propia.}
 \end{figure}
 
 En el caso de aplicar el valor 0 al parámetro \textbf{nfeatures}, se detectarían todas las características posibles en la imagen, lo que aumentaría significativamente el número de keypoints detectados, como se observa en la siguiente imagen:
@@ -531,7 +533,7 @@ En el caso de aplicar el valor 0 al parámetro \textbf{nfeatures}, se detectarí
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{images/sift_paso_5.png}
-    \caption{Detección de todos los keypoints con \texttt{nfeatures} = 0.}
+    \caption{Detección de todos los keypoints con \texttt{nfeatures} = 0. Fuente: Elaboracion propia.}
 \end{figure}
 
 \textbf{Paso 7: Asignación de Orientación a los Keypoints}
@@ -542,7 +544,7 @@ Cada keypoint recibe una orientación basada en los gradientes locales de la ima
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.1\textwidth]{images/sift_paso_6.1.png}
-    \caption{Orientación asignada a cada keypoint.}
+    \caption{Orientación asignada a cada keypoint. Fuente: Elaboracion propia.}
 \end{figure}
 
 \textbf{Paso 8: Visualización de los Keypoints con su Orientación}
@@ -553,7 +555,7 @@ Los keypoints detectados y sus orientaciones asignadas se visualizan para evalua
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{images/sift_paso_7.1.png}
-    \caption{Visualización de keypoints con orientación.}
+    \caption{Visualización de keypoints con orientación. Fuente: Elaboracion propia.}
 \end{figure}
 
 \textbf{Paso 9: Cálculo de Descriptores}
@@ -564,10 +566,24 @@ Cada keypoint se describe mediante un vector de características basado en la di
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/sift_paso_8.png}
-    \caption{Ejemplo de descriptor SIFT calculado.}
+    \caption{Ejemplo de descriptor SIFT calculado. Fuente: Elaboracion propia.}
 \end{figure}
 
 Estos descriptores serán los que permitan al modelo de aprendizaje automático emparejar características entre diferentes imágenes, facilitando tareas como el reconocimiento de objetos y la detección de peatones en escenas complejas.
+
+Para comprobar la invarianza del algoritmo frente a cambios de escala, rotación y perspectiva, se ha implementado una función en el cuaderno de trabajo que aplica distintas transformaciones a una imagen, incluyendo modificaciones en la escala, rotación, iluminación y contraste. Esto permite observar que el algoritmo es capaz de detectar un número muy similar de puntos clave (keypoints) en las distintas versiones de la imagen, calculando descriptores prácticamente idénticos en cada caso.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/sift_inv.png}
+    \caption{Visualización de keypoints en las dos imágenes. Fuente: Elaboracion propia.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/sift_inv_des.png}
+    \caption{Visualización de descriptores en las dos imágenes. Fuente: Elaboracion propia.}
+\end{figure}
 
 
 \subsubsection{HOG (Histogram of Oriented Gradients)}
@@ -671,7 +687,7 @@ En este paso, los histogramas de las celdas se agrupan en bloques, y cada bloque
 \subsection{Decisiones de Diseño}
 
 \begin{itemize}
-\item \textbf{Separación de los algoritmos en archivos independientes:} Cada método de detección (Harris, SURF, SIFT y HOG) se implementó en archivos de Python independientes dentro de una carpeta central denominada \texttt{algoritmos}.
+\item \textbf{Separación de los algoritmos en archivos independientes:} Cada método de detección (Harris, ORB, SIFT y HOG) se implementó en archivos de Python independientes dentro de una carpeta central denominada \texttt{algoritmos}.
 \item \textbf{Presentación didáctica en Jupyter Notebooks:} Se desarrolló un \texttt{notebook.ipynb} por cada algoritmo donde se explican los algoritmos paso a paso.
 \item \textbf{Experimentación con un banco de imágenes de prueba:} Se realizó una prueba con un conjunto de imágenes para entrenar un modelo \textbf{SVM} y predecir si en una imagen hay o no un peatón.
 \item \textbf{Estructura organizada del proyecto:}  
@@ -691,14 +707,14 @@ La experimentación es una parte fundamental de este trabajo, ya que permite eva
 Para obtener resultados significativos, hemos realizado pruebas sistemáticas con las configuraciones más eficientes con cada algoritmo y un conjunto variado de imágenes.
 \par \hspace{1cm}
 
-Una vez implementados y probados los algoritmos de detección de características (\textbf{Harris, SURF, SIFT y HOG}), decidimos entrenar un modelo \textbf{SVM} utilizando un banco de datos con más de 1000 imágenes, en las que se incluyen ejemplos con y sin peatones. El objetivo es evaluar la capacidad del modelo para predecir correctamente la presencia de un peatón en una imagen.
+Una vez implementados y probados los algoritmos de detección de características (\textbf{Harris, ORB, SIFT y HOG}), decidimos entrenar un modelo \textbf{SVM} utilizando un banco de datos con más de 1000 imágenes, en las que se incluyen ejemplos con y sin peatones. El objetivo es evaluar la capacidad del modelo para predecir correctamente la presencia de un peatón en una imagen.
 
 \subsection{Preparación del Conjunto de Datos}
 
 Para garantizar un entrenamiento adecuado del \textbf{SVM}, cada imagen del banco de datos fue sometida a un tratamiento previo, el cual depende del algoritmo de detección de características a evaluar. Este preprocesamiento incluyó:
 \begin{itemize}
     \item Conversión a escala de grises (en los algoritmos que lo requieren).
-    \item Aplicación del método de detección de características correspondiente (Harris, SURF, SIFT o HOG).
+    \item Aplicación del método de detección de características correspondiente (Harris, ORB, SIFT o HOG).
     \item Extracción de descriptores característicos de cada imagen.
     \item Normalización de los descriptores para mejorar la robustez del modelo.
 \end{itemize}
@@ -709,24 +725,156 @@ Tras procesar el conjunto de datos, se procedió al entrenamiento del \textbf{SV
 el valor true en caso de haber una o más personas (señalando su ubicación), y false en caso contrario, para diferenciar aquellas que contienen peatones de aquellas que no.
 
 
+\section{Experimentación}
+
+La experimentación es una parte fundamental de este trabajo, ya que permite evaluar el rendimiento de los algoritmos implementados en combinación con un modelo \textbf{SVM} (Support Vector Machine). 
+Con este fin, se llevaron a cabo pruebas sistemáticas utilizando las configuraciones más eficientes de cada algoritmo, sobre un conjunto variado de imágenes.
+
+\subsection{Preparación del Conjunto de Datos}
+
+Para entrenar el modelo \textbf{SVM}, se utilizó un conjunto de datos compuesto por imágenes divididas en dos categorías: con personas y sin personas. Las imágenes con personas venían acompañadas de un archivo \texttt{.xml} que indicaba la ubicación exacta del peatón mediante una caja delimitadora (ROI, Region of Interest). Para una mejor calidad en el entrenamiento, el procesamiento mediante los algoritmos de detección de características se aplicó exclusivamente sobre el ROI de cada imagen con persona. En cambio, las imágenes sin personas fueron procesadas en su totalidad.
+
+\par\vspace{0.5cm}
+Cada imagen fue sometida a un preprocesamiento específico, dependiendo del algoritmo utilizado (\textbf{Harris, ORB, SIFT o HOG}), siguiendo los pasos:
+\begin{itemize}
+    \item Conversión a escala de grises.
+    \item Aplicación del algoritmo de detección de características correspondiente.
+    \item Extracción de los descriptores generados.
+\end{itemize}
+
+\subsection{Adaptación de Descriptores para el SVM}
+
+Para entrenar un modelo \textbf{SVM}, es imprescindible que todos los vectores de entrada tengan la misma longitud. Sin embargo, los descriptores generados por los algoritmos de detección de características varían en tamaño según la imagen. Por ello, fue necesario diseñar un procedimiento específico para estandarizar los vectores generados por cada técnica. A continuación, se detalla el enfoque seguido en cada caso:
+
+\subsubsection*{Harris}
+
+\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+
+\subsubsection*{SIFT}
+
+El algoritmo \textbf{SIFT} genera descriptores de 128 dimensiones por keypoint, pero el número de keypoints detectados por imagen varía, lo que impide utilizar directamente sus descriptores como entrada al SVM.
+\par\vspace{0.5cm}
+
+Se probaron varios enfoques:
+\par\vspace{0.5cm}
+
+\begin{itemize}
+    \item Limitar el número de keypoints a 100 y rellenar con ceros si no se alcanzaba dicha cantidad.
+    \item Rellenar los huecos replicando descriptores existentes, aunque esto introducía redundancia.
+\end{itemize}
+
+Ambas opciones resultaron poco eficientes computacionalmente. Posteriormente, se intentó filtrar las imágenes que no tuvieran al menos 50 keypoints. Aunque esta estrategia permitía evitar el padding, y datos artificiales, eliminaba demasiadas imágenes del conjunto de test, reduciendo la muestra útil y por tanto dando información estadísticamente poco fiable.
+\par\vspace{0.5cm}
+
+La solución adoptada finalmente consistió en calcular un vector estadístico por imagen a partir de los descriptores SIFT. Este vector incluye medidas como la media, desviación estándar y valor máximo por dimensión de cada descriptor. Esta técnica permitió estandarizar los vectores de entrada al modelo sin añadir datos artificiales y manteniendo una buena eficiencia y computación.
+
+
+\subsubsection*{HOG}
+
+\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+
+
+
+\subsubsection*{ORB}
+
+\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+
+
+
+\subsection{Entrenamiento del Modelo SVM}
+
+Con los descriptores estandarizados, se entrenó un modelo \textbf{SVM} cuyo objetivo es clasificar si una imagen contiene o no un peatón. El conjunto de entrenamiento se compuso de imágenes etiquetadas, asignando la clase \texttt{Persona} cuando existía al menos una anotación en el archivo \texttt{.xml}, y \texttt{No Persona} en caso contrario.
+
+\par\vspace{0.5cm}
+
+Cada modelo entrenado se guardó en un archivo independiente con el nombre \texttt{svm\_algoritmo.pkl}, según el algoritmo utilizado para la extracción de características.
+
 \subsection{Pruebas de Evaluación}
 
-Una vez entrenado el modelo con los descriptores obtenidos de cada algoritmo, se realizó una prueba final con un conjunto de imágenes con y sin personas, que no habían sido utilizadas durante el entrenamiento. El objetivo era medir la eficiencia del modelo en la tarea de detección de peatones.
+Una vez entrenado el modelo, se evaluó su rendimiento utilizando un banco de pruebas independiente, estructurado igual que el conjunto de entrenamiento: dos carpetas con imágenes con y sin personas, que no se habían utilizado durante la fase de entrenamiento.
+\par\vspace{0.5cm}
 
-Cada imagen de prueba fue procesada de la misma manera que las imágenes de entrenamiento, aplicando el algoritmo de detección de características correspondiente y extrayendo sus descriptores. Posteriormente, estos descriptores fueron introducidos en el \textbf{SVM} entrenado para predecir si la imagen contenía un peatón o no.
+Cada imagen de prueba fue procesada con el mismo algoritmo utilizado para el entrenamiento, extrayendo los descriptores correspondientes. Estos descriptores fueron posteriormente introducidos en el modelo \textbf{SVM} para realizar la predicción.
 
 \subsection{Resultados y Análisis}
 
-Para evaluar el desempeño del modelo, se calcularon métricas como:
+El rendimiento de los modelos entrenados con cada uno de los algoritmos se evaluó mediante métricas estándar en clasificación binaria, como la precisión, sensibilidad (recall), F1-Score y la matriz de confusión. A continuación, se explica brevemente en qué consiste cada una de estas métricas:
+
 \begin{itemize}
-    \item \textbf{Precisión}: Porcentaje de imágenes correctamente clasificadas.
-    \item \textbf{Tiempo de Procesamiento}: Tiempo medio necesario para procesar una imagen.
+    \item \textbf{Precisión (Precision)}: mide la proporción de verdaderos positivos sobre el total de predicciones positivas realizadas por el modelo. Es decir, indica cuántas de las imágenes clasificadas como persona realmente contienen una persona. Se calcula como: 
+    \[
+    \text{Precisión} = \frac{TP}{TP + FP}
+    \]
+
+    \item \textbf{Sensibilidad (Recall)}: también conocida como \textit{tasa de verdaderos positivos}, mide la capacidad del modelo para identificar correctamente todas las imágenes que realmente contienen personas. Se calcula como:
+    \[
+    \text{Recall} = \frac{TP}{TP + FN}
+    \]
+
+    \item \textbf{F1-Score}: es la media armónica entre la precisión y la sensibilidad. Esta métrica proporciona una visión equilibrada del rendimiento del modelo cuando existe un compromiso entre evitar falsos positivos y no perder verdaderos positivos. Se calcula como:
+    \[
+    F1 = 2 \cdot \frac{\text{Precisión} \cdot \text{Recall}}{\text{Precisión} + \text{Recall}}
+    \]
+
+    \item \textbf{Matriz de confusión}: es una tabla que permite visualizar el rendimiento del modelo mostrando las cantidades de verdaderos positivos (TP), falsos positivos (FP), verdaderos negativos (TN) y falsos negativos (FN). Cada celda indica cuántas veces el modelo clasificó correctamente o se equivocó al predecir una clase frente a la clase real.
 \end{itemize}
 
 
-\subsection{Resultados Obtenidos}
+\subsubsection*{Resultados con SIFT}
 
+\begin{itemize}
+    \item \textbf{Imágenes procesadas - Evaluación}: 747 con personas, 781 sin personas.
+    \item \textbf{Precisión del modelo en el conjunto de prueba}: \textbf{79.25\%}
+    \item \textbf{Precisión (Precision)}: 76.41\%
+    \item \textbf{Sensibilidad (Recall)}: 83.27\%
+    \item \textbf{F1-Score}: 79.69\%
+\end{itemize}
 
+\textbf{Matriz de confusión}:
+\[
+\begin{bmatrix}
+589 & 192 \\
+125 & 622 \\
+\end{bmatrix}
+\]
+
+\textbf{Distribución de casos}:
+\begin{itemize}
+    \item Verdaderos negativos (TN): 589
+    \item Falsos positivos (FP): 192
+    \item Falsos negativos (FN): 125
+    \item Verdaderos positivos (TP): 622
+\end{itemize}
+
+\textbf{Reporte de clasificación}:
+
+\begin{verbatim}
+              precision    recall  f1-score   support
+
+  No Persona       0.82      0.75      0.79       781
+     Persona       0.76      0.83      0.80       747
+
+    accuracy                           0.79      1528
+   macro avg       0.79      0.79      0.79      1528
+weighted avg       0.80      0.79      0.79      1528
+\end{verbatim}
+
+Los resultados obtenidos con SIFT muestran un rendimiento general equilibrado del modelo, destacando una buena sensibilidad (83.27\%), lo que indica una alta capacidad para identificar correctamente las imágenes que contienen personas. La precisión también es aceptable, aunque algo menor, lo que refleja la existencia de falsos positivos. En conjunto, estos datos evidencian que los descriptores generados a partir de SIFT son útiles para esta tarea, aunque podrían optimizarse con técnicas adicionales de selección o reducción de características.
+
+\vspace{0.5cm}
+\subsubsection*{Resultados con ORB}
+
+\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+
+\vspace{0.5cm}
+\subsubsection*{Resultados con HOG}
+
+\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+
+\vspace{0.5cm}
+\subsubsection*{Resultados con Harris}
+
+\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
 \newpage
 
 \section{Manual de usuario}
@@ -829,8 +977,8 @@ Para consultar con mayor detalle las fechas específicas, tareas asignadas, tiem
   \bibitem{HARRIS}
   C. Harris y M. Stephens, \emph{A Combined Corner and Edge Detector}, Proceedings of The Fourth Alvey Vision Conference, pp. 147–151, 1988. Disponible en: \url{https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=88cdfbeb78058e0eb2613e79d1818c567f0920e2}
   
-  \bibitem{SURF}
-  H. Bay, T. Tuytelaars y L. Van Gool, \emph{Surf: Speeded up robust features}, en Computer Vision–ECCV 2006, Springer Berlin Heidelberg, pp. 404-417, 2006. Disponible en: \url{https://link.springer.com/chapter/10.1007/11744023_32}
+  \bibitem{ORB}
+  H. Bay, T. Tuytelaars y L. Van Gool, \emph{ORB: Oriented FAST and Rotated BRIEF}, en Computer Vision–ECCV 2006, Springer Berlin Heidelberg, pp. 404-417, 2006. Disponible en: \url{https://link.springer.com/chapter/10.1007/11744023_32}
   
   \bibitem{SIFT}
   I. Rey-Otero y M. Delbracio, \emph{Anatomy of the SIFT Method}, Image Processing On Line, vol. 4, pp. 370–396, 2014. Disponible en: \url{https://doi.org/10.5201/ipol.2014.82}
