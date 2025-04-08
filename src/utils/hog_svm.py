@@ -1,5 +1,6 @@
 import numpy as np
 import algoritmos.hog as hog
+import cv2
 
 def hog_svm(image, parametros, tipo):
     """
@@ -26,16 +27,12 @@ def hog_svm(image, parametros, tipo):
         bin_width = parametros.get("bin_width", 20)
     )
     
+    target_size = parametros.get("target_size", (64, 128))
+    
+    # Redimensionar la imagen al tamaño fijo definido
+    img_resized = cv2.resize(image, target_size, interpolation=cv2.INTER_LINEAR)
     # Calcular el descriptor HOG para la imagen
-    descriptor = hog_detector.compute_hog(image)
+    descriptor = hog_detector.compute_hog(img_resized)
     
-    # Si no se obtiene descriptor, se retornan valores neutros
-    if descriptor is None or len(descriptor) == 0:
-        return [0, 0, 0]
-    
-    # Extraer estadísticas: media, desviación estándar y máximo del descriptor
-    mean_val = np.mean(descriptor)
-    std_val  = np.std(descriptor)
-    max_val  = np.max(descriptor)
-    
-    return [mean_val, std_val, max_val]
+   
+    return descriptor
