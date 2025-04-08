@@ -128,7 +128,7 @@
         \]
 
         Los elementos \(a_n\) son los elementos de la matriz de autocorrelación \(M\) y \(\lambda\) es el autovalor. 
-        \(lambda_max\) corresponde al autovalor máximo y \(lambda_min\) al autovalor mínimo, es decir, cuanto aumenta la intensidad de la imagen en cada dirección.
+        \(\lambda_{max}\) corresponde al autovalor máximo y \(\lambda_{min}\) al autovalor mínimo, es decir, cuanto aumenta la intensidad de la imagen en cada dirección.
 
         \[
         (a_{11} - \lambda)(a_{22} - \lambda) - a_{12} a_{21} = 0
@@ -203,7 +203,7 @@
         Afortunadamente, el valor de Harris se puede calcular de una manera equivalente pero más sencilla:
 
         \[
-        f(x, y) = \det(A) - \kappa \, \text{tr}(A)^2 = a_{11} a_{22} - a_{12} a_{21} - \kappa (a_{11} + a_{22})^2
+        f(x, y) = \det(M) - \kappa \, \text{tr}(M)^2 = I_x^2 I_y^2 - I_xI_y I_xI_y - \kappa (I_x^2 + I_y^2)^2
         \]
 
     Esta formulación es mucho más simple y se puede obtener fácilmente mediante el uso de filtros de gradiente como el filtro de Sobel.
@@ -429,15 +429,200 @@ A lo largo del proyecto se implementaron varias técnicas de procesamiento de im
 
 \subsubsection{Harris Corner Detection}
 
+A continuación se detalla el procedimiento que realiza el algoritmo para la obtención de las esquinas de una imagen.
+\par\vspace{0.5cm}
+\textbf{Paso 1: Cargar librerías y la imagen original}
+\par\vspace{0.5cm}
 
-\textbf{Proceso aplicado:}
+Ya que estamos trabajando con diversas librerías, debemos importarlas.
+Además se debe cargar la imagen con la que se va a trabajar.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/harris_paso_1.png}
+    \caption{Imagen original cargada.}
+\end{figure}
+
+\par\vspace{0.5cm}
+\textbf{Paso 2: Cargar imagen en escala de grises}
+\par\vspace{0.5cm}
+
+Es importante cargar la misma imagen en escala de grises. Aunque podriamos aplicar el algoritmo a cada una de los canales de color,
+esto no tendria sentido, ya que el algoritmo busca esquinas y bordes, y estos no dependen del color de la imagen, si no de la intensidad de la misma, la cual aparece reflejada en la escala de grises. 
+Aunque otros motivos no tan evidentes son:
+
+\begin{itemize}
+    \item \textbf{Reducción de ruido:} Al trabajar con una sola capa, se reduce el ruido y la complejidad de la imagen, lo que facilita la detección de características.
+    \item \textbf{Invarianza al color:} La detección de esquinas y bordes no depende del color, sino de los cambios en la intensidad de la imagen. Al convertir a escala de grises, se eliminan las variaciones de color que no son relevantes para la detección.
+    \item \textbf{Eficiencia computacional:} Al trabajar con un solo canal en lugar de tres, se reduce la carga computacional drásticamente.
+    \item \textbf{Detección de características:} Los cambios en intensidad es la base de la detección de esquinas en este algoritmo y, el canal que mas información mantiene acerca de los cambios en intensidad, es el gris.
+\end{itemize}
+
+Esta es la imagen original convertida a escala de grises.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/harris_paso_2.png}
+    \caption{Imagen original convertida a escala de grises.}
+\end{figure}
+
+\par\vspace{0.5cm}
+\textbf{Paso 3: Configuración de parámetros del algoritmo}
+\par\vspace{0.5cm}
+
+El algoritmo Harris requiere la configuración de varios parámetros clave que afectan la detección de características en la imagen. Estos
+son definidos dentro de un constructor diseñado para su correcto funcionamiento. Dichos parámetros son:
+
+\begin{itemize}
+    \item \textbf{window\_size = 5:} Tamaño de la ventana utilizada para aplicar supresión de no máximos.
+    \item \textbf{\(\kappa\) = 0.04:} Parámetro que controla la sensibilidad del detector a esquinas y bordes.
+    \begin{itemize}
+        \item \textbf{Valores bajos de \(\kappa \approx 0.02\):} 
+        \begin{itemize}
+            \item Favorece la detección de esquinas claramente definidas.
+            \item Menos sensible al ruido.
+        \end{itemize}
+        \item \textbf{Valores altos de \(\kappa \approx 0.15\):} 
+        \begin{itemize}
+            \item Hace que el algoritmo sea más sensible a bordes y texturas.
+            \item Aumenta el riesgo de falsas detecciones debido al ruido.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{gaussbox = 3:} Es el tamaño del filtro gaussiano usado para suavizar la imagen.
+    \item \textbf{threshold = 0.1:} Umbral para filtrar las esquinas detectadas, eliminando aquellas con valores bajos.
+\end{itemize}
+
+Para la implementación, se ha utilizado la clase correspondiente en el módulo \texttt{algoritmos/harris.py}.	
+
+\par\vspace{0.5cm}
+\textbf{Paso 4: Obtener el gradiente de cada pixel de la imagen}
+\par\vspace{0.5cm}
+
+A continuación calculamos el gradiente de cada píxel de la imagen, utilizando el filtro Sobel. 
+El filtro Sobel es un operador de detección de bordes que calcula la derivada de la imagen en las direcciones horizontal y vertical.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/harris_paso_3.png}
+    \caption{imagen tras aplicar un filtro Sobel.}
+\end{figure}
+
+El resultado nos ilutra claramente los bordes de la imagen, pero no nos da información acerca de las esquinas.
+
+\par\vspace{0.5cm}
+\textbf{Paso 5: Calculo de la Matriz de autocorrelación}
+\par\vspace{0.5cm}
+
+Debemos calcular la matriz de autocorrelación \(M\) para cada pixel de la imagen. Dado que este cálculo es relativamente complejo y costoso y, 
+sabiendo que ambas imagenes obtenidas en el paso anterior corresponden con el gradiente de la imagen original
+en cada dirrección, es decir, \(I_x\) e \(I_y\), podemos calcular la matriz de autocorrelación de la siguiente manera:
+\par\vspace{0.3cm}    
+\[
+    M = \sum_{x, y} w(x, y)
+    \begin{bmatrix}
+    I_x^2 & I_x I_y \\
+    I_x I_y & I_y^2
+    \end{bmatrix}
+    \]
+
+    \par\vspace{0.3cm}    
+Para simplificar y, dado que no tiene sentido su uso en nustro en particular, evitamos el uso explícito de la función ventana \(w(x, y)\), y aprovechamos que
+ya contamos con los valores de \(I_x\) e \(I_y\) , por lo que simplemente calculamos sus productos.
+\par\vspace{0.3cm}    
+\[
+    M = 
+    \begin{bmatrix}
+    I_x^2 & I_x I_y \\
+    I_x I_y & I_y^2
+    \end{bmatrix}
+    \]
+    \par\vspace{0.3cm}    
+Nota: El uso de la función ventana \(w(x, y)\) es impresincible para el calulo de la matriz de autocorrelación para cada píxel.
+Como en nuestro caso hemos calculado los gradientes de la imagen mediante un filtro Sobel, podemos prescindir de su uso, ya que el resultado es el mismo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/harris_paso_4.png}
+    \caption{Matrices \(I_x^2\), \(I_y^2\) y \(I_xI_y\).}
+\end{figure}
+
+\par\vspace{0.5cm}
+\textbf{Paso 6: Aplicar un filtro gausiano}
+\par\vspace{0.5cm}
+
+Aplicamos un filtro gausiano cada una de las matrices para suavizar y eliminar el ruido.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/harris_paso_5.png}
+    \caption{Matrices \(I_x^2\), \(I_y^2\) y \(I_xI_y\) tras aplicar un filtro gausiano.}
+\end{figure}
+
+\par\vspace{0.5cm}
+\textbf{Paso 7: Calculo de las notas Harris para cada pixel}
+\par\vspace{0.5cm}
+
+Simplemente realizamos el siguiente cálculo para obtener la nota Harris \(R\) para cada pixel de la imagen:
+\par\vspace{0.3cm}
+\[
+f(x, y) = \det(M) - \kappa \, \text{tr}(M)^2 = I_x^2 I_y^2 - I_xI_y \cdot I_xI_y - \kappa (I_x^2 + I_y^2)^2
+\]
+\par\vspace{0.3cm}
+El resultado de este cálculo es una matriz de la misma dimensión que la imagen original, donde cada pixel tiene un valor que representa su \("esquinidad"\). A mayor valor, mayor esquinidad.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/harris_paso_6.png}
+    \caption{Matriz de notas Harris.}
+\end{figure}
+
+\par\vspace{0.5cm}
+\textbf{Paso 8: Normalizamos y aplicamos un umbral del 10\%}
+\par\vspace{0.5cm}
+
+El objetivo es normalizar la matriz de las notas Harris para que se encuentren
+entre valores 0 y 255 y aplicar un umbral del 10\% para eliminar los valores irrelavantes. Este umbral, 
+tal como se ha mencionado anteriormente, se puede ajustar según las necesidades del problema.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/harris_paso_7.png}
+    \caption{Matriz de notas Harris Normalizada.}
+\end{figure}
+
+\par\vspace{0.5cm}
+\textbf{Paso 9: Aplicar supresión de no máximos}
+\par\vspace{0.5cm}
+
+Por último, debemos aplicar supresión de no máximos paro sólo mantener a las esquinas con mayor nota.
+Supresión de no máximos consiste en aplicar a la matriz de notas, una funcion ventana que oscila en cada uno de los píxeles, y compara si el valor del píxel central es el mayor de entre sus vecinos.
+
+Explíquemoslo con más detalle:
+
+\begin{itemize}
+    \item Una ventana de tamaño \texttt{window\_size} recorre cada píxel de la imagen.
+    \item Esta comprueba si el píxel central es el mayor de sus vecinos.
+    \item En el caso que sí lo sea, se añade dicho valor a una matriz resultado final. Esto se hace para comparar adecuadamente todos los píxeles con sus vecinos.
+    \item El resultado final es una matriz que contiene solo los píxeles aceptados por la supresión de no máximos.
+\end{itemize}
+
+Este paso permite extraer sólo aquellos píxeles que son los que tiene mayor nota en su vecindario, y por lo tanto, lo que son más suceptibles a ser esquinas viables.
+
+El resultado final es el siguiente:
+\par\vspace{0.5cm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/harris_paso_8.png}
+    \caption{Resultado Final.}
+\end{figure}
+
+Esta matriz final contiene los píxeles que han sido aceptados por la supresión de no máximos, y por lo tanto, son los que se consideran esquinas viables. Además, el valor de cada pixel es la nota Harris de dicho píxel, que indica su "esquinidad", lo
+cual es útil para determinar la calidad de la esquina y, por lo tanto, su viabilidad como punto de interés.
 
 \subsubsection{SURF (Speeded-Up Robust Features)}
 
-
 \textbf{Proceso aplicado:}
-
 
 \subsubsection{SIFT (Scale-Invariant Feature Transform)}
 
