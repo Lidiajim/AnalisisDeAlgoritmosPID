@@ -771,8 +771,14 @@ La solución adoptada finalmente consistió en calcular un vector estadístico p
 
 \subsubsection*{HOG}
 
-\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+El descriptor HOG (Histogram of Oriented Gradients) genera vectores cuya longitud depende del tamaño de la imagen. 
+Para poder usar estos vectores en un modelo SVM, es necesario que todos tengan la misma dimensión.
 
+Para solucionar esto, se aplicaron dos enfoques:
+\begin{itemize}
+    \item Redimensionado fijo: Todas las imágenes se escalan a un tamaño estándar (\(64\times128\) píxeles) antes de calcular el descriptor HOG, asegurando así una longitud uniforme del vector.
+    \item Resumen estadístico: Alternativamente, se extraen tres estadísticas del descriptor original (media, desviación estándar y valor máximo), lo que da lugar a un vector corto pero fijo, útil para reducir la complejidad computacional.
+\end{itemize}
 
 
 \subsubsection*{ORB}
@@ -862,12 +868,95 @@ weighted avg       0.80      0.79      0.79      1528
 Los resultados obtenidos con SIFT muestran un rendimiento general equilibrado del modelo, destacando una buena sensibilidad (83.27\%), lo que indica una alta capacidad para identificar correctamente las imágenes que contienen personas. La precisión también es aceptable, aunque algo menor, lo que refleja la existencia de falsos positivos. En conjunto, estos datos evidencian que los descriptores generados a partir de SIFT son útiles para esta tarea, aunque podrían optimizarse con técnicas adicionales de selección o reducción de características.
 
 \vspace{0.5cm}
-\subsubsection*{Resultados con ORB}
+\subsubsection*{Resultados con HOG}
 
-\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+\textbf{Tipo 1: Redimensionado fijo:}:
+
+\begin{itemize}
+    \item \textbf{Imágenes procesadas - Evaluación}: 747 con personas, 781 sin persona.
+    \item \textbf{Precisión del modelo en el conjunto de prueba}: \textbf{95.09\%}
+    \item \textbf{Precisión (Precision)}: 95.90\%
+    \item \textbf{Sensibilidad (Recall)}: 93.98\%
+    \item \textbf{F1-Score}: 94.93\%
+\end{itemize}
+
+\textbf{Matriz de confusión}:
+\[
+\begin{bmatrix}
+751 & 30 \\
+45 & 702 \\
+\end{bmatrix}
+\]
+
+\textbf{Distribución de casos}
+\begin{itemize}
+    \item Verdaderos negativos (TN): 751
+    \item Falsos positivos (FP): 30
+    \item Falsos negativos (FN): 45
+    \item Verdaderos positivos (TP): 702
+\end{itemize}
+
+\textbf{Reporte de clasificación}:
+
+\begin{verbatim}
+              precision    recall  f1-score   support
+
+  No Persona       0.94      0.96      0.95       781
+     Persona       0.96      0.94      0.95       747
+
+    accuracy                           0.95      1528
+   macro avg       0.95      0.95      0.95      1528
+weighted avg       0.95      0.95      0.95      1528
+\end{verbatim}
+
+\textbf{Tipo 2: Resumen estadístico:}
+\begin{itemize}
+    \item \textbf{Imágenes procesadas - Evaluación}: 747 con personas, 781 sin persona.
+    \item \textbf{Precisión del modelo en el conjunto de prueba}: \textbf{76.96\%}
+    \item \textbf{Precisión (Precision)}: 69.97\%
+    \item \textbf{Sensibilidad (Recall)}: 92.64\%
+    \item \textbf{F1-Score}: 79.72\%
+\end{itemize}
+
+\textbf{Matriz de confusión}:
+\[
+\begin{bmatrix}
+484 & 297 \\
+55 & 692 \\
+\end{bmatrix}
+\]
+
+\textbf{Distribución de casos}:
+\begin{itemize}
+    \item Verdaderos negativos (TN): 484
+    \item Falsos positivos (FP): 297
+    \item Falsos negativos (FN): 55
+    \item Verdaderos positivos (TP): 692
+\end{itemize}
+
+\textbf{Reporte de clasificación}:
+
+\begin{verbatim}
+              precision    recall  f1-score   support
+
+  No Persona       0.90      0.62      0.73       781
+     Persona       0.70      0.93      0.80       747
+
+    accuracy                           0.77      1528
+   macro avg       0.80      0.77      0.77      1528
+weighted avg       0.80      0.77      0.76      1528
+\end{verbatim}
+
+Los resultados obtenidos con ambos tipos en HOG muestran que el método de redimensionado 
+fijo (tipo 1) ofrece un rendimiento significativamente mejor. Al mantener la información 
+completa del descriptor HOG, se logra mayor precisión, sensibilidad y F1-score, con menos 
+falsos positivos y negativos. En cambio, el enfoque de resumen estadístico (tipo 2), al 
+condensar la información en solo tres valores, pierde detalles cruciales, lo que afecta negativamente 
+la capacidad del modelo SVM para distinguir correctamente las imágenes.
+
 
 \vspace{0.5cm}
-\subsubsection*{Resultados con HOG}
+\subsubsection*{Resultados con ORB}
 
 \textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
 
