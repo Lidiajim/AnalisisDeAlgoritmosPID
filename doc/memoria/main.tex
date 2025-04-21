@@ -99,7 +99,7 @@
       \begin{figure}[H]
         \centering
         \includegraphics[width=1.1\textwidth]{images/harris_autovectores.png}
-        \caption{Proceso de la piramide de diferencia gaussiana.}
+        \caption{Ilustración sobre autovectores.}
         
     \end{figure}
       
@@ -892,7 +892,7 @@ La experimentación es una parte fundamental de este trabajo, ya que permite eva
 Para obtener resultados significativos, hemos realizado pruebas sistemáticas con las configuraciones más eficientes con cada algoritmo y un conjunto variado de imágenes.
 \par \hspace{1cm}
 
-Una vez implementados y probados los algoritmos de detección de características (\textbf{Harris, ORB, SIFT y HOG}), decidimos entrenar un modelo \textbf{SVM} utilizando un banco de datos con más de 1000 imágenes, en las que se incluyen ejemplos con y sin peatones. El objetivo es evaluar la capacidad del modelo para predecir correctamente la presencia de un peatón en una imagen.
+Una vez implementados y probados los algoritmos de detección de características (\textbf{Harris, ORB, SIFT y HOG}), decidimos entrenar un modelo \textbf{SVM} utilizando un banco de datos con más de 1000 imágenes, en las que se incluyen ejemplos con y sin peatones. El objetivo es evaluar la capacidad del modelo para predecir correctamente la presencia de un peatón en una imagen, siendo la dicha imagen preprocesada por cada uno de los algoritmos mostrados, es decir, el objetivo es experimentar y definir cual de los 4 alogritmos estudiados es el más conveniente para preprocesar imágenes para el modelo.
 
 \subsection{Preparación del Conjunto de Datos}
 
@@ -902,6 +902,11 @@ Para garantizar un entrenamiento adecuado del \textbf{SVM}, cada imagen del banc
     \item Aplicación del método de detección de características correspondiente (Harris, ORB, SIFT o HOG).
     \item Extracción de descriptores característicos de cada imagen.
     \item Normalización de los descriptores para mejorar la robustez del modelo.
+    \item Extracción de los ROI (Region Of Interest) de las imágenes. Esto se dividió en dos categorías:
+        \begin{itemize}
+            \item Imágenes con personas: Se utilizó un archivo \texttt{.xml} que indicaba la ubicación exacta del peatón mediante una caja delimitadora (ROI).
+            \item Imágenes sin personas: Se genero un ROI aleatorio de aproximadamente un 30\% de la imagen. Este tamaño es el tamaño medio de los ROI del archivo \texttt{.xml} de las personas.
+        \end{itemize}
 \end{itemize}
 
 \subsection{Entrenamiento del Modelo SVM}
@@ -933,8 +938,19 @@ Para entrenar un modelo \textbf{SVM}, es imprescindible que todos los vectores d
 
 \subsubsection*{Harris}
 
-\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+El enfoque orginal del algoritmo Harris es generar una matriz de tamaño imagen, la cual contiene en sus pixeles el valor de la nota ofrecida por el algoritmo si este ha sido considerado como esquino o, 0s en el caso de no serlo. 
+Para poder estandarizar dicha matriz y poder utilizarla como entrada al modelo SVM, se tomar en cuenta diferentes enfoques, dado que una simple matriz con puntos repartidos por el espacio dificilmente puede ser utilizada como entrada al modelo, pues no tiene un tamaño fijo y el modelo dificilmente puede aprender de puntos sin una estructura definida.
+Para ello se optó por cuatro enfoques diferentes:
+\begin{itemize}
+    \item Se experimento para obetener la media de puntos que se calculaban por ROI, viendose un total de 28.5 puntos aproximadamente. Este enfoque consiste en pasar al modelo un vector fija de los 32 mejores puntos de la imagen, y rellenar con ceros el resto de la matriz. El principal objetivo era que sabiendo que los ROIs contenian o no personas, si estas estaban presentes, y por tanto ser protagonistas de la imagen, el algoritmo obtendría muchos puntos y con notas altas de dicho ROI.
+    \item El segundo enfoque consiste en calcular tres parámetros estadísticos (media, desviación estándar y valor máximo) de la matriz de notas Harris. Este enfoque permite obtener un vector de tamaño fijo, que puede ser utilizado como entrada al modelo SVM. Aunque este enfoque no introduce valores artificiales al modelo, este pierde mucha información como, posicional, relativa posional o similitud de notas de puntos cercanos.
+    \item El tercer enfoque consiste en obtener la densidad de puntos en la imagen. La base de este enfoque es que si existe una persona en la imagen ha de haber una mayor densidad de puntos en la región.
+    \item El ultimo enfoque consiste en trabajar con la informacion posicional y relativa posicional de los puntos que nos ofrece la matriz de notas Harris. Consiste en obtener la dispersion de los puntos calculada con centroides, devuelve la distancia promedio, los centroides de cada eje, y la varianza de los ejes. 
+\end{itemize}
 
+En general no se obtuvieron buenos resultados, pero no por culpa de los enfoques, sino por la naturaleza del algoritmo Harris, el cual arroja muy poca informacicón sobre los puntos, privando de información al modelo. Aunque este es muy util para la obtención de esquinas de una manera rápida y sencilla.
+\par\vspace{0.5cm}
+La solución que finalmente se adoptó fue la de calcular los 32 primeros mejores puntos del ROI, y rellenar con ceros el resto de la matriz. Esto ofreció resultados drásticomente mejores que el resto de enfoques, y aunque naturalmente no es el mejor enfoque, es el que mejor resultados ofreció.
 \subsubsection*{SIFT}
 
 El algoritmo \textbf{SIFT} genera descriptores de 128 dimensiones por keypoint, pero el número de keypoints detectados por imagen varía, lo que impide utilizar directamente sus descriptores como entrada al SVM.
@@ -1147,8 +1163,169 @@ la capacidad del modelo SVM para distinguir correctamente las imágenes.
 
 \vspace{0.5cm}
 \subsubsection*{Resultados con Harris}
+\textbf{Tipo 1: 32 mejores puntos de la imagen:}:
 
-\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+\begin{itemize}
+    \item \textbf{Imágenes procesadas - Evaluación}: 747 con personas, 781 sin persona.
+    \item \textbf{Precisión del modelo en el conjunto de prueba}: \textbf{73.63\%}
+    \item \textbf{Precisión (Precision)}: 69.97\%
+    \item \textbf{Sensibilidad (Recall)}: 81.26\%
+    \item \textbf{F1-Score}: 75.08\%
+\end{itemize}
+
+\textbf{Matriz de confusión}:
+
+\[
+\begin{bmatrix}
+    518 & 263 \\
+    140 & 607 \\
+\end{bmatrix}
+\]
+
+\begin{itemize}
+    \item \textbf{Falsos positivos (TN)}: 263
+    \item \textbf{Falsos negativos (FP)}: 140
+    \item \textbf{Verdaderos positivos (FN)}: 518
+    \item \textbf{Verdaderos negativos (TP)}: 607
+\end{itemize}
+
+\textbf{Reporte de clasificación}:
+
+\begin{verbatim}
+    precision    recall  f1-score   support
+
+    No Persona       0.79      0.66      0.72       781
+       Persona       0.70      0.81      0.75       747
+  
+      accuracy                           0.74      1528
+     macro avg       0.74      0.74      0.74      1528
+  weighted avg       0.74      0.74      0.74      1528
+\end{verbatim}
+
+\vspace{0.5cm}
+\textbf{Tipo 2: Tres parámetros estadísticos:}:
+
+\begin{itemize}
+    \item \textbf{Imágenes procesadas - Evaluación}: 747 con personas, 781 sin persona.
+    \item \textbf{Precisión del modelo en el conjunto de prueba}: \textbf{57.98\%}
+    \item \textbf{Precisión (Precision)}: 62.47\%
+    \item \textbf{Sensibilidad (Recall)}: 35.21\%
+    \item \textbf{F1-Score}: 45.03\%
+\end{itemize}
+
+\textbf{Matriz de confusión}:
+
+\[
+\begin{bmatrix}
+    623 & 158 \\
+    484 & 263 \\
+\end{bmatrix}
+\]
+
+\begin{itemize}
+    \item \textbf{Falsos positivos (TN)}: 158
+    \item \textbf{Falsos negativos (FP)}: 484
+    \item \textbf{Verdaderos positivos (FN)}: 623
+    \item \textbf{Verdaderos negativos (TP)}: 263
+\end{itemize}
+
+\textbf{Reporte de clasificación}:
+
+\begin{verbatim}
+    precision    recall  f1-score   support
+
+    No Persona       0.56      0.80      0.66       781
+       Persona       0.62      0.35      0.45       747
+  
+      accuracy                           0.58      1528
+     macro avg       0.59      0.57      0.56      1528
+  weighted avg       0.59      0.58      0.56      1528
+\end{verbatim}
+\vspace{0.5cm}
+
+\textbf{Tipo 3: Densidad de puntos}:
+
+\begin{itemize}
+    \item \textbf{Imágenes procesadas - Evaluación}: 747 con personas, 781 sin persona.
+    \item \textbf{Precisión del modelo en el conjunto de prueba}: \textbf{57.00\%}
+    \item \textbf{Precisión (Precision)}: 58.04\%
+    \item \textbf{Sensibilidad (Recall)}: 43.51\%
+    \item \textbf{F1-Score}: 49.73\%
+\end{itemize}
+
+\textbf{Matriz de confusión}:
+
+\[
+\begin{bmatrix}
+    546 & 235 \\
+    422 & 325 \\
+\end{bmatrix}
+\]
+
+\begin{itemize}
+    \item \textbf{Falsos positivos (TN)}: 235
+    \item \textbf{Falsos negativos (FP)}: 422
+    \item \textbf{Verdaderos positivos (FN)}: 546
+    \item \textbf{Verdaderos negativos (TP)}: 325
+\end{itemize}
+
+\textbf{Reporte de clasificación}:
+
+\begin{verbatim}
+    precision    recall  f1-score   support
+
+    No Persona       0.56      0.70      0.62       781
+       Persona       0.58      0.44      0.50       747
+  
+      accuracy                           0.57      1528
+     macro avg       0.57      0.57      0.56      1528
+  weighted avg       0.57      0.57      0.56      1528
+\end{verbatim}
+
+\vspace{0.5cm}
+
+\textbf{Tipo 4: Dispersión de los puntos}:
+
+\begin{itemize}
+    \item \textbf{Imágenes procesadas - Evaluación}: 747 con personas, 781 sin persona.
+    \item \textbf{Precisión del modelo en el conjunto de prueba}: \textbf{60.47\%}
+    \item \textbf{Precisión (Precision)}: 70.14\%
+    \item \textbf{Sensibilidad (Recall)}: 33.33\%
+    \item \textbf{F1-Score}: 45.19\%
+\end{itemize}
+
+\textbf{Matriz de confusión}:
+
+\[
+\begin{bmatrix}
+    675 & 106 \\
+    498 & 249 \\
+\end{bmatrix}
+\]
+
+\begin{itemize}
+    \item \textbf{Falsos positivos (TN)}: 106
+    \item \textbf{Falsos negativos (FP)}: 498
+    \item \textbf{Verdaderos positivos (FN)}: 675
+    \item \textbf{Verdaderos negativos (TP)}: 249
+\end{itemize}
+
+\textbf{Reporte de clasificación}:
+
+\begin{verbatim}
+    precision    recall  f1-score   support
+
+    No Persona       0.58      0.86      0.69       781
+       Persona       0.70      0.33      0.45       747
+  
+      accuracy                           0.60      1528
+     macro avg       0.64      0.60      0.57      1528
+  weighted avg       0.64      0.60      0.57      1528
+\end{verbatim}
+
+Una vez mostrados los resultados de cada enfoque podemos apreciar que el primero de ellos es el que mejores resultados ofrece.
+
+
 \newpage
 
 \section{Manual de usuario}
