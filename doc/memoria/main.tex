@@ -1342,7 +1342,45 @@ Para acceder al manual de usuario, visite el siguiente enlace donde encontrará 
 
 \section{Conclusiones}
 
-Se debe introducir una sección de conclusiones que incluyan propuestas claras de mejora o extensión del trabajo (por ejemplo, si no se han podido alcanzar todos los objetivos iniciales). También conclusiones sobre los resultados obtenidos, en qué medida difieren de los esperados. además, son apropiadas conclusiones sobre las desviaciones en cuanto a la planificación inicial, así como conclusiones sobre la experiencia de la realización del trabajo (lecciones aprendidas).
+\subsection{Síntesis de resultados}
+
+Como era de esperar, HOG obtuvo los mejores resultados, con una precisión del 95 \%, lo cual tiene sentido 
+porque este descriptor se creó precisamente para la detección de peatones. 
+SIFT quedó segundo con un F1-score de 0,80: sus keypoints son muy informativos, pero al no poder usarlos directamente sobre el model svm,
+se ha perdido mucha información importante por lo que su rendimiento se ha visto muy afectado. Harris alcanzó un F1 de 0,75 incluso usando sólo sus 32 puntos más fuertes, 
+y en cuanto a ORB, aunque es el algoritmo más rápido y ligero, su F1 ronda el 0.78, lo cual ofrece un equilibrio entre precisión y bajo coste computacional, lo que lo convierte en una buena opción en aplicaciones que antepongan la velocidad a la máxima exactitud.
+
+\subsection{Limitaciones y desviaciones respecto al plan inicial}
+
+\begin{itemize}
+    \item \textbf{Imposibilidad de usar SURF}: el algoritmo SURF está sujeto a patente y su implementación en \texttt{cv2} no podía utilizarse libremente, por lo que hubo que descartarlo y usar otro algoritmo alternativo.
+    
+    \item \textbf{Vectores de longitud fija para el SVM}: para entrenar el clasificador fue imprescindible transformar los descriptores en vectores de dimensión fija. Esto obligó a diseñar procedimientos de \emph{padding} o resúmenes estadísticos específicos para cada algoritmo.
+\end{itemize}
+
+
+\subsection{Líneas futuras}
+
+\begin{enumerate}
+    \item \textbf{Aumentar y balancear el dataset}
+    \item \textbf{Explorar otros modelos basados en aprendizaje automático}
+\end{enumerate}
+
+\subsection{Lecciones aprendidas}
+
+\begin{itemize}
+    \item Hemos entendido el funcionamiento interno de un modelo de machine learning como es el \textbf{SVM}
+    
+    \item Aprendimos a transformar imágenes en vectores de características con distintos algoritmos (HOG, SIFT, ORB y Harris).
+        
+    \item Descubrimos la utilidad práctica de estos métodos en la detección de peatones y su aplicación en otros ámbitos de visión artificial, como la identificación de vehículos, el reconocimiento facial.
+\end{itemize}
+
+
+
+
+
+
 \newpage
 \section{Autoevaluación}
 A continuación se presenta la autoevaluación individual realizada por cada miembro del equipo según la rúbrica proporcionada:
@@ -1370,7 +1408,7 @@ A continuación se presenta la autoevaluación individual realizada por cada mie
   \hline
   Aspectos didácticos & Excelente & Excelente & Excelente & Excelente \\
   \hline
-  Experimentación y conclusiones & Excelente & Excelente & Excelente & Excelente \\
+  Experimentación y conclusiones & Bien & Excelente & Excelente & Excelente \\
   \hline
   \textbf{Documentación} & \textbf{Álvaro} & \textbf{Lidia} & \textbf{Víctor} & \textbf{Óscar} \\
   \hline
@@ -1378,10 +1416,11 @@ A continuación se presenta la autoevaluación individual realizada por cada mie
   \hline
   Divulgación contenidos & Excelente & Excelente & Excelente & Excelente \\
   \hline
-  Bibliografía y recursos científicos & Excelente & Excelente & Excelente & Excelente \\
+  Bibliografía y recursos científicos & Bien & Excelente & Excelente & Excelente \\
   \hline
   \end{tabular}
-  \caption{Rúbrica para evaluar trabajos dirigidos (ponderada sobre 7 puntos)}
+  \caption{Rúbrica para evaluar trabajos dirigidos (ponderada sobre 7 puntos). Excelente (1 pto) Bien (0.65 ptos) Regular (0.35 ptos)  Mal (0 ptos)
+  }
   \end{table}
 
   \newpage
@@ -1409,18 +1448,25 @@ El seguimiento del trabajo de cada participante del proyecto se ha dividido en c
   \hline
   Fase & Álvaro Ruiz Gutiérrez & Lidia Jiménez Soriano & Víctor Flores González & Óscar Menéndez Márquez \\
   \hline
-  Fase 1 & 23,74 horas & 0 horas& 0 horas& 0 horas\\
-  Fase 2 & 26,89 horas & 1 horas& 1 horas& 1 horas\\
-  Fase 3 & x horas& 2 horas & 2 horas& 2 horas\\
-  Fase 4 & x horas& 3 horas & 3 horas& 3 horas\\
+  Fase 1 & 23,44 horas & 0 horas& 0 horas& 0 horas\\
+  Fase 2 & 30,12 horas & 1 horas& 1 horas& 1 horas\\
+  Fase 3 & 18,44 horas& 2 horas & 2 horas& 2 horas\\
+  Fase 4 & 5,55 horas& 3 horas & 3 horas& 3 horas\\
   \hline
-  \textbf{Total} & \textbf{70} & \textbf{70} & \textbf{70} & \textbf{70} \\
+  \textbf{Total} & \textbf{78,36} & \textbf{70} & \textbf{70} & \textbf{70} \\
   \hline
   \end{tabular}
   \end{center}
   
 
-Para consultar con mayor detalle las fechas específicas, tareas asignadas, tiempo dedicado por cada participante y otra información relevante, puedes acceder al siguiente enlace a la ficha de datos de Clockify: [LINK].
+Para consultar con mayor detalle las fechas específicas, tareas asignadas, tiempo dedicado por cada participante 
+y otra información relevante, puedes acceder al siguiente enlace a la ficha de datos de Clockify: 
+
+
+\begin{center}
+    \url{https://github.com/Lidiajim/AnalisisDeAlgoritmosPID/blob/main/doc/clockify}
+\end{center}
+
 \newpage
 
 \begin{thebibliography}{10}
