@@ -242,6 +242,62 @@
 
   \subsection{ORB (Oriented FAST and Rotated BRIEF)}
   \par\vspace{0.5cm}
+    El algoritmo \textbf{ORB} (Oriented FAST and Rotated BRIEF) es una técnica eficiente y robusta para la detección y descripción de características en imágenes. Fue propuesto en 2011 por Ethan Rublee y su equipo como una alternativa rápida a SIFT y SURF, combinando dos técnicas previas: el detector \textbf{FAST} y el descriptor \textbf{BRIEF}, con mejoras para dotarlos de invariancia a la rotación.
+
+    ORB es ampliamente utilizado en aplicaciones en tiempo real, como visión en robótica y realidad aumentada, debido a su bajo coste computacional y buena precisión.
+
+    \par\vspace{0.5cm}
+    \textbf{Fundamentos teóricos}
+    \par\vspace{0.5cm}
+
+    ORB consta de dos partes principales: el detector de puntos clave (keypoints) y el descriptor binario. A continuación se detallan los pasos fundamentales:
+
+    \begin{itemize}
+        \item \textbf{Detección de puntos clave con FAST:}  
+        ORB utiliza el algoritmo \textbf{FAST} (Features from Accelerated Segment Test) para detectar esquinas de forma eficiente. El criterio de FAST consiste en verificar si un píxel del centro de una ventana de \(16\) píxeles en un círculo presenta diferencias significativas de intensidad con respecto a un número fijo de píxeles del contorno. Es rápido pero no es invariante a la rotación.
+
+        \item \textbf{Mejora de FAST con Harris Score:}  
+        Para ordenar y seleccionar los puntos más relevantes, ORB emplea la \textbf{Harris corner measure}, descartando puntos débiles y manteniendo los más robustos para su posterior descripción.
+
+        \item \textbf{Asignación de orientación:}  
+        Para dotar a FAST de invariancia rotacional, ORB calcula la orientación dominante en la vecindad del punto clave usando momentos de orden 1. Dado un patch centrado en el keypoint, la orientación se calcula como:
+
+        \[
+        \theta = \arctan\left( \frac{m_{01}}{m_{10}} \right)
+        \]
+
+        donde los momentos se definen como:
+        \[
+        m_{pq} = \sum_x \sum_y x^p y^q I(x, y)
+        \]
+
+        \item \textbf{Generación del descriptor BRIEF rotado:}  
+        ORB utiliza \textbf{BRIEF} (Binary Robust Independent Elementary Features) para describir el entorno de cada punto. BRIEF genera un vector binario comparando la intensidad de pares de píxeles dentro de una ventana. Para que sea invariante a la rotación, ORB rota la máscara de BRIEF según el ángulo calculado previamente.
+
+        \item \textbf{Reducción de correlación en BRIEF:}  
+        ORB introduce un aprendizaje offline para seleccionar un subconjunto de pruebas de comparación que sean menos correlacionadas entre sí, mediante el análisis de varianza y correlación de las pruebas binarias.
+    \end{itemize}
+
+    \par\vspace{0.5cm}
+    \textbf{Ventajas de ORB}
+    \par\vspace{0.5cm}
+
+    ORB combina velocidad, eficiencia y robustez, lo que lo convierte en una opción ideal para sistemas en tiempo real. Entre sus principales ventajas destacan:
+
+    \begin{itemize}
+        \item \textbf{Alta velocidad de cómputo:}  
+        Es mucho más rápido que SIFT y SURF, ya que utiliza técnicas binarizadas y eficientes computacionalmente.
+        
+        \item \textbf{Invariancia a la rotación:}  
+        Gracias a la estimación de orientación y rotación del descriptor BRIEF, ORB puede detectar características robustas a la rotación de la imagen.
+
+        \item \textbf{Buena discriminación:}  
+        Aunque los descriptores binarios son más ligeros, ORB conserva una buena capacidad de discriminación, útil en tareas de emparejamiento y reconocimiento.
+
+        \item \textbf{Libre de patentes:}  
+        A diferencia de SIFT o SURF, ORB es completamente libre de uso, lo que lo hace muy atractivo en aplicaciones comerciales o académicas sin restricciones de licencia.
+    \end{itemize}
+
 
   \subsection{SIFT (Scale-Invariant Feature Transform)}
   \par\vspace{0.5cm}
@@ -624,7 +680,96 @@ cual es útil para determinar la calidad de la esquina y, por lo tanto, su viabi
 
 \subsubsection{ORB (Oriented FAST and Rotated BRIEF)}
 
-\textbf{Proceso aplicado:}
+\subsection*{Implementación práctica de ORB}
+
+\par\vspace{0.5cm}
+La implementación práctica de ORB se ha realizado utilizando \texttt{OpenCV} y módulos desarrollados específicamente para este proyecto. A continuación, se detallan los pasos seguidos, ilustrados con los resultados intermedios obtenidos:
+
+\subsubsection*{Paso 1: Carga y preprocesamiento de la imagen}
+
+Se carga una imagen de prueba y se convierte a escala de grises, ya que ORB trabaja únicamente sobre intensidades de píxeles:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/original.jpg}
+    \caption{Imagen original utilizada para la detección de características.}
+\end{figure}
+
+\subsubsection*{Paso 2: Suavizado y generación de la pirámide de escalas}
+
+ORB utiliza una pirámide de escalas para lograr invariancia a tamaño. Antes de construir cada nivel de la pirámide, se aplica un suavizado Gaussiano para reducir ruido:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/gaussian_blur.jpg}
+    \caption{Aplicación de filtro Gaussiano con diferentes valores de $\sigma$.}
+\end{figure}
+
+Posteriormente, se genera la pirámide de imágenes:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/piramide_orb.jpg}
+    \caption{Pirámide de escalas construida a partir de la imagen original.}
+\end{figure}
+
+\subsubsection*{Paso 3: Detección inicial de puntos clave (FAST)}
+
+Se emplea el detector FAST para localizar esquinas de forma rápida:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/fast_keypoints.jpg}
+    \caption{Puntos clave detectados mediante el detector FAST.}
+\end{figure}
+
+\subsubsection*{Paso 4: Filtrado de keypoints usando respuesta de Harris}
+
+Para mejorar la calidad de los puntos clave detectados, se calcula la respuesta de Harris, descartando puntos poco significativos:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/harris_response.jpg}
+    \caption{Keypoints tras aplicar filtrado basado en la respuesta de Harris.}
+\end{figure}
+
+\subsubsection*{Paso 5: Asignación de orientación usando momentos de imagen}
+
+Se asigna una orientación dominante a cada keypoint calculando los momentos del parche local:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/keypoints_orientacion.jpg}
+    \caption{Puntos clave con orientación asignada mediante cálculo de momentos.}
+\end{figure}
+
+\subsubsection*{Paso 6: Cálculo de descriptores rBRIEF}
+
+Una vez asignada la orientación, se calculan los descriptores rBRIEF:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/rbrief_descriptors.jpg}
+    \caption{Visualización de la matriz de descriptores generados con rBRIEF.}
+\end{figure}
+
+\subsubsection*{Paso 7: Entrenamiento de un clasificador SVM}
+
+Los descriptores generados se utilizan para entrenar un modelo SVM que distingue entre imágenes con presencia o ausencia de peatones:
+
+\begin{itemize}
+    \item Se entrenó el clasificador utilizando conjuntos de imágenes etiquetadas.
+    \item El modelo se guardó en el fichero \texttt{svm\_orb.pkl}.
+\end{itemize}
+
+\subsubsection*{Paso 8: Evaluación del modelo}
+
+Finalmente, el clasificador SVM se evaluó sobre conjuntos de prueba separados, calculando métricas de rendimiento como precisión y tasa de error.
+
+\par\vspace{0.5cm}
+ORB ha demostrado ser una técnica eficiente tanto en velocidad como en capacidad de detección robusta para el reconocimiento de peatones, logrando una buena relación entre coste computacional y rendimiento.
+
+
 
 \subsubsection{SIFT (Scale-Invariant Feature Transform)}
 
@@ -984,7 +1129,32 @@ Para solucionar esto, se aplicaron dos enfoques:
 
 \subsubsection*{ORB}
 
-\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+El algoritmo \textbf{ORB} genera descriptores binarios de tamaño fijo (usualmente de 256 bits) por cada keypoint detectado. Sin embargo, al igual que sucede con SIFT, el número de keypoints detectados en cada imagen puede variar considerablemente, lo que imposibilita el uso directo de los descriptores como entrada al modelo \textbf{SVM}.
+
+\par\vspace{0.5cm}
+Se analizaron diversas estrategias para adaptar los descriptores de ORB al modelo:
+
+\begin{itemize}
+    \item \textbf{Límite de número de keypoints:} Se propuso fijar un número máximo de keypoints (por ejemplo, 100) y completar con vectores nulos (ceros) en caso de que no se alcanzara dicho número. Sin embargo, esta técnica introducía ruido cuando las imágenes no contenían suficientes keypoints de calidad.
+    \item \textbf{Resumen estadístico:} Se calculó la \textbf{media}, la \textbf{desviación estándar} y el \textbf{valor máximo} de todos los descriptores ORB obtenidos en cada imagen. Este enfoque genera un vector compacto de tamaño fijo, que conserva información global sobre la distribución de los descriptores sin necesidad de padding artificial.
+\end{itemize}
+
+\par\vspace{0.5cm}
+La solución adoptada finalmente fue la del \textbf{resumen estadístico} de los descriptores ORB.  
+Concretamente, para cada dimensión del descriptor (256 bits), se calcularon los siguientes valores:
+\begin{itemize}
+    \item Media de los valores de la dimensión en todos los keypoints.
+    \item Desviación estándar de la dimensión.
+    \item Valor máximo observado en la dimensión.
+\end{itemize}
+
+\par\vspace{0.5cm}
+Este procedimiento permite transformar un conjunto variable de descriptores binarios en un vector de tamaño fijo, apto para su uso en el entrenamiento del modelo \textbf{SVM}.  
+Además, al basarse en medidas estadísticas, mejora la robustez frente a variaciones menores en el número o calidad de los keypoints detectados.
+
+\par\vspace{0.5cm}
+Finalmente, esta estrategia demostró ser eficiente y efectiva para el uso de ORB en la clasificación de imágenes con o sin personas.
+
 
 
 
@@ -1157,9 +1327,62 @@ la capacidad del modelo SVM para distinguir correctamente las imágenes.
 
 
 \vspace{0.5cm}
-\subsubsection*{Resultados con ORB}
+\section{Resultados con ORB}
 
-\textit{(Sección pendiente de completar por el responsable de este algoritmo.)}
+\subsection*{Clasificación mediante descriptores ORB}
+
+Imágenes procesadas - Evaluación: 747 con personas, 781 sin persona.  
+Precisión del modelo en el conjunto de prueba: \textbf{75.39\,\%}
+
+\begin{itemize}
+    \item \textbf{Precisión (Precision):} 66.67\,\%
+    \item \textbf{Sensibilidad (Recall):} 99.33\,\%
+    \item \textbf{F1-Score:} 79.78\,\%
+\end{itemize}
+
+\begin{center}
+\textbf{Matriz de confusión:}
+\[
+\begin{bmatrix}
+410 & 371 \\
+5 & 742 \\
+\end{bmatrix}
+\]
+\end{center}
+
+\textbf{Distribución de casos:}
+\begin{itemize}
+    \item Verdaderos negativos (TN): 410
+    \item Falsos positivos (FP): 371
+    \item Falsos negativos (FN): 5
+    \item Verdaderos positivos (TP): 742
+\end{itemize}
+
+\textbf{Reporte de clasificación:}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccc}
+\textbf{Clase} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Soporte} \\
+No Persona & 0.99 & 0.52 & 0.69 & 781 \\
+Persona    & 0.67 & 0.99 & 0.80 & 747 \\
+\textbf{Accuracy} & \multicolumn{4}{c}{0.75 (1528 muestras)} \\
+\textbf{Macro Avg} & 0.83 & 0.76 & 0.74 & 1528 \\
+\textbf{Weighted Avg} & 0.83 & 0.75 & 0.74 & 1528 \\
+\end{tabular}
+\caption{Resultados de clasificación utilizando descriptores ORB}
+\end{table}
+
+\subsection*{Análisis de los resultados}
+
+Los resultados obtenidos con ORB muestran una alta capacidad de detección de personas, como demuestra su \textbf{recall del 99.33\,\%}, lo que implica que casi todos los individuos presentes fueron correctamente identificados. Sin embargo, su \textbf{precisión del 66.67\,\%} indica una elevada tasa de falsos positivos, es decir, en numerosas ocasiones el modelo predijo la existencia de una persona cuando no la había.
+
+\par\vspace{0.3cm}
+Este comportamiento es coherente con la naturaleza de los descriptores binarios de ORB: son rápidos y eficientes, pero menos detallados que los de SIFT o HOG. Aun así, el \textbf{F1-score global del 79.78\,\%} lo sitúa como un método viable en contextos donde se prioriza la detección (recall) por encima de la precisión.
+
+\par\vspace{0.3cm}
+El alto número de falsos positivos puede mitigarse ajustando el umbral de decisión del modelo o combinando ORB con técnicas de postprocesado espacial o de seguimiento en vídeo para reducir las detecciones erróneas aisladas.
+
 
 \vspace{0.5cm}
 \subsubsection*{Resultados con Harris}
@@ -1448,12 +1671,12 @@ El seguimiento del trabajo de cada participante del proyecto se ha dividido en c
   \hline
   Fase & Álvaro Ruiz Gutiérrez & Lidia Jiménez Soriano & Víctor Flores González & Óscar Menéndez Márquez \\
   \hline
-  Fase 1 & 23,44 horas & 0 horas& 0 horas& 0 horas\\
-  Fase 2 & 30,12 horas & 1 horas& 1 horas& 1 horas\\
-  Fase 3 & 18,44 horas& 2 horas & 2 horas& 2 horas\\
-  Fase 4 & 5,55 horas& 3 horas & 3 horas& 3 horas\\
+  Fase 1 & 23,44 horas & 20,33 horas& 0 horas& 20,21 horas\\
+  Fase 2 & 30,12 horas & 19,02 horas& 1 horas& 19,32 horas\\
+  Fase 3 & 18,44 horas& 26,18 horas & 2 horas& 20,34 horas\\
+  Fase 4 & 5,55 horas& 6,19 horas & 3 horas& 11,11 horas\\
   \hline
-  \textbf{Total} & \textbf{78,36} & \textbf{70} & \textbf{70} & \textbf{70} \\
+  \textbf{Total} & \textbf{78,36} & \textbf{71,45} & \textbf{70} & \textbf{71,39} \\
   \hline
   \end{tabular}
   \end{center}

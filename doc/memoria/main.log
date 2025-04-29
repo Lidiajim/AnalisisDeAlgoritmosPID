@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.7.4)  29 APR 2025 13:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.7.4)  29 APR 2025 20:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1044,7 +1044,7 @@ Overfull \hbox (85.05435pt too wide) in paragraph at lines 26--26
 {C:/Users/alvar/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
 
 [2]
-<images/harris_autovectores.png, id=154, 372.1905pt x 195.8517pt>
+<images/harris_autovectores.png, id=158, 372.1905pt x 195.8517pt>
 File: images/harris_autovectores.png Graphic file (type png)
 <use images/harris_autovectores.png>
 Package pdftex.def Info: images/harris_autovectores.png  used on input line 101.
@@ -1066,465 +1066,557 @@ l.161         \]
                  <./images/harris_autovectores.png>]
 
 [5]
-<images/sift_gauss.png, id=180, 737.75626pt x 301.8778pt>
+
+[6]
+<images/sift_gauss.png, id=188, 737.75626pt x 301.8778pt>
 File: images/sift_gauss.png Graphic file (type png)
 <use images/sift_gauss.png>
-Package pdftex.def Info: images/sift_gauss.png  used on input line 265.
+Package pdftex.def Info: images/sift_gauss.png  used on input line 321.
 (pdftex.def)             Requested size: 469.47308pt x 192.10022pt.
 
-Overfull \hbox (42.68173pt too wide) in paragraph at lines 265--266
+Overfull \hbox (42.68173pt too wide) in paragraph at lines 321--322
  [][] 
  []
 
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 266.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 322.
 (C:\Users\alvar\AppData\Local\Programs\MiKTeX\tex/latex/base\t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
 
-[6]
-<images/sift_orientacion.png, id=187, 1221.81468pt x 593.96906pt>
+[7]
+<images/sift_orientacion.png, id=196, 1221.81468pt x 593.96906pt>
 File: images/sift_orientacion.png Graphic file (type png)
 <use images/sift_orientacion.png>
-Package pdftex.def Info: images/sift_orientacion.png  used on input line 277.
+Package pdftex.def Info: images/sift_orientacion.png  used on input line 333.
 (pdftex.def)             Requested size: 469.47308pt x 228.23016pt.
 
-Overfull \hbox (42.68173pt too wide) in paragraph at lines 277--278
+Overfull \hbox (42.68173pt too wide) in paragraph at lines 333--334
  [][] 
  []
 
 
 
-[7
+[8
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.288 
+l.344 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.288 
+l.344 
        <./images/sift_gauss.png> <./images/sift_orientacion.png>]
-<images/sift_descrip.png, id=200, 283.81032pt x 145.29282pt>
+<images/sift_descrip.png, id=208, 283.81032pt x 145.29282pt>
 File: images/sift_descrip.png Graphic file (type png)
 <use images/sift_descrip.png>
-Package pdftex.def Info: images/sift_descrip.png  used on input line 292.
+Package pdftex.def Info: images/sift_descrip.png  used on input line 348.
 (pdftex.def)             Requested size: 298.75264pt x 152.95656pt.
 
 
-[8
+[9
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.342 
+l.398 
        <./images/sift_descrip.png>]
 
-[9]
-
 [10]
-<images/harris_paso_1.png, id=223, 281.1303pt x 295.5843pt>
-File: images/harris_paso_1.png Graphic file (type png)
-<use images/harris_paso_1.png>
-Package pdftex.def Info: images/harris_paso_1.png  used on input line 444.
-(pdftex.def)             Requested size: 256.07741pt x 269.24371pt.
-
 
 [11]
-<images/harris_paso_2.png, id=228, 281.1303pt x 295.5843pt>
-File: images/harris_paso_2.png Graphic file (type png)
-<use images/harris_paso_2.png>
-Package pdftex.def Info: images/harris_paso_2.png  used on input line 467.
+<images/harris_paso_1.png, id=231, 281.1303pt x 295.5843pt>
+File: images/harris_paso_1.png Graphic file (type png)
+<use images/harris_paso_1.png>
+Package pdftex.def Info: images/harris_paso_1.png  used on input line 500.
 (pdftex.def)             Requested size: 256.07741pt x 269.24371pt.
 
 
-[12
-pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.470 
-       <./images/harris_paso_1.png>]
-Overfull \hbox (25.43633pt too wide) in paragraph at lines 497--498
-[]\T1/cmr/m/n/10 Para la im-ple-men-ta-ción, se ha uti-li-za-do la cla-se co-rres-pon-dien-te en el mó-du-lo \T1/cmtt/m/n/10 algoritmos/harris.py\T1/cmr/m/n/10 . 
- []
-
-<images/harris_paso_3.png, id=235, 615.7404pt x 293.4162pt>
-File: images/harris_paso_3.png Graphic file (type png)
-<use images/harris_paso_3.png>
-Package pdftex.def Info: images/harris_paso_3.png  used on input line 508.
-(pdftex.def)             Requested size: 384.1096pt x 183.03993pt.
+[12]
+<images/harris_paso_2.png, id=236, 281.1303pt x 295.5843pt>
+File: images/harris_paso_2.png Graphic file (type png)
+<use images/harris_paso_2.png>
+Package pdftex.def Info: images/harris_paso_2.png  used on input line 523.
+(pdftex.def)             Requested size: 256.07741pt x 269.24371pt.
 
 
 [13
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.511 
-       <./images/harris_paso_2.png>]
-<images/harris_paso_4.png, id=243, 641.0349pt x 298.4751pt>
-File: images/harris_paso_4.png Graphic file (type png)
-<use images/harris_paso_4.png>
-Package pdftex.def Info: images/harris_paso_4.png  used on input line 547.
-(pdftex.def)             Requested size: 384.1096pt x 178.84505pt.
+l.526 
+       <./images/harris_paso_1.png>]
+Overfull \hbox (25.43633pt too wide) in paragraph at lines 553--554
+[]\T1/cmr/m/n/10 Para la im-ple-men-ta-ción, se ha uti-li-za-do la cla-se co-rres-pon-dien-te en el mó-du-lo \T1/cmtt/m/n/10 algoritmos/harris.py\T1/cmr/m/n/10 . 
+ []
+
+<images/harris_paso_3.png, id=244, 615.7404pt x 293.4162pt>
+File: images/harris_paso_3.png Graphic file (type png)
+<use images/harris_paso_3.png>
+Package pdftex.def Info: images/harris_paso_3.png  used on input line 564.
+(pdftex.def)             Requested size: 384.1096pt x 183.03993pt.
 
 
 [14
-pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) has been already used, duplicate ignored
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.550 
-       <./images/harris_paso_3.png>]
-<images/harris_paso_5.png, id=250, 641.0349pt x 298.4751pt>
-File: images/harris_paso_5.png Graphic file (type png)
-<use images/harris_paso_5.png>
-Package pdftex.def Info: images/harris_paso_5.png  used on input line 559.
+l.567 
+       <./images/harris_paso_2.png>]
+<images/harris_paso_4.png, id=251, 641.0349pt x 298.4751pt>
+File: images/harris_paso_4.png Graphic file (type png)
+<use images/harris_paso_4.png>
+Package pdftex.def Info: images/harris_paso_4.png  used on input line 603.
 (pdftex.def)             Requested size: 384.1096pt x 178.84505pt.
-<images/harris_paso_6.png, id=251, 376.5267pt x 312.9291pt>
-File: images/harris_paso_6.png Graphic file (type png)
-<use images/harris_paso_6.png>
-Package pdftex.def Info: images/harris_paso_6.png  used on input line 577.
-(pdftex.def)             Requested size: 256.07741pt x 212.8367pt.
 
 
 [15
+pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.606 
+       <./images/harris_paso_3.png>]
+<images/harris_paso_5.png, id=258, 641.0349pt x 298.4751pt>
+File: images/harris_paso_5.png Graphic file (type png)
+<use images/harris_paso_5.png>
+Package pdftex.def Info: images/harris_paso_5.png  used on input line 615.
+(pdftex.def)             Requested size: 384.1096pt x 178.84505pt.
+<images/harris_paso_6.png, id=259, 376.5267pt x 312.9291pt>
+File: images/harris_paso_6.png Graphic file (type png)
+<use images/harris_paso_6.png>
+Package pdftex.def Info: images/harris_paso_6.png  used on input line 633.
+(pdftex.def)             Requested size: 256.07741pt x 212.8367pt.
+
+
+[16
 pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.580 
+l.636 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.9}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.580 
+l.636 
        <./images/harris_paso_4.png> <./images/harris_paso_5.png>]
-<images/harris_paso_7.png, id=260, 364.9635pt x 312.9291pt>
+<images/harris_paso_7.png, id=268, 364.9635pt x 312.9291pt>
 File: images/harris_paso_7.png Graphic file (type png)
 <use images/harris_paso_7.png>
-Package pdftex.def Info: images/harris_paso_7.png  used on input line 591.
+Package pdftex.def Info: images/harris_paso_7.png  used on input line 647.
 (pdftex.def)             Requested size: 256.07741pt x 219.57887pt.
 
 
-[16
+[17
 pdfTeX warning (ext4): destination with the same identifier (name{figure.10}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.606     \item E
+l.662     \item E
                  sta comprueba si el pÃ­xel central es el mayor de sus vecinos.
 pdfTeX warning (ext4): destination with the same identifier (name{figure.11}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.606     \item E
+l.662     \item E
                  sta comprueba si el pÃ­xel central es el mayor de sus vecinos. <./images/harris_paso_6.png> <./images/harris_paso_7.png>]
-<images/harris_paso_8.png, id=269, 281.1303pt x 295.5843pt>
+<images/harris_paso_8.png, id=277, 281.1303pt x 295.5843pt>
 File: images/harris_paso_8.png Graphic file (type png)
 <use images/harris_paso_8.png>
-Package pdftex.def Info: images/harris_paso_8.png  used on input line 618.
+Package pdftex.def Info: images/harris_paso_8.png  used on input line 674.
 (pdftex.def)             Requested size: 256.07741pt x 269.24371pt.
-
-
-[17
-pdfTeX warning (ext4): destination with the same identifier (name{figure.12}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.642 
-       <./images/harris_paso_8.png>]
-<images/sift_paso_1.png, id=276, 358.33875pt x 374.14781pt>
-File: images/sift_paso_1.png Graphic file (type png)
-<use images/sift_paso_1.png>
-Package pdftex.def Info: images/sift_paso_1.png  used on input line 645.
-(pdftex.def)             Requested size: 256.07741pt x 267.39375pt.
-<images/sift_paso_2.png, id=277, 357.58594pt x 374.90062pt>
-File: images/sift_paso_2.png Graphic file (type png)
-<use images/sift_paso_2.png>
-Package pdftex.def Info: images/sift_paso_2.png  used on input line 655.
-(pdftex.def)             Requested size: 256.07741pt x 268.49239pt.
+<images/original.jpg, id=278, 483.8075pt x 503.8825pt>
+File: images/original.jpg Graphic file (type jpg)
+<use images/original.jpg>
+Package pdftex.def Info: images/original.jpg  used on input line 694.
+(pdftex.def)             Requested size: 256.07741pt x 266.71046pt.
 
 
 [18
+pdfTeX warning (ext4): destination with the same identifier (name{figure.12}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.697 
+       <./images/harris_paso_8.png>]
+<images/gaussian_blur.jpg, id=287, 1552.80125pt x 398.48875pt>
+File: images/gaussian_blur.jpg Graphic file (type jpg)
+<use images/gaussian_blur.jpg>
+Package pdftex.def Info: images/gaussian_blur.jpg  used on input line 704.
+(pdftex.def)             Requested size: 341.43437pt x 87.61914pt.
+<images/piramide_orb.jpg, id=288, 1264.725pt x 349.305pt>
+File: images/piramide_orb.jpg Graphic file (type jpg)
+<use images/piramide_orb.jpg>
+Package pdftex.def Info: images/piramide_orb.jpg  used on input line 712.
+(pdftex.def)             Requested size: 341.43437pt x 94.2976pt.
+<images/fast_keypoints.jpg, id=289, 483.8075pt x 503.8825pt>
+File: images/fast_keypoints.jpg Graphic file (type jpg)
+<use images/fast_keypoints.jpg>
+Package pdftex.def Info: images/fast_keypoints.jpg  used on input line 722.
+(pdftex.def)             Requested size: 256.07741pt x 266.71046pt.
+
+
+[19
 pdfTeX warning (ext4): destination with the same identifier (name{figure.13}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.663 
+l.725 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.14}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.663 
-       <./images/sift_paso_1.png> <./images/sift_paso_2.png>]
-Overfull \hbox (14.93889pt too wide) in paragraph at lines 672--673
-[]\T1/cmr/m/n/10 Para la im-ple-men-ta-ción, se ha uti-li-za-do la cla-se co-rres-pon-dien-te en el mó-du-lo \T1/cmtt/m/n/10 algoritmos/sift.py\T1/cmr/m/n/10 . 
- []
-
-<images/sift_paso_3.1.png, id=286, 927.465pt x 161.85469pt>
-File: images/sift_paso_3.1.png Graphic file (type png)
-<use images/sift_paso_3.1.png>
-Package pdftex.def Info: images/sift_paso_3.1.png  used on input line 685.
-(pdftex.def)             Requested size: 469.47308pt x 81.92982pt.
-<images/sift_paso_3.2.png, id=287, 925.20656pt x 150.5625pt>
-File: images/sift_paso_3.2.png Graphic file (type png)
-<use images/sift_paso_3.2.png>
-Package pdftex.def Info: images/sift_paso_3.2.png  used on input line 686.
-(pdftex.def)             Requested size: 384.1096pt x 62.50754pt.
-<images/sift_paso_3.3.png, id=288, 927.465pt x 154.32657pt>
-File: images/sift_paso_3.3.png Graphic file (type png)
-<use images/sift_paso_3.3.png>
-Package pdftex.def Info: images/sift_paso_3.3.png  used on input line 687.
-(pdftex.def)             Requested size: 298.75264pt x 49.71046pt.
-<images/sift_paso_3.4.png, id=289, 928.21782pt x 149.8097pt>
-File: images/sift_paso_3.4.png Graphic file (type png)
-<use images/sift_paso_3.4.png>
-Package pdftex.def Info: images/sift_paso_3.4.png  used on input line 688.
-(pdftex.def)             Requested size: 170.71393pt x 27.55205pt.
-
-Overfull \hbox (42.68173pt too wide) in paragraph at lines 685--689
- [][] 
- []
-
-<images/sift_paso_4.1.png, id=290, 770.12718pt x 160.34906pt>
-File: images/sift_paso_4.1.png Graphic file (type png)
-<use images/sift_paso_4.1.png>
-Package pdftex.def Info: images/sift_paso_4.1.png  used on input line 698.
-(pdftex.def)             Requested size: 469.47308pt x 97.74916pt.
-<images/sift_paso_4.2.png, id=291, 770.88pt x 149.05687pt>
-File: images/sift_paso_4.2.png Graphic file (type png)
-<use images/sift_paso_4.2.png>
-Package pdftex.def Info: images/sift_paso_4.2.png  used on input line 699.
-(pdftex.def)             Requested size: 384.1096pt x 74.27124pt.
-<images/sift_paso_4.3.png, id=292, 773.13844pt x 150.5625pt>
-File: images/sift_paso_4.3.png Graphic file (type png)
-<use images/sift_paso_4.3.png>
-Package pdftex.def Info: images/sift_paso_4.3.png  used on input line 700.
-(pdftex.def)             Requested size: 298.75264pt x 58.17924pt.
-<images/sift_paso_4.4.png, id=293, 775.39688pt x 151.3153pt>
-File: images/sift_paso_4.4.png Graphic file (type png)
-<use images/sift_paso_4.4.png>
-Package pdftex.def Info: images/sift_paso_4.4.png  used on input line 701.
-(pdftex.def)             Requested size: 170.71393pt x 33.31255pt.
-
-Overfull \hbox (42.68173pt too wide) in paragraph at lines 698--702
- [][] 
- []
-
-
-
-[19
+l.725 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.15}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.704 
-       <./images/sift_paso_3.1.png> <./images/sift_paso_3.2.png> <./images/sift_paso_3.3.png> <./images/sift_paso_3.4.png>]
-<images/sift_paso_5.1.png, id=304, 327.47343pt x 340.27126pt>
-File: images/sift_paso_5.1.png Graphic file (type png)
-<use images/sift_paso_5.1.png>
-Package pdftex.def Info: images/sift_paso_5.1.png  used on input line 712.
-(pdftex.def)             Requested size: 256.07741pt x 266.08548pt.
+l.725 
+       <./images/original.jpg> <./images/gaussian_blur.jpg> <./images/piramide_orb.jpg>]
+<images/harris_response.jpg, id=300, 483.8075pt x 503.8825pt>
+File: images/harris_response.jpg Graphic file (type jpg)
+<use images/harris_response.jpg>
+Package pdftex.def Info: images/harris_response.jpg  used on input line 732.
+(pdftex.def)             Requested size: 256.07741pt x 266.71046pt.
+<images/keypoints_orientacion.jpg, id=301, 483.8075pt x 505.89pt>
+File: images/keypoints_orientacion.jpg Graphic file (type jpg)
+<use images/keypoints_orientacion.jpg>
+Package pdftex.def Info: images/keypoints_orientacion.jpg  used on input line 742.
+(pdftex.def)             Requested size: 256.07741pt x 267.77304pt.
 
 
 [20
 pdfTeX warning (ext4): destination with the same identifier (name{figure.16}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.717 
+l.745 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.17}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.717 
-       <./images/sift_paso_4.1.png> <./images/sift_paso_4.2.png> <./images/sift_paso_4.3.png> <./images/sift_paso_4.4.png> <./images/sift_paso_5.1.png>]
-<images/sift_paso_5.png, id=316, 329.73187pt x 338.76563pt>
-File: images/sift_paso_5.png Graphic file (type png)
-<use images/sift_paso_5.png>
-Package pdftex.def Info: images/sift_paso_5.png  used on input line 720.
-(pdftex.def)             Requested size: 256.07741pt x 263.0989pt.
-<images/sift_paso_6.1.png, id=317, 704.6325pt x 195.73125pt>
-File: images/sift_paso_6.1.png Graphic file (type png)
-<use images/sift_paso_6.1.png>
-Package pdftex.def Info: images/sift_paso_6.1.png  used on input line 731.
-(pdftex.def)             Requested size: 469.47308pt x 130.40752pt.
-
-Overfull \hbox (42.68173pt too wide) in paragraph at lines 731--732
- [][] 
- []
-
-<images/sift_paso_7.1.png, id=318, 327.47343pt x 339.51843pt>
-File: images/sift_paso_7.1.png Graphic file (type png)
-<use images/sift_paso_7.1.png>
-Package pdftex.def Info: images/sift_paso_7.1.png  used on input line 742.
-(pdftex.def)             Requested size: 256.07741pt x 265.49678pt.
+l.745 
+       <./images/fast_keypoints.jpg> <./images/harris_response.jpg>]
+<images/rbrief_descriptors.jpg, id=310, 553.06625pt x 456.70625pt>
+File: images/rbrief_descriptors.jpg Graphic file (type jpg)
+<use images/rbrief_descriptors.jpg>
+Package pdftex.def Info: images/rbrief_descriptors.jpg  used on input line 752.
+(pdftex.def)             Requested size: 341.43437pt x 281.94237pt.
 
 
 [21
 pdfTeX warning (ext4): destination with the same identifier (name{figure.18}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.745 
-      
+l.761     \item S
+                 e entrenÃ³ el clasificador utilizando conjuntos de imÃ¡gene...
 pdfTeX warning (ext4): destination with the same identifier (name{figure.19}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.745 
-       <./images/sift_paso_5.png> <./images/sift_paso_6.1.png>]
-<images/sift_paso_8.png, id=327, 417.05812pt x 361.35pt>
-File: images/sift_paso_8.png Graphic file (type png)
-<use images/sift_paso_8.png>
-Package pdftex.def Info: images/sift_paso_8.png  used on input line 753.
-(pdftex.def)             Requested size: 341.43437pt x 295.84576pt.
+l.761     \item S
+                 e entrenÃ³ el clasificador utilizando conjuntos de imÃ¡gene... <./images/keypoints_orientacion.jpg> <./images/rbrief_descriptors.jpg>]
+<images/sift_paso_1.png, id=318, 358.33875pt x 374.14781pt>
+File: images/sift_paso_1.png Graphic file (type png)
+<use images/sift_paso_1.png>
+Package pdftex.def Info: images/sift_paso_1.png  used on input line 790.
+(pdftex.def)             Requested size: 256.07741pt x 267.39375pt.
+<images/sift_paso_2.png, id=319, 357.58594pt x 374.90062pt>
+File: images/sift_paso_2.png Graphic file (type png)
+<use images/sift_paso_2.png>
+Package pdftex.def Info: images/sift_paso_2.png  used on input line 800.
+(pdftex.def)             Requested size: 256.07741pt x 268.49239pt.
 
 
 [22
 pdfTeX warning (ext4): destination with the same identifier (name{figure.20}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.758 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{figure.21}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.758 
-       <./images/sift_paso_7.1.png> <./images/sift_paso_8.png>]
-<images/sift_inv.png, id=336, 686.565pt x 366.4089pt>
-File: images/sift_inv.png Graphic file (type png)
-<use images/sift_inv.png>
-Package pdftex.def Info: images/sift_inv.png  used on input line 763.
-(pdftex.def)             Requested size: 362.77525pt x 193.60315pt.
-<images/sift_inv_des.png, id=337, 909.8793pt x 437.2335pt>
-File: images/sift_inv_des.png Graphic file (type png)
-<use images/sift_inv_des.png>
-Package pdftex.def Info: images/sift_inv_des.png  used on input line 769.
-(pdftex.def)             Requested size: 362.77525pt x 174.3232pt.
+l.802 \end{figure}
+                   <./images/sift_paso_1.png>]
+Overfull \hbox (14.93889pt too wide) in paragraph at lines 817--818
+[]\T1/cmr/m/n/10 Para la im-ple-men-ta-ción, se ha uti-li-za-do la cla-se co-rres-pon-dien-te en el mó-du-lo \T1/cmtt/m/n/10 algoritmos/sift.py\T1/cmr/m/n/10 . 
+ []
+
+<images/sift_paso_3.1.png, id=328, 927.465pt x 161.85469pt>
+File: images/sift_paso_3.1.png Graphic file (type png)
+<use images/sift_paso_3.1.png>
+Package pdftex.def Info: images/sift_paso_3.1.png  used on input line 830.
+(pdftex.def)             Requested size: 469.47308pt x 81.92982pt.
+<images/sift_paso_3.2.png, id=329, 925.20656pt x 150.5625pt>
+File: images/sift_paso_3.2.png Graphic file (type png)
+<use images/sift_paso_3.2.png>
+Package pdftex.def Info: images/sift_paso_3.2.png  used on input line 831.
+(pdftex.def)             Requested size: 384.1096pt x 62.50754pt.
+<images/sift_paso_3.3.png, id=330, 927.465pt x 154.32657pt>
+File: images/sift_paso_3.3.png Graphic file (type png)
+<use images/sift_paso_3.3.png>
+Package pdftex.def Info: images/sift_paso_3.3.png  used on input line 832.
+(pdftex.def)             Requested size: 298.75264pt x 49.71046pt.
+<images/sift_paso_3.4.png, id=331, 928.21782pt x 149.8097pt>
+File: images/sift_paso_3.4.png Graphic file (type png)
+<use images/sift_paso_3.4.png>
+Package pdftex.def Info: images/sift_paso_3.4.png  used on input line 833.
+(pdftex.def)             Requested size: 170.71393pt x 27.55205pt.
+
+Overfull \hbox (42.68173pt too wide) in paragraph at lines 830--834
+ [][] 
+ []
+
 
 
 [23
-pdfTeX warning (ext4): destination with the same identifier (name{figure.22}) has been already used, duplicate ignored
+pdfTeX warning (ext4): destination with the same identifier (name{figure.21}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.786 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{figure.23}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.786 
-       <./images/sift_inv.png> <./images/sift_inv_des.png>]
-<images/hog_paso_1.png, id=346, 348.3414pt x 364.2408pt>
-File: images/hog_paso_1.png Graphic file (type png)
-<use images/hog_paso_1.png>
-Package pdftex.def Info: images/hog_paso_1.png  used on input line 791.
-(pdftex.def)             Requested size: 213.39568pt x 223.14252pt.
-<images/hog_paso_2.png, id=347, 577.40718pt x 352.31625pt>
-File: images/hog_paso_2.png Graphic file (type png)
-<use images/hog_paso_2.png>
-Package pdftex.def Info: images/hog_paso_2.png  used on input line 802.
-(pdftex.def)             Requested size: 256.07741pt x 156.25607pt.
+l.836 
+       <./images/sift_paso_2.png>]
+<images/sift_paso_4.1.png, id=338, 770.12718pt x 160.34906pt>
+File: images/sift_paso_4.1.png Graphic file (type png)
+<use images/sift_paso_4.1.png>
+Package pdftex.def Info: images/sift_paso_4.1.png  used on input line 843.
+(pdftex.def)             Requested size: 469.47308pt x 97.74916pt.
+<images/sift_paso_4.2.png, id=339, 770.88pt x 149.05687pt>
+File: images/sift_paso_4.2.png Graphic file (type png)
+<use images/sift_paso_4.2.png>
+Package pdftex.def Info: images/sift_paso_4.2.png  used on input line 844.
+(pdftex.def)             Requested size: 384.1096pt x 74.27124pt.
+<images/sift_paso_4.3.png, id=340, 773.13844pt x 150.5625pt>
+File: images/sift_paso_4.3.png Graphic file (type png)
+<use images/sift_paso_4.3.png>
+Package pdftex.def Info: images/sift_paso_4.3.png  used on input line 845.
+(pdftex.def)             Requested size: 298.75264pt x 58.17924pt.
+<images/sift_paso_4.4.png, id=341, 775.39688pt x 151.3153pt>
+File: images/sift_paso_4.4.png Graphic file (type png)
+<use images/sift_paso_4.4.png>
+Package pdftex.def Info: images/sift_paso_4.4.png  used on input line 846.
+(pdftex.def)             Requested size: 170.71393pt x 33.31255pt.
+
+Overfull \hbox (42.68173pt too wide) in paragraph at lines 843--847
+ [][] 
+ []
+
+<images/sift_paso_5.1.png, id=342, 327.47343pt x 340.27126pt>
+File: images/sift_paso_5.1.png Graphic file (type png)
+<use images/sift_paso_5.1.png>
+Package pdftex.def Info: images/sift_paso_5.1.png  used on input line 857.
+(pdftex.def)             Requested size: 256.07741pt x 266.08548pt.
 
 
 [24
-pdfTeX warning (ext4): destination with the same identifier (name{figure.24}) has been already used, duplicate ignored
+pdfTeX warning (ext4): destination with the same identifier (name{figure.22}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.815     \item \textbf
-                       {win\_stride = (8,8):} Desplazamiento en pÃ­xeles de ...
-pdfTeX warning (ext4): destination with the same identifier (name{figure.25}) has been already used, duplicate ignored
+l.859 \end{figure}
+                  
+pdfTeX warning (ext4): destination with the same identifier (name{figure.23}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.815     \item \textbf
-                       {win\_stride = (8,8):} Desplazamiento en pÃ­xeles de ... <./images/hog_paso_1.png> <./images/hog_paso_2.png>]
-Overfull \hbox (7.18967pt too wide) in paragraph at lines 821--822
-[]\T1/cmr/m/n/10 Para la im-plem-ne-ta-ción se ha uti-li-za-do la cla-se co-rres-pon-dien-te en el mó-du-lo \T1/cmtt/m/n/10 algoritmos/hog.py\T1/cmr/m/n/10 . 
- []
-
-<images/hog_paso_4.png, id=356, 348.3414pt x 364.2408pt>
-File: images/hog_paso_4.png Graphic file (type png)
-<use images/hog_paso_4.png>
-Package pdftex.def Info: images/hog_paso_4.png  used on input line 831.
-(pdftex.def)             Requested size: 170.71393pt x 178.50734pt.
-<images/hog_paso_5.png, id=357, 659.1024pt x 308.5929pt>
-File: images/hog_paso_5.png Graphic file (type png)
-<use images/hog_paso_5.png>
-Package pdftex.def Info: images/hog_paso_5.png  used on input line 842.
-(pdftex.def)             Requested size: 341.43437pt x 159.86179pt.
+l.859 \end{figure}
+                   <./images/sift_paso_3.1.png> <./images/sift_paso_3.2.png> <./images/sift_paso_3.3.png> <./images/sift_paso_3.4.png> <./images/sift_paso_4.1.png> <./images/sift_paso_4.2.png> <./images/sift_paso_4.3.png> <./images/sift_paso_4.4.png>]
+<images/sift_paso_5.png, id=357, 329.73187pt x 338.76563pt>
+File: images/sift_paso_5.png Graphic file (type png)
+<use images/sift_paso_5.png>
+Package pdftex.def Info: images/sift_paso_5.png  used on input line 865.
+(pdftex.def)             Requested size: 256.07741pt x 263.0989pt.
 
 
 [25
+pdfTeX warning (ext4): destination with the same identifier (name{figure.24}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.873 
+      
+pdfTeX warning (ext4): destination with the same identifier (name{figure.25}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.873 
+       <./images/sift_paso_5.1.png> <./images/sift_paso_5.png>]
+<images/sift_paso_6.1.png, id=367, 704.6325pt x 195.73125pt>
+File: images/sift_paso_6.1.png Graphic file (type png)
+<use images/sift_paso_6.1.png>
+Package pdftex.def Info: images/sift_paso_6.1.png  used on input line 876.
+(pdftex.def)             Requested size: 469.47308pt x 130.40752pt.
+
+Overfull \hbox (42.68173pt too wide) in paragraph at lines 876--877
+ [][] 
+ []
+
+<images/sift_paso_7.1.png, id=368, 327.47343pt x 339.51843pt>
+File: images/sift_paso_7.1.png Graphic file (type png)
+<use images/sift_paso_7.1.png>
+Package pdftex.def Info: images/sift_paso_7.1.png  used on input line 887.
+(pdftex.def)             Requested size: 256.07741pt x 265.49678pt.
+<images/sift_paso_8.png, id=369, 417.05812pt x 361.35pt>
+File: images/sift_paso_8.png Graphic file (type png)
+<use images/sift_paso_8.png>
+Package pdftex.def Info: images/sift_paso_8.png  used on input line 898.
+(pdftex.def)             Requested size: 341.43437pt x 295.84576pt.
+
+
+[26
 pdfTeX warning (ext4): destination with the same identifier (name{figure.26}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.850 
+l.901 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.27}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.850 
-       <./images/hog_paso_4.png> <./images/hog_paso_5.png>]
-<images/hog_paso_6.png, id=367, 1024.7886pt x 281.853pt>
-File: images/hog_paso_6.png Graphic file (type png)
-<use images/hog_paso_6.png>
-Package pdftex.def Info: images/hog_paso_6.png  used on input line 853.
-(pdftex.def)             Requested size: 384.1096pt x 105.643pt.
-<images/hog_paso_7.png, id=368, 836.8866pt x 364.2408pt>
-File: images/hog_paso_7.png Graphic file (type png)
-<use images/hog_paso_7.png>
-Package pdftex.def Info: images/hog_paso_7.png  used on input line 868.
-(pdftex.def)             Requested size: 426.79135pt x 185.75479pt.
+l.901 
+       <./images/sift_paso_6.1.png> <./images/sift_paso_7.1.png>]
+<images/sift_inv.png, id=378, 686.565pt x 366.4089pt>
+File: images/sift_inv.png Graphic file (type png)
+<use images/sift_inv.png>
+Package pdftex.def Info: images/sift_inv.png  used on input line 908.
+(pdftex.def)             Requested size: 362.77525pt x 193.60315pt.
+<images/sift_inv_des.png, id=379, 909.8793pt x 437.2335pt>
+File: images/sift_inv_des.png Graphic file (type png)
+<use images/sift_inv_des.png>
+Package pdftex.def Info: images/sift_inv_des.png  used on input line 914.
+(pdftex.def)             Requested size: 362.77525pt x 174.3232pt.
 
 
-[26
+[27
 pdfTeX warning (ext4): destination with the same identifier (name{figure.28}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.881         \item S
-                     e aÃ±adiÃ³ una carpeta \texttt{doc} para documentar el ...
+l.917 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.29}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.881         \item S
-                     e aÃ±adiÃ³ una carpeta \texttt{doc} para documentar el ... <./images/hog_paso_6.png> <./images/hog_paso_7.png>]
+l.917 
+       <./images/sift_paso_8.png> <./images/sift_inv.png>]
+<images/hog_paso_1.png, id=388, 348.3414pt x 364.2408pt>
+File: images/hog_paso_1.png Graphic file (type png)
+<use images/hog_paso_1.png>
+Package pdftex.def Info: images/hog_paso_1.png  used on input line 936.
+(pdftex.def)             Requested size: 213.39568pt x 223.14252pt.
 
-[27]
 
-[28]
+[28
+pdfTeX warning (ext4): destination with the same identifier (name{figure.30}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.944 
+      
+pdfTeX warning (ext4): destination with the same identifier (name{figure.31}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.944 
+       <./images/sift_inv_des.png> <./images/hog_paso_1.png>]
+<images/hog_paso_2.png, id=397, 577.40718pt x 352.31625pt>
+File: images/hog_paso_2.png Graphic file (type png)
+<use images/hog_paso_2.png>
+Package pdftex.def Info: images/hog_paso_2.png  used on input line 947.
+(pdftex.def)             Requested size: 256.07741pt x 156.25607pt.
 
-[29]
-Overfull \hbox (10.30002pt too wide) in paragraph at lines 997--998
-[]\T1/cmr/m/n/10 Cada mo-de-lo en-tre-na-do se guar-dó en un ar-chi-vo in-de-pen-dien-te con el nom-bre \T1/cmtt/m/n/10 svm_algoritmo.pkl\T1/cmr/m/n/10 ,
+Overfull \hbox (7.18967pt too wide) in paragraph at lines 966--967
+[]\T1/cmr/m/n/10 Para la im-plem-ne-ta-ción se ha uti-li-za-do la cla-se co-rres-pon-dien-te en el mó-du-lo \T1/cmtt/m/n/10 algoritmos/hog.py\T1/cmr/m/n/10 . 
  []
 
+<images/hog_paso_4.png, id=398, 348.3414pt x 364.2408pt>
+File: images/hog_paso_4.png Graphic file (type png)
+<use images/hog_paso_4.png>
+Package pdftex.def Info: images/hog_paso_4.png  used on input line 976.
+(pdftex.def)             Requested size: 170.71393pt x 178.50734pt.
 
 
-[30]
+[29
+pdfTeX warning (ext4): destination with the same identifier (name{figure.32}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.979 
+       <./images/hog_paso_2.png>]
+<images/hog_paso_5.png, id=405, 659.1024pt x 308.5929pt>
+File: images/hog_paso_5.png Graphic file (type png)
+<use images/hog_paso_5.png>
+Package pdftex.def Info: images/hog_paso_5.png  used on input line 987.
+(pdftex.def)             Requested size: 341.43437pt x 159.86179pt.
+<images/hog_paso_6.png, id=406, 1024.7886pt x 281.853pt>
+File: images/hog_paso_6.png Graphic file (type png)
+<use images/hog_paso_6.png>
+Package pdftex.def Info: images/hog_paso_6.png  used on input line 998.
+(pdftex.def)             Requested size: 384.1096pt x 105.643pt.
 
-[31]
+
+[30
+pdfTeX warning (ext4): destination with the same identifier (name{figure.33}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1004 
+       
+pdfTeX warning (ext4): destination with the same identifier (name{figure.34}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1004 
+       
+pdfTeX warning (ext4): destination with the same identifier (name{figure.35}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1004 
+        <./images/hog_paso_4.png> <./images/hog_paso_5.png> <./images/hog_paso_6.png>]
+<images/hog_paso_7.png, id=417, 836.8866pt x 364.2408pt>
+File: images/hog_paso_7.png Graphic file (type png)
+<use images/hog_paso_7.png>
+Package pdftex.def Info: images/hog_paso_7.png  used on input line 1013.
+(pdftex.def)             Requested size: 426.79135pt x 185.75479pt.
+
+
+[31
+pdfTeX warning (ext4): destination with the same identifier (name{figure.36}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1032 \newpage
+                <./images/hog_paso_7.png>]
 
 [32]
 
 [33]
 
 [34]
+Overfull \hbox (10.30002pt too wide) in paragraph at lines 1167--1168
+[]\T1/cmr/m/n/10 Cada mo-de-lo en-tre-na-do se guar-dó en un ar-chi-vo in-de-pen-dien-te con el nom-bre \T1/cmtt/m/n/10 svm_algoritmo.pkl\T1/cmr/m/n/10 ,
+ []
+
+
 
 [35]
 
 [36]
 
 [37]
-Overfull \hbox (36.70946pt too wide) in paragraph at lines 1393--1423
- [][] 
- []
-
-
 
 [38
 pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.1426   \newpage
+l.1397 \end{itemize}
+                    ]
+
+[39]
+
+[40]
+
+[41]
+
+[42]
+
+[43]
+Overfull \hbox (36.70946pt too wide) in paragraph at lines 1616--1646
+ [][] 
+ []
+
+
+
+[44
+pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1649   \newpage
                  ]
-Overfull \hbox (70.33586pt too wide) in paragraph at lines 1447--1459
+Overfull \hbox (70.33586pt too wide) in paragraph at lines 1670--1682
  [] 
  []
 
 
 
-[39]
+[45]
 
-[40] (main.aux
+[46] (main.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -1533,20 +1625,20 @@ LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-05-27>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 52CC39CF70A875289C0419A13CAB2869;6361.
+(rerunfilecheck)             Checksum: D1CBC6FB93988F990E9B1E0CB50D4B43;6502.
  ) 
 Here is how much of TeX's memory you used:
- 22958 strings out of 473904
- 430432 string characters out of 5726601
- 1942908 words of memory out of 5000000
- 45312 multiletter control sequences out of 15000+600000
+ 23034 strings out of 473904
+ 432267 string characters out of 5726601
+ 1943908 words of memory out of 5000000
+ 45363 multiletter control sequences out of 15000+600000
  572853 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,10n,101p,724b,605s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,10n,101p,724b,539s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0700.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcbx1000.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1000.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0700.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1000.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1000.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1000.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0900.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0900.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\alvar\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1728.pk><C:/Users/alvar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/alvar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/alvar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/alvar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/alvar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/alvar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/alvar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on main.pdf (40 pages, 8359974 bytes).
+Output written on main.pdf (46 pages, 8923116 bytes).
 PDF statistics:
- 1082 PDF objects out of 1200 (max. 8388607)
- 120 named destinations out of 1000 (max. 500000)
- 452 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1148 PDF objects out of 1200 (max. 8388607)
+ 145 named destinations out of 1000 (max. 500000)
+ 495 words of extra memory for PDF output out of 10000 (max. 10000000)
 
